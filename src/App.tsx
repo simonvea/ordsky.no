@@ -1,22 +1,27 @@
 import React from 'react';
 import './App.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { WordsProvider } from './context/wordsContext';
+import { Home } from './pages/Home';
+import { TextForm } from './pages/Form';
 
-export const App: React.FC = () => {
+const App: React.FC = function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header className="header">
+        <h1 className="header__title">Ordsky.no</h1>
       </header>
+      <main className="main-container">
+        <WordsProvider>
+          <Router>
+            <Route exact path="/" component={Home} />
+            <Route path="/ordsky" component={TextForm} />
+          </Router>
+        </WordsProvider>
+      </main>
+      <footer className="footer" />
     </div>
   );
 };
+
+export { App };

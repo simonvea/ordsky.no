@@ -1,0 +1,25 @@
+.welcome {
+  width: calc(100% - 40px);
+  max-width: 600px;
+  margin-bottom: 4rem;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.welcome__title {
+  font-size: 1.5rem;
+  
+}
+
+.welcome__undertitle {
+  font-size: 1.3rem;
+  padding: 5px;
+}
+
+.welcome__text {
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}

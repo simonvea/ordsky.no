@@ -11,7 +11,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:eslint-comments/recommended',
     'plugin:jest/recommended',
-    'plugin:promise/recommended',
+    // 'plugin:promise/recommended',
     'plugin:unicorn/recommended',
     'prettier',
     'prettier/react',
@@ -26,6 +26,7 @@ module.exports = {
     jest: true,
   },
   rules: {
+    'react/prop-types': 0,
     'unicorn/filename-case': 0,
     // Too restrictive, writing ugly code to defend against a very unlikely scenario: https://eslint.org/docs/rules/no-prototype-builtins
     'no-prototype-builtins': 'off',
