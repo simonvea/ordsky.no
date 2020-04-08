@@ -11,20 +11,20 @@ export const TextForm: React.FC = function TextForm() {
     10
   );
   const history = useHistory();
-  const { state, onSubmit } = useWordsContext();
+  const { state, createCloud } = useWordsContext();
   const { loading } = state;
 
   const onChange = ({ target }: ChangeEvent<HTMLTextAreaElement>): void => {
     setText(target.value);
   };
 
-  const handleSubmit = (event: FormEvent): void => {
+  const handleSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
     if (!text) {
       notify();
-      return;
     }
-    onSubmit(text);
+    createCloud(text);
+    history.push('/ordsky');
   };
   return (
     <div>
@@ -37,7 +37,9 @@ export const TextForm: React.FC = function TextForm() {
           value={text}
           onChange={onChange}
         />
-        <div className="notification">{notification || null}</div>
+        <div className="notification">
+          {notification || state.error || null}
+        </div>
         <div className="flex-container">
           <button
             type="button"

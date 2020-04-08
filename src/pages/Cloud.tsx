@@ -1,22 +1,24 @@
 import React from 'react';
 import './Cloud.css';
-import {
-  createCloud,
-  svgDataURL,
-  downloadAsPng,
-  Cloud,
-} from '../utils/svgToPng';
+import { useHistory } from 'react-router-dom';
+import { svgDataURL, downloadAsPng } from '../utils/downloadAsPng';
+import { createCloud } from '../utils/createCloud';
+import { useWordsContext } from '../context/wordsContext.hook';
+import { Spinner } from '../components/Spinner';
 
-export interface CloudProps {
-  cloud: Cloud[];
-  toggleDisplay: () => void;
-}
+export const WordCloud: React.FC = function WordCloud() {
+  const { state } = useWordsContext();
+  const history = useHistory();
 
-export const WordCloud: React.FC<CloudProps> = function WordCloud({
-  cloud,
-  toggleDisplay,
-}) {
-  const svg = createCloud(cloud);
+  if (state.loading) {
+    return <Spinner message="Lager ordsky..." />;
+  }
+
+  if (!state.cloud) {
+    return <div>Mangler ordsky.</div>;
+  }
+
+  const svg = createCloud(state.cloud);
   const xml = svgDataURL(svg);
   const download = (): void => downloadAsPng(xml);
 
@@ -33,7 +35,11 @@ export const WordCloud: React.FC<CloudProps> = function WordCloud({
         >
           Last ned som png
         </button>
-        <button type="button" onClick={toggleDisplay} className="button">
+        <button
+          type="button"
+          onClick={() => history.push('/input')}
+          className="button"
+        >
           Ny ordsky
         </button>
       </div>

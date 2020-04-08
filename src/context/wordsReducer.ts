@@ -18,11 +18,20 @@ export const wordsReducer = produce(
         break;
       case 'WORDS_FINISH_COUNT':
         draft.wordCount = action.data;
+        console.log(action.data);
         draft.loading = false;
         break;
-      case 'WORDS_ERROR':
+      case 'CLOUD_ERROR':
         draft.error = action.error;
         draft.loading = false;
+        break;
+      case 'CLOUD_CREATE':
+        draft.loading = true;
+        break;
+      case 'CLOUD_CREATED':
+        draft.loading = false;
+        draft.cloud = action.data;
+        delete draft.error;
         break;
       default:
         return draft;

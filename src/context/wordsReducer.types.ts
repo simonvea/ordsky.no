@@ -1,4 +1,5 @@
 import { WordCount } from '../utils/countWords';
+import { Cloud } from '../utils/createCloud';
 
 export const initialState = {
   loading: false,
@@ -10,6 +11,7 @@ export interface WordsState {
   loading: boolean;
   text: string;
   wordCount?: WordCount;
+  cloud?: Cloud[];
   error?: string;
 }
 
@@ -24,6 +26,8 @@ export type WordsActions =
       data: WordCount;
     }
   | {
-      type: 'WORDS_ERROR';
+      type: 'CLOUD_ERROR';
       error: string;
-    };
+    }
+  | { type: 'CLOUD_CREATE' }
+  | { type: 'CLOUD_CREATED'; data: Cloud[] };

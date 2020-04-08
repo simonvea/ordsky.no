@@ -2,9 +2,9 @@ export interface WordCount {
   [k: string]: number;
 }
 
-export function countWords(string: string): WordCount {
+export async function countWords(string: string): Promise<WordCount> {
   const regExp = /\S+/gi;
-  const wordsRaw = string.toLowerCase().match(regExp);
+  const wordsRaw = string.toUpperCase().match(regExp);
   const words = wordsRaw
     ?.map((word) => word.replace(/[!#$%&'()*,./:;=?^_`{}~´-]/g, ''))
     .filter((word) => word.length > 0);

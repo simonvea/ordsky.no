@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { WordsProvider } from './context/wordsContext';
 import { Home } from './pages/Home';
 import { TextForm } from './pages/Form';
+import { WordCloud } from './pages/Cloud';
 
 const App: React.FC = function App() {
   return (
@@ -15,7 +16,8 @@ const App: React.FC = function App() {
         <WordsProvider>
           <Router>
             <Route exact path="/" component={Home} />
-            <Route path="/ordsky" component={TextForm} />
+            <Route path="/input" component={TextForm} />
+            <Route path="/ordsky" component={WordCloud} />
           </Router>
         </WordsProvider>
       </main>
