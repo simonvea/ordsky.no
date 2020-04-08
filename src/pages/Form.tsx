@@ -2,6 +2,7 @@ import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useWordsContext } from '../context/wordsContext.hook';
 import { useNotification } from '../hooks';
+import { Spinner } from '../components/Spinner';
 
 export const TextForm: React.FC = function TextForm() {
   const [text, setText] = useState('');
@@ -51,7 +52,11 @@ export const TextForm: React.FC = function TextForm() {
             className="button"
             disabled={!text || loading}
           >
-            Generer ordsky
+            {loading ? (
+              <Spinner message="Skaper ordsky..." />
+            ) : (
+              'Generer ordsky'
+            )}
           </button>
           <button
             type="button"
