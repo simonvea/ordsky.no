@@ -2,7 +2,7 @@ import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useWordsContext } from '../context/wordsContext.hook';
 import { useNotification } from '../hooks';
-import { Spinner } from '../components/Spinner';
+import { Spinner } from './Spinner';
 
 export const TextForm: React.FC = function TextForm() {
   const [text, setText] = useState('');
