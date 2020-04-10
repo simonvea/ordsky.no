@@ -1,33 +1,50 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
+import { useFormsContext } from '../context/form/formsContext.hook';
 
 export type WordsInputProps = {
-  onChangeWord: (word: string) => void;
-  onChangeSize: (size: string) => void;
+  number: number;
+  inputKey: string;
 };
 
 export const WordsInput: React.FC<WordsInputProps> = function WordsInput({
-  onChangeWord,
-  onChangeSize,
+  number,
+  inputKey,
 }) {
-  const [word, setWord] = useState('');
-  const [size, setSize] = useState('');
+  const { state, updateSize, updateWord } = useFormsContext();
+
+  const { word, size } = state.inputs.find(
+    (input) => input.key === inputKey
+  ) || { word: '', size: '' };
 
   const handleWordChange = ({
     target,
   }: ChangeEvent<HTMLInputElement>): void => {
-    setWord(target.value);
-    onChangeWord(target.value);
+    updateWord(inputKey, target.value);
   };
 
   const handleSizehange = ({ target }: ChangeEvent<HTMLInputElement>): void => {
-    setSize(target.value);
-    onChangeSize(target.value);
+    updateSize(inputKey, target.value);
   };
 
   return (
     <div className="word-form__inputs">
-      <input type="text" value={word} onChange={handleWordChange} />
-      <input type="text" value={size} onChange={handleSizehange} />
+      <h2 className="word-form__row-number">{`${number}.`}</h2>
+      <input
+        className="word-form__input"
+        type="text"
+        value={word}
+        onChange={handleWordChange}
+        placeholder="Skriv inn ord..."
+      />
+      <input
+        className={`word-form__input word-form__input--small ${
+          word && !size && 'word-form__input--warning'
+        }`}
+        type="text"
+        value={size}
+        onChange={handleSizehange}
+        placeholder="Antall"
+      />
     </div>
   );
 };

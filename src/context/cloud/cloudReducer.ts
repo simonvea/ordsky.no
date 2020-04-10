@@ -1,22 +1,16 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
-import { WordsState, WordsActions, initialState } from './wordsReducer.types';
+import { CloudState, CloudActions, initialState } from './cloudReducer.types';
 
 export const wordsReducer = produce(
   // eslint-disable-next-line consistent-return
-  (draft: WordsState = initialState, action: WordsActions) => {
+  (draft: CloudState = initialState, action: CloudActions) => {
     switch (action.type) {
-      case 'WORDS_SET_TEXT':
-        draft.text = action.data;
-        break;
-      case 'WORDS_CLEAR':
-        draft.text = '';
-        break;
-      case 'WORDS_START_COUNT':
+      case 'CLOUD_START_COUNT':
         draft.loading = true;
         delete draft.wordCount;
         break;
-      case 'WORDS_FINISH_COUNT':
+      case 'CLOUD_FINISH_COUNT':
         draft.wordCount = action.data;
         console.log(action.data);
         draft.loading = false;

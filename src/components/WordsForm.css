@@ -1,6 +1,50 @@
-.word-form__inputs {
-  margin: 20px;
+.word-form__inputs-container {
+}
+
+.word-form__input-titles-container {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+}
+
+.word-form__input-title {
+  font-size: 22px;
+  text-align: center;
+  width: 214px;
+  margin-left: 5px;
+}
+
+.word-form__input-title--small {
+  width: 100px;
+}
+
+.word-form__inputs {
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: center;
+}
+
+.word-form__row-number {
+  width: 25px;
+}
+
+.word-form__input {
+  margin: 10px 15px;
+  border: 2px solid var(--primary-color-light);
+  border-radius: 4px;
+  padding: 7px;
+  font-size: 14px;
+  -webkit-transition-duration: 0.2s; /* Safari */
+  transition-duration: 0.2s;
+  font-family: 'Proza Libre', sans-serif;
+}
+
+.word-form__input--warning {
+  border: 2px solid red;
+}
+
+.word-form__input--small {
+  width: 70px;
 }

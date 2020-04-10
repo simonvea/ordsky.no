@@ -3,11 +3,11 @@ import './Cloud.css';
 import { useHistory } from 'react-router-dom';
 import { svgDataURL, downloadAsPng } from '../utils/downloadAsPng';
 import { createCloud } from '../utils/createCloud';
-import { useWordsContext } from '../context/wordsContext.hook';
+import { useCloudContext } from '../context/cloud/cloudContext.hook';
 import { Spinner } from '../components/Spinner';
 
 export const WordCloud: React.FC = function WordCloud() {
-  const { state } = useWordsContext();
+  const { state } = useCloudContext();
   const history = useHistory();
 
   if (state.loading) {

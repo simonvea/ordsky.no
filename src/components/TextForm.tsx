@@ -1,21 +1,32 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { FormEvent, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useWordsContext } from '../context/wordsContext.hook';
+import { useCloudContext } from '../context/cloud/cloudContext.hook';
 import { useNotification } from '../hooks';
 import { Spinner } from './Spinner';
+import { useFormsContext } from '../context/form/formsContext.hook';
 
-export const TextForm: React.FC = function TextForm() {
-  const [text, setText] = useState('');
+export type TextFormProps = {
+  changeToWordsForm: () => void;
+};
+
+export const TextForm: React.FC<TextFormProps> = function TextForm({
+  changeToWordsForm,
+}) {
   const [notification, notify] = useNotification(
     'Du må legge inn tekst før du kan generere en ordsky.',
     10
   );
   const history = useHistory();
-  const { state, createCloud } = useWordsContext();
+  const { state, createCloud } = useCloudContext();
   const { loading } = state;
+  const {
+    state: { text },
+    updateText,
+    clearText,
+  } = useFormsContext();
 
   const onChange = ({ target }: ChangeEvent<HTMLTextAreaElement>): void => {
-    setText(target.value);
+    updateText(target.value);
   };
 
   const handleSubmit = async (event: FormEvent): Promise<void> => {
@@ -44,7 +55,7 @@ export const TextForm: React.FC = function TextForm() {
           <button
             type="button"
             className="button button--outline"
-            onClick={() => setText('')}
+            onClick={clearText}
           >
             Tøm
           </button>
@@ -63,9 +74,9 @@ export const TextForm: React.FC = function TextForm() {
           <button
             type="button"
             className="button button--outline"
-            onClick={() => history.goBack()}
+            onClick={changeToWordsForm}
           >
-            Tilbake
+            Tilbake til ordskjema
           </button>
         </div>
       </form>

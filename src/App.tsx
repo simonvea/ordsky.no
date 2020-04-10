@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { WordsProvider } from './context/wordsContext';
+import { CloudProvider } from './context/cloud/cloudContext';
 import { Home } from './pages/Home';
 import { WordCloud } from './pages/Cloud';
 import { Input } from './pages/Input';
+import { FormsProvider } from './context/form/formsContext';
 
 const App: React.FC = function App() {
   return (
@@ -13,13 +14,15 @@ const App: React.FC = function App() {
         <h1 className="header__title">Ordsky.no</h1>
       </header>
       <main className="main-container">
-        <WordsProvider>
-          <Router>
-            <Route exact path="/" component={Home} />
-            <Route path="/input" component={Input} />
-            <Route path="/ordsky" component={WordCloud} />
-          </Router>
-        </WordsProvider>
+        <CloudProvider>
+          <FormsProvider>
+            <Router>
+              <Route exact path="/" component={Home} />
+              <Route path="/input" component={Input} />
+              <Route path="/ordsky" component={WordCloud} />
+            </Router>
+          </FormsProvider>
+        </CloudProvider>
       </main>
       <footer className="footer" />
     </div>

@@ -1,68 +1,73 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { FormEvent } from 'react';
+import { useHistory } from 'react-router-dom';
 import { WordsInput } from './WordsInput';
 import './WordsForm.css';
+import { useFormsContext } from '../context/form/formsContext.hook';
+import { useCloudContext } from '../context/cloud/cloudContext.hook';
 
-type Input = { key: string; word: string; size: string };
+type WordsFormProps = {
+  changeToTextForm: () => void;
+};
 
-export const WordsForm: React.FC = function WordsForm() {
-  const [inputs, setInputs] = useState<Array<Input>>([
-    { key: 'input-0', word: '', size: '' },
-  ]);
-
-  const addInput = (): void => {
-    const key = `input-${inputs.length}`;
-    const newInput: Input = { key, word: '', size: '' };
-    setInputs([...inputs, newInput]);
-  };
-
-  const handleWordChange = (key: string): ((word: string) => void) => {
-    const updateWord = (word: string): void => {
-      const updatedInputs = inputs;
-      const index = inputs.findIndex((input) => input.key === key);
-      updatedInputs[index] = { ...updatedInputs[index], word };
-      setInputs(updatedInputs);
-    };
-
-    return updateWord;
-  };
-
-  const handleSizeChange = (key: string): ((size: string) => void) => {
-    const updateSize = (size: string): void => {
-      const updatedInputs = inputs;
-      const index = inputs.findIndex((input) => input.key === key);
-      updatedInputs[index] = { ...updatedInputs[index], size };
-      setInputs(updatedInputs);
-    };
-
-    return updateSize;
-  };
+export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
+  changeToTextForm,
+}) {
+  const { state, addInput, clearInputs } = useFormsContext();
+  const { createCloudFromWords } = useCloudContext();
+  const history = useHistory();
 
   const onSubmit = (e: FormEvent): void => {
     e.preventDefault();
-    console.log(inputs);
+    console.log(state.inputs);
+    createCloudFromWords(state.inputs);
+    history.push('/ordsky');
   };
 
   return (
-    <>
-      <form onSubmit={onSubmit}>
-        {inputs.map((input) => (
-          <WordsInput
-            key={input.key}
-            onChangeWord={handleWordChange(input.key)}
-            onChangeSize={handleSizeChange(input.key)}
-          />
+    <form onSubmit={onSubmit}>
+      <section className="word-form__inputs-container">
+        <section className="word-form__input-titles-container">
+          <h3 className="word-form__input-title">Ord</h3>
+          <h3 className="word-form__input-title word-form__input-title--small">
+            Antall
+          </h3>
+        </section>
+        {state.inputs.map((input, index) => (
+          <WordsInput number={index + 1} key={input.key} inputKey={input.key} />
         ))}
+        <div className="flex-container">
+          <button
+            type="button"
+            className="button button--outline"
+            onClick={addInput}
+          >
+            Legg til et ord
+          </button>
+          <button
+            type="button"
+            className="button button--outline"
+            onClick={() => changeToTextForm()}
+          >
+            ... eller lim inn en tekst
+          </button>
+        </div>
+      </section>
+      <div className="flex-container">
         <button
           type="button"
           className="button button--outline"
-          onClick={addInput}
+          onClick={clearInputs}
         >
-          Legg til ord
+          Tøm liste
         </button>
-        <button type="submit" className="button">
+        <button
+          type="submit"
+          className="button"
+          disabled={!state.inputs[0].word && !state.inputs[0].size}
+        >
           Lag ordsky
         </button>
-      </form>
-    </>
+      </div>
+    </form>
   );
 };

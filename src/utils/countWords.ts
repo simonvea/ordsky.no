@@ -1,6 +1,8 @@
-export interface WordCount {
+import { WordsInput } from '../context/form/formsReducer.types';
+
+export type WordCount = {
   [k: string]: number;
-}
+};
 
 export async function countWords(string: string): Promise<WordCount> {
   const regExp = /\S+/gi;
@@ -24,4 +26,13 @@ export async function countWords(string: string): Promise<WordCount> {
   }
 
   return count;
+}
+
+export function wordInputsToWordCount(inputs: WordsInput[]): WordCount {
+  const countedWords = inputs.reduce((tot, input) => {
+    const { word, size } = input;
+    const obj = { [word.toUpperCase()]: Number.parseInt(size, 10) };
+    return { ...tot, ...obj };
+  }, {} as WordCount);
+  return countedWords;
 }
