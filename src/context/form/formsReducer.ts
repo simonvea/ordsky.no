@@ -20,6 +20,9 @@ export const formsReducer = produce(
       }
       case 'WORDS_REMOVE_INPUT':
         draft.inputs = draft.inputs.filter((input) => input.key !== action.key);
+        if (draft.inputs.length === 0) {
+          draft.inputs = initialState.inputs;
+        }
         break;
       case 'WORDS_UPDATE_INPUT': {
         draft.inputs = draft.inputs.map((input) =>

@@ -1,4 +1,6 @@
 import React, { ChangeEvent } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinusSquare } from '@fortawesome/free-solid-svg-icons';
 import { useFormsContext } from '../context/form/formsContext.hook';
 
 export type WordsInputProps = {
@@ -10,7 +12,7 @@ export const WordsInput: React.FC<WordsInputProps> = function WordsInput({
   number,
   inputKey,
 }) {
-  const { state, updateSize, updateWord } = useFormsContext();
+  const { state, updateSize, updateWord, removeInput } = useFormsContext();
 
   const { word, size } = state.inputs.find(
     (input) => input.key === inputKey
@@ -40,11 +42,24 @@ export const WordsInput: React.FC<WordsInputProps> = function WordsInput({
         className={`word-form__input word-form__input--small ${
           word && !size && 'word-form__input--warning'
         }`}
-        type="text"
+        type="number"
         value={size}
         onChange={handleSizehange}
         placeholder="Antall"
       />
+      <button
+        type="button"
+        onClick={() => removeInput(inputKey)}
+        // disabled={state.inputs.length < 2}
+        className="button button--icon"
+        aria-label="Remove input row"
+      >
+        <FontAwesomeIcon
+          icon={faMinusSquare}
+          color="rgb(217, 83, 79)"
+          size="lg"
+        />
+      </button>
     </div>
   );
 };

@@ -146,6 +146,12 @@ table {
 
 :root {
   /* Colors */
+  /* --primary-color: #548687;
+  --primary-color-light: #8fbc94;
+  --primary-color-dark: #56445d;
+  --secondary-color: #6da34d;
+  --secondary-color-light: #c5e99b;
+  --secondary-color-dark: #429897; */
   --primary-color: #548687;
   --primary-color-light: #8fbc94;
   --primary-color-dark: #56445d;
@@ -168,7 +174,7 @@ table {
 
 html {
   color: white;
-  background-color: var(--primary-color);
+  background-color: #373737;
   font-family: 'Proza Libre', sans-serif;
 }
 
