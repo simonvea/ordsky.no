@@ -14,8 +14,27 @@ export const WordCloud: React.FC = function WordCloud() {
     return <Spinner message="Lager ordsky..." />;
   }
 
+  if (state.error) {
+    return (
+      <div>
+        <p>En error har hendt: {state.error} </p>
+      </div>
+    );
+  }
+
   if (!state.cloud) {
-    return <div>Mangler ordsky.</div>;
+    return (
+      <div className="flex-container flex-container--column">
+        <p>Mangler ordsky.</p>
+        <button
+          type="button"
+          className="button"
+          onClick={() => history.push('/')}
+        >
+          Gå til fremsiden
+        </button>
+      </div>
+    );
   }
 
   const svg = createCloud(state.cloud);
@@ -33,7 +52,7 @@ export const WordCloud: React.FC = function WordCloud() {
           onClick={download}
           className="button button--secondary"
         >
-          Last ned som png
+          Last ned
         </button>
         <button
           type="button"

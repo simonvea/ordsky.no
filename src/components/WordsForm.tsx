@@ -18,7 +18,6 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
 
   const onSubmit = (e: FormEvent): void => {
     e.preventDefault();
-    console.log(state.inputs);
     createCloudFromWords(state.inputs);
     history.push('/ordsky');
   };
@@ -27,10 +26,12 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
     <form onSubmit={onSubmit}>
       <section className="word-form__inputs-container">
         <section className="word-form__input-titles-container">
+          <div className="word-form__row-number" />
           <h3 className="word-form__input-title">Ord</h3>
           <h3 className="word-form__input-title word-form__input-title--small">
             Antall
           </h3>
+          <div className="word-form__input-title word-form__input-title--tiny" />
         </section>
         {state.inputs.map((input, index) => (
           <WordsInput number={index + 1} key={input.key} inputKey={input.key} />
@@ -55,7 +56,7 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
       <div className="flex-container">
         <button
           type="button"
-          className="button button--outline"
+          className="button button--secondary"
           onClick={clearInputs}
         >
           Tøm liste

@@ -1,21 +1,25 @@
-.word-form__inputs-container {
-}
-
 .word-form__input-titles-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: stretch;
 }
 
 .word-form__input-title {
   font-size: 22px;
   text-align: center;
-  width: 214px;
-  margin-left: 5px;
+  width: 184px;
+  margin: 0 15px;
+  padding: 0 7px;
 }
 
 .word-form__input-title--small {
-  width: 100px;
+  width: 70px;
+}
+
+.word-form__input-title--tiny {
+  width: 19px;
+  padding: 0;
+  margin: 0;
 }
 
 .word-form__inputs {
@@ -31,7 +35,7 @@
 }
 
 .word-form__input {
-  margin: 10px 15px;
+  margin: 5px 15px;
   border: 2px solid var(--primary-color-light);
   border-radius: 4px;
   padding: 7px;
@@ -39,6 +43,17 @@
   -webkit-transition-duration: 0.2s; /* Safari */
   transition-duration: 0.2s;
   font-family: 'Proza Libre', sans-serif;
+}
+
+.word-form__validation {
+  margin: 0;
+  margin-left: 50px;
+  height: 10px;
+  width: inherit;
+  padding: 0px;
+  font-size: 0.8em;
+  padding: 2px;
+  color: red;
 }
 
 .word-form__input--warning {

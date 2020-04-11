@@ -54,7 +54,7 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
         <div className="flex-container">
           <button
             type="button"
-            className="button button--outline"
+            className="button button--secondary"
             onClick={clearText}
           >
             Tøm

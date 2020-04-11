@@ -46,6 +46,11 @@ This file contains styles for main display and styles that are used in multiple 
 .flex-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.flex-container--column {
+  flex-direction: column;
 }
 
 .form {
@@ -115,6 +120,11 @@ This file contains styles for main display and styles that are used in multiple 
   opacity: 0.7;
 }
 
+.button:active,
+.button:focus {
+  border: none;
+}
+
 .button--outline {
   background-color: transparent;
 }
@@ -144,4 +154,12 @@ This file contains styles for main display and styles that are used in multiple 
   padding: 2px;
   margin: 5px;
   color: red;
+}
+
+.notification--small {
+  height: 10px;
+  width: inherit;
+  padding: 0px;
+  margin: 0px;
+  font-size: 0.8em;
 }
