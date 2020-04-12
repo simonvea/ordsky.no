@@ -1,45 +1,42 @@
-import { useContext, useCallback } from 'react';
+import { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { CloudContext } from './cloudContext';
 import { CloudState } from './cloudReducer.types';
-import {
-  countWords as wordCounter,
-  wordInputsToWordCount,
-} from '../../utils/countWords';
+import { generateCloud } from '../../utils/cloud/createCloud';
+import { Cloud, CloudInput } from '../../utils/cloud/cloud.types';
 import { apiService } from '../../services/API';
-import { WordsInput } from '../form/formsReducer.types';
+import { countWords } from '../../utils/countWords';
 
 export interface UseWordsContext {
   state: CloudState;
-  createCloud: (text: string) => Promise<void>;
-  createCloudFromWords: (words: WordsInput[]) => void;
+  createCloud: (cloudInput: CloudInput[]) => void;
+  createCloudAsync: (text: string) => Promise<void>;
 }
 
 export const useCloudContext = (): UseWordsContext => {
   const { state, dispatch } = useContext(CloudContext);
+  const history = useHistory();
 
-  const createCloud = useCallback(
-    async (text: string): Promise<void> => {
-      dispatch({ type: 'CLOUD_START_COUNT' });
-      const data = await wordCounter(text);
-      dispatch({ type: 'CLOUD_FINISH_COUNT', data });
-
-      dispatch({ type: 'CLOUD_CREATE' });
-      try {
-        const cloud = await apiService.createCloud(data);
-        dispatch({ type: 'CLOUD_CREATED', data: cloud });
-      } catch (error) {
-        dispatch({ type: 'CLOUD_ERROR', error: (error as Error).message });
-      }
-    },
-    [dispatch]
-  );
-
-  const createCloudFromWords = async (words: WordsInput[]): Promise<void> => {
-    const wordCount = wordInputsToWordCount(words);
-    dispatch({ type: 'CLOUD_CREATE' });
+  const createCloudAsync = async (text: string): Promise<void> => {
+    dispatch({ type: 'CLOUD_START_COUNT' });
     try {
-      const cloud = await apiService.createCloud(wordCount);
-      dispatch({ type: 'CLOUD_CREATED', data: cloud });
+      const wordCount = await countWords(text);
+      dispatch({ type: 'CLOUD_FINISH_COUNT', data: wordCount });
+      dispatch({ type: 'CLOUD_CREATE' });
+      const data = await apiService.createCloud(wordCount);
+      dispatch({ type: 'CLOUD_CREATED', data });
+    } catch (error) {
+      dispatch({ type: 'CLOUD_ERROR', error: (error as Error).message });
+    }
+  };
+
+  const createCloud = (cloudInput: CloudInput[]): void => {
+    dispatch({ type: 'CLOUD_CREATE' });
+    history.push('/ordsky');
+    try {
+      const callback = (data: Cloud[]): void =>
+        dispatch({ type: 'CLOUD_CREATED', data });
+      generateCloud(cloudInput, callback);
     } catch (error) {
       dispatch({ type: 'CLOUD_ERROR', error: (error as Error).message });
     }
@@ -48,6 +45,6 @@ export const useCloudContext = (): UseWordsContext => {
   return {
     state,
     createCloud,
-    createCloudFromWords,
+    createCloudAsync,
   };
 };

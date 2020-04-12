@@ -2,7 +2,6 @@ import React, { FormEvent, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useCloudContext } from '../context/cloud/cloudContext.hook';
 import { useNotification } from '../hooks';
-import { Spinner } from './Spinner';
 import { useFormsContext } from '../context/form/formsContext.hook';
 
 export type TextFormProps = {
@@ -16,14 +15,16 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
     'Du må legge inn tekst før du kan generere en ordsky.',
     10
   );
-  const history = useHistory();
-  const { state, createCloud } = useCloudContext();
-  const { loading } = state;
+  const {
+    createCloudAsync,
+    state: { loading },
+  } = useCloudContext();
   const {
     state: { text },
     updateText,
     clearText,
   } = useFormsContext();
+  const history = useHistory();
 
   const onChange = ({ target }: ChangeEvent<HTMLTextAreaElement>): void => {
     updateText(target.value);
@@ -33,10 +34,12 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
     event.preventDefault();
     if (!text) {
       notify();
+      return;
     }
-    createCloud(text);
+    createCloudAsync(text);
     history.push('/ordsky');
   };
+
   return (
     <div>
       <form className="form" onSubmit={handleSubmit}>
@@ -48,9 +51,7 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
           value={text}
           onChange={onChange}
         />
-        <div className="notification">
-          {notification || state.error || null}
-        </div>
+        <div className="notification">{notification && notification}</div>
         <div className="flex-container">
           <button
             type="button"
@@ -63,13 +64,9 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
             type="submit"
             id="submit"
             className="button"
-            disabled={!text || loading}
+            disabled={loading}
           >
-            {loading ? (
-              <Spinner message="Skaper ordsky..." />
-            ) : (
-              'Generer ordsky'
-            )}
+            Generer ordsky
           </button>
           <button
             type="button"

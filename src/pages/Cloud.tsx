@@ -2,7 +2,7 @@ import React from 'react';
 import './Cloud.css';
 import { useHistory } from 'react-router-dom';
 import { svgDataURL, downloadAsPng } from '../utils/downloadAsPng';
-import { createCloud } from '../utils/createCloud';
+import { createCloud } from '../utils/cloud/createCloud';
 import { useCloudContext } from '../context/cloud/cloudContext.hook';
 import { Spinner } from '../components/Spinner';
 
@@ -65,3 +65,6 @@ export const WordCloud: React.FC = function WordCloud() {
     </div>
   );
 };
+
+// eslint-disable-next-line import/no-default-export
+export default WordCloud;

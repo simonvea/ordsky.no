@@ -1,8 +1,4 @@
-import { WordsInput } from '../context/form/formsReducer.types';
-
-export type WordCount = {
-  [k: string]: number;
-};
+import { WordsInput, WordCount } from '../context/form/formsReducer.types';
 
 export async function countWords(string: string): Promise<WordCount> {
   const regExp = /\S+/gi;

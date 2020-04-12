@@ -1,5 +1,5 @@
-import { WordCount } from '../../utils/countWords';
-import { Cloud } from '../../utils/createCloud';
+import { WordCount } from '../form/formsReducer.types';
+import { Cloud } from '../../utils/cloud/cloud.types';
 
 export const initialState = {
   loading: false,

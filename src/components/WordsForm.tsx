@@ -4,6 +4,7 @@ import { WordsInput } from './WordsInput';
 import './WordsForm.css';
 import { useFormsContext } from '../context/form/formsContext.hook';
 import { useCloudContext } from '../context/cloud/cloudContext.hook';
+import { wordsInputToCloudInput } from '../utils/cloud/createCloud';
 
 type WordsFormProps = {
   changeToTextForm: () => void;
@@ -13,12 +14,14 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
   changeToTextForm,
 }) {
   const { state, addInput, clearInputs } = useFormsContext();
-  const { createCloudFromWords } = useCloudContext();
+  const { createCloud } = useCloudContext();
   const history = useHistory();
 
   const onSubmit = (e: FormEvent): void => {
     e.preventDefault();
-    createCloudFromWords(state.inputs);
+    const inputs = state.inputs.filter((input) => input.word !== '');
+    const cloudInput = wordsInputToCloudInput(inputs);
+    createCloud(cloudInput);
     history.push('/ordsky');
   };
 
@@ -64,7 +67,7 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
         <button
           type="submit"
           className="button"
-          disabled={!state.inputs[0].word && !state.inputs[0].size}
+          disabled={!state.inputs[0].word || !state.inputs[0].size}
         >
           Lag ordsky
         </button>

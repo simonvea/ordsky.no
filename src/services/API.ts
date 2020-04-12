@@ -1,5 +1,5 @@
-import { Cloud } from '../utils/createCloud';
-import { WordCount } from '../utils/countWords';
+import { Cloud } from '../utils/cloud/cloud.types';
+import { WordCount } from '../context/form/formsReducer.types';
 
 const baseUrl = '/api';
 

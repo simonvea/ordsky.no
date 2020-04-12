@@ -13,7 +13,7 @@ export const formsReducer = produce(
     switch (action.type) {
       case 'WORDS_ADD_INPUT': {
         const key = `input-${draft.addedInputs}`;
-        const newInput: WordsInput = { key, word: '', size: '' };
+        const newInput: WordsInput = { key, word: '', size: '1' };
         draft.inputs.push(newInput);
         draft.addedInputs += 1;
         break;
@@ -31,7 +31,7 @@ export const formsReducer = produce(
         break;
       }
       case 'WORDS_CLEAR_INPUTS':
-        draft.inputs = [{ key: 'input-0', word: '', size: '' }];
+        draft.inputs = [{ key: 'input-0', word: '', size: '1' }];
         break;
       case 'WORDS_SET_TEXT':
         draft.text = action.text;
