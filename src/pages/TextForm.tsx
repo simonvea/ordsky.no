@@ -64,6 +64,8 @@ export const TextForm: React.FC<TextFormProps> = function TextForm() {
           >
             Generer ordsky
           </button>
+        </div>
+        <div className="flex-container">
           <Link
             type="button"
             className="button button--outline"
