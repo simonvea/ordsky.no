@@ -3,9 +3,10 @@ import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { CloudProvider } from './context/cloud/cloudContext';
 import { Home } from './pages/Home';
-import { Input } from './pages/Input';
 import { FormsProvider } from './context/form/formsContext';
 import { Spinner } from './components/Spinner';
+import { WordsForm } from './pages/WordsForm';
+import { TextForm } from './pages/TextForm';
 
 const WordCloud = lazy(() => import('./pages/Cloud'));
 
@@ -22,7 +23,8 @@ const App: React.FC = function App() {
             <Router>
               <Suspense fallback={<Spinner message="Laster side..." />}>
                 <Route exact path="/" component={Home} />
-                <Route path="/input" component={Input} />
+                <Route path="/text-input" component={TextForm} />
+                <Route path="/form-input" component={WordsForm} />
                 <Route path="/ordsky" component={WordCloud} />
               </Suspense>
             </Router>

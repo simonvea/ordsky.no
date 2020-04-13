@@ -1,18 +1,14 @@
 import React, { FormEvent } from 'react';
-import { useHistory } from 'react-router-dom';
-import { WordsInput } from './WordsInput';
+import { useHistory, Link } from 'react-router-dom';
+import { WordsInput } from '../components/WordsInput';
 import './WordsForm.css';
 import { useFormsContext } from '../context/form/formsContext.hook';
 import { useCloudContext } from '../context/cloud/cloudContext.hook';
 import { wordsInputToCloudInput } from '../utils/cloud/createCloud';
 
-type WordsFormProps = {
-  changeToTextForm: () => void;
-};
+type WordsFormProps = {};
 
-export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
-  changeToTextForm,
-}) {
+export const WordsForm: React.FC<WordsFormProps> = function WordsForm() {
   const { state, addInput, clearInputs } = useFormsContext();
   const { createCloud } = useCloudContext();
   const history = useHistory();
@@ -47,13 +43,13 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
           >
             Legg til et ord
           </button>
-          <button
+          <Link
             type="button"
             className="button button--outline"
-            onClick={() => changeToTextForm()}
+            to="/text-input"
           >
             ... eller lim inn en tekst
-          </button>
+          </Link>
         </div>
       </section>
       <div className="flex-container">

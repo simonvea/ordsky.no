@@ -1,16 +1,12 @@
 import React, { FormEvent, ChangeEvent } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { useCloudContext } from '../context/cloud/cloudContext.hook';
 import { useNotification } from '../hooks';
 import { useFormsContext } from '../context/form/formsContext.hook';
 
-export type TextFormProps = {
-  changeToWordsForm: () => void;
-};
+export type TextFormProps = {};
 
-export const TextForm: React.FC<TextFormProps> = function TextForm({
-  changeToWordsForm,
-}) {
+export const TextForm: React.FC<TextFormProps> = function TextForm() {
   const [notification, notify] = useNotification(
     'Du må legge inn tekst før du kan generere en ordsky.',
     10
@@ -68,13 +64,13 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
           >
             Generer ordsky
           </button>
-          <button
+          <Link
             type="button"
             className="button button--outline"
-            onClick={changeToWordsForm}
+            to="/form-input"
           >
             Tilbake til ordskjema
-          </button>
+          </Link>
         </div>
       </form>
     </div>

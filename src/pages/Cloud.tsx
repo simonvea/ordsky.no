@@ -18,6 +18,13 @@ export const WordCloud: React.FC = function WordCloud() {
     return (
       <div>
         <p>En error har hendt: {state.error} </p>
+        <button
+          type="button"
+          className="button"
+          onClick={() => history.goBack()}
+        >
+          Tilbake
+        </button>
       </div>
     );
   }
@@ -31,7 +38,7 @@ export const WordCloud: React.FC = function WordCloud() {
           className="button"
           onClick={() => history.push('/')}
         >
-          Gå til fremsiden
+          Gå til forsiden
         </button>
       </div>
     );

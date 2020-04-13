@@ -18,7 +18,7 @@ export const Home: React.FC = function Home() {
         </article>
       </section>
       <section className="flex-container">
-        <Link to="/input" className="button">
+        <Link to="/form-input" className="button">
           Lag en ordsky
         </Link>
       </section>
