@@ -65,7 +65,6 @@ export const WordCloud: React.FC = function WordCloud() {
           type="button"
           onClick={() => {
             history.goBack();
-            history.goBack();
           }}
           className="button"
         >

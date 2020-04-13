@@ -24,8 +24,8 @@ export const useCloudContext = (): UseWordsContext => {
       dispatch({ type: 'CLOUD_FINISH_COUNT', data: wordCount });
       dispatch({ type: 'CLOUD_CREATE' });
       const config: CloudConfig = {
-        svgHeight: 500,
-        svgWidth: 300,
+        svgHeight: 300,
+        svgWidth: 500,
       };
       const data = await apiService.createCloud(wordCount, config);
       dispatch({ type: 'CLOUD_CREATED', data });

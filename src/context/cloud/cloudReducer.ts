@@ -12,7 +12,6 @@ export const wordsReducer = produce(
         break;
       case 'CLOUD_FINISH_COUNT':
         draft.wordCount = action.data;
-        console.log(action.data);
         draft.loading = false;
         break;
       case 'CLOUD_ERROR':

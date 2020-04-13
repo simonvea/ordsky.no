@@ -11,14 +11,12 @@ type WordsFormProps = {};
 export const WordsForm: React.FC<WordsFormProps> = function WordsForm() {
   const { state, addInput, clearInputs } = useFormsContext();
   const { createCloud } = useCloudContext();
-  const history = useHistory();
 
   const onSubmit = (e: FormEvent): void => {
     e.preventDefault();
     const inputs = state.inputs.filter((input) => input.word !== '');
     const cloudInput = wordsInputToCloudInput(inputs);
     createCloud(cloudInput);
-    history.push('/ordsky');
   };
 
   return (
