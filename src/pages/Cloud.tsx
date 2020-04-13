@@ -63,7 +63,10 @@ export const WordCloud: React.FC = function WordCloud() {
         </button>
         <button
           type="button"
-          onClick={() => history.push('/input')}
+          onClick={() => {
+            history.goBack();
+            history.goBack();
+          }}
           className="button"
         >
           Ny ordsky

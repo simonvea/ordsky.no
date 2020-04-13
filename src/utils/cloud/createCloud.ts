@@ -42,7 +42,7 @@ export const generateCloud = (
     .size([svgWidth, svgHeight])
     .words(words)
     .padding(paddingBetweenWords)
-    .rotate(() => rotationDeg)
+    // .rotate(() => rotationDeg)
     .font(font)
     .fontSize((d) => d.size as number)
     .on('end', callBack)
