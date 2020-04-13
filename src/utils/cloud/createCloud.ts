@@ -4,15 +4,18 @@ import getRandomColor from 'randomcolor';
 import { WordsInput, WordCount } from '../../context/form/formsReducer.types';
 import { Cloud, CloudInput, CloudConfig } from './cloud.types';
 
-export function createCloud(cloud: Cloud[]): SVGElement {
+export function createCloud(cloud: Cloud[], config?: CloudConfig): SVGElement {
   const div = document.createElement('div');
+
+  const width = config?.svgWidth || 500;
+  const height = config?.svgHeight || 300;
 
   select(div)
     .append('svg')
-    .attr('width', 500) // layout.size()[0]
-    .attr('height', 300) // layout.size()[1]
+    .attr('width', width) // layout.size()[0]
+    .attr('height', height) // layout.size()[1]
     .append('g')
-    .attr('transform', `translate(${500 / 2},${300 / 2})`)
+    .attr('transform', `translate(${width / 2},${height / 2})`)
     .selectAll('text')
     .data(cloud)
     .enter()
@@ -35,14 +38,15 @@ export const generateCloud = (
   const svgWidth = config?.svgWidth || 500;
   const svgHeight = config?.svgHeight || 300;
   const paddingBetweenWords = config?.padding || 2;
-  const rotationDeg = config?.rotationDeg || Math.random() * 4 * 45 - 45;
+  // eslint-disable-next-line no-bitwise
+  const rotationDeg = config?.rotationDeg || (~~(Math.random() * 6) - 3) * 30;
   const font = config?.font || 'Impact';
 
   d3cloud()
     .size([svgWidth, svgHeight])
     .words(words)
     .padding(paddingBetweenWords)
-    // .rotate(() => rotationDeg)
+    .rotate(() => rotationDeg)
     .font(font)
     .fontSize((d) => d.size as number)
     .on('end', callBack)

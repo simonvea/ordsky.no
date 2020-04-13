@@ -1,4 +1,4 @@
-import { Cloud } from '../utils/cloud/cloud.types';
+import { Cloud, CloudConfig } from '../utils/cloud/cloud.types';
 import { WordCount } from '../context/form/formsReducer.types';
 
 const baseUrl = '/api';
@@ -10,13 +10,13 @@ export class API {
     this.url = url;
   }
 
-  async createCloud(words: WordCount): Promise<Cloud[]> {
+  async createCloud(words: WordCount, config?: CloudConfig): Promise<Cloud[]> {
     const init = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ words }),
+      body: JSON.stringify({ words, config }),
     };
 
     const url = `${this.url}/cloud`;
