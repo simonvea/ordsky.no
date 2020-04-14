@@ -4,7 +4,7 @@ import { CloudContext } from './cloudContext';
 import { CloudState } from './cloudReducer.types';
 import { generateCloud } from '../../utils/cloud/createCloud';
 import { Cloud, CloudInput, CloudConfig } from '../../utils/cloud/cloud.types';
-import { apiService } from '../../services/API';
+import { apiService, AnalyticsDTO } from '../../services/API';
 import { countWords } from '../../utils/countWords';
 
 export interface UseWordsContext {
@@ -32,6 +32,11 @@ export const useCloudContext = (): UseWordsContext => {
     } catch (error) {
       dispatch({ type: 'CLOUD_ERROR', error: (error as Error).message });
     }
+    const analyticsData: AnalyticsDTO = {
+      data: text,
+      type: 'text',
+    };
+    apiService.analytics(analyticsData).catch();
   };
 
   const createCloud = (cloudInput: CloudInput[]): void => {
@@ -44,6 +49,11 @@ export const useCloudContext = (): UseWordsContext => {
     } catch (error) {
       dispatch({ type: 'CLOUD_ERROR', error: (error as Error).message });
     }
+    const analyticsData: AnalyticsDTO = {
+      data: cloudInput,
+      type: 'words',
+    };
+    apiService.analytics(analyticsData).catch();
   };
 
   return {
