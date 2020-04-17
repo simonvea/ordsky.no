@@ -40,9 +40,14 @@
   border-radius: 4px;
   padding: 7px;
   font-size: 14px;
+  width: 150px;
   -webkit-transition-duration: 0.2s; /* Safari */
   transition-duration: 0.2s;
   font-family: 'Proza Libre', sans-serif;
+}
+
+.word-form__input:focus {
+  border: 2px solid var(--primary-color-dark);
 }
 
 .word-form__validation {
@@ -62,4 +67,14 @@
 
 .word-form__input--small {
   width: 70px;
+}
+
+@media only screen and (min-width: 768px) {
+  .word-form__input {
+    width: 200px;
+  }
+
+  .word-form__input--small {
+    width: 70px;
+  }
 }

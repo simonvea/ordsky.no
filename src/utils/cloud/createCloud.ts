@@ -39,7 +39,7 @@ export const generateCloud = (
   const svgHeight = config?.svgHeight || 300;
   const paddingBetweenWords = config?.padding || 2;
   // eslint-disable-next-line no-bitwise
-  const rotationDeg = config?.rotationDeg || (~~(Math.random() * 6) - 3) * 30;
+  // const rotationDeg = config?.rotationDeg || (~~(Math.random() * 6) - 3) * 30; TODO: Implement
   const font = config?.font || 'Impact';
 
   d3cloud()

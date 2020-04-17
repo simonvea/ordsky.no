@@ -1,5 +1,5 @@
 import React, { FormEvent } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { WordsInput } from '../components/WordsInput';
 import './WordsForm.css';
 import { useFormsContext } from '../context/form/formsContext.hook';

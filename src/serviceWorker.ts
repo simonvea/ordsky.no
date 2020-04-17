@@ -11,6 +11,9 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
 
+// In general, just remember that the double-underscore namespace is reserved for Firebase usage and that you should not intercept these requests in your service worker.
+// Ref: https://firebase.google.com/docs/hosting/reserved-urls?authuser=0
+
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
