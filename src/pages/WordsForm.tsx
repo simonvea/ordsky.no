@@ -1,5 +1,5 @@
 import React, { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { WordsInput } from '../components/WordsInput';
 import './WordsForm.css';
 import { useFormsContext } from '../context/form/formsContext.hook';
@@ -11,12 +11,14 @@ type WordsFormProps = {};
 export const WordsForm: React.FC<WordsFormProps> = function WordsForm() {
   const { state, addInput, clearInputs } = useFormsContext();
   const { createCloud } = useCloudContext();
+  const history = useHistory();
 
   const onSubmit = (e: FormEvent): void => {
     e.preventDefault();
     const inputs = state.inputs.filter((input) => input.word !== '');
     const cloudInput = wordsInputToCloudInput(inputs);
     createCloud(cloudInput);
+    history.push('/visualization/words');
   };
 
   return (

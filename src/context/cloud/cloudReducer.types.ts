@@ -1,9 +1,8 @@
-import { WordCount } from '../form/formsReducer.types';
+import { WordCount } from '../../utils/countWords';
 import { Cloud } from '../../utils/cloud/cloud.types';
 
 export const initialState = {
   loading: false,
-  wordCount: {},
 };
 
 export interface CloudState {

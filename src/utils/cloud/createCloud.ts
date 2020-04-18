@@ -1,7 +1,7 @@
 import { select } from 'd3-selection';
 import d3cloud from 'd3-cloud';
 import getRandomColor from 'randomcolor';
-import { WordsInput, WordCount } from '../../context/form/formsReducer.types';
+import { WordsInput } from '../../context/form/formsReducer.types';
 import { Cloud, CloudInput, CloudConfig } from './cloud.types';
 
 export function createCloud(cloud: Cloud[], config?: CloudConfig): SVGElement {
@@ -79,17 +79,6 @@ export const addColorToWordsInput = (words: WordsInput[]): CloudInput[] => {
     size: Number.parseInt(word.size, 10),
     fill: getRandomColor(),
   }));
-};
-
-export const wordCountToCloudInput = (wordCount: WordCount): CloudInput[] => {
-  const words = Object.keys(wordCount);
-  const cloudInput = words.map((word) => ({
-    text: word,
-    size: wordCount[word],
-    fill: getRandomColor(),
-  }));
-  const normalizedSizes = normalizeSizes(cloudInput);
-  return normalizedSizes.sort((a, b) => b.size - a.size);
 };
 
 export const wordsInputToCloudInput = (

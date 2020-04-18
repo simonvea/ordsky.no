@@ -8,7 +8,7 @@ import { Spinner } from './components/Spinner';
 import { WordsForm } from './pages/WordsForm';
 import { TextForm } from './pages/TextForm';
 
-const WordCloud = lazy(() => import('./pages/Cloud'));
+const Visualization = lazy(() => import('./pages/Visualization'));
 
 const App: React.FC = function App() {
   // TODO: Add link to homepage in header
@@ -25,7 +25,7 @@ const App: React.FC = function App() {
                 <Route exact path="/" component={Home} />
                 <Route path="/text-input" component={TextForm} />
                 <Route path="/form-input" component={WordsForm} />
-                <Route path="/ordsky" component={WordCloud} />
+                <Route path="/visualization" component={Visualization} />
               </Suspense>
             </Router>
           </FormsProvider>

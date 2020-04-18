@@ -1,5 +1,5 @@
 import { Cloud, CloudConfig, CloudInput } from '../utils/cloud/cloud.types';
-import { WordCount } from '../context/form/formsReducer.types';
+import { WordCount } from '../utils/countWords';
 
 export interface AnalyticsDTO {
   data: string | CloudInput[];

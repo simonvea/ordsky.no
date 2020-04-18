@@ -1,12 +1,23 @@
-import { WordsInput, WordCount } from '../context/form/formsReducer.types';
+import filter from './filter.json';
+
+export type WordCount = Array<{
+  text: string;
+  count: number;
+}>;
+const isNotNumber = (w: string): boolean =>
+  Number.isNaN(Number.parseInt(w, 10));
+
+const wordsFilter = (word: string): boolean => {
+  return word.length > 2 && isNotNumber && !filter.includes(word);
+};
 
 export async function countWords(string: string): Promise<WordCount> {
   const regExp = /\S+/gi;
   const wordsRaw = string.toUpperCase().match(regExp);
   const words = wordsRaw
-    ?.map((word) => word.replace(/[!#$%&'()*,./:;=?^_`{}~´-]/g, ''))
-    .filter((word) => word.length > 0);
-  const count: WordCount = {};
+    ?.map((word) => word.replace(/[\d!#$%&'()*,./:;=?^_`{}~´-]/g, ''))
+    .filter(wordsFilter);
+  const count: { [k: string]: number } = {};
 
   if (words) {
     words.forEach((word) => {
@@ -21,14 +32,10 @@ export async function countWords(string: string): Promise<WordCount> {
     });
   }
 
-  return count;
-}
-
-export function wordInputsToWordCount(inputs: WordsInput[]): WordCount {
-  const countedWords = inputs.reduce((tot, input) => {
-    const { word, size } = input;
-    const obj = { [word.toUpperCase()]: Number.parseInt(size, 10) };
-    return { ...tot, ...obj };
-  }, {} as WordCount);
-  return countedWords;
+  const countedWords = Object.keys(count);
+  const countedArray = countedWords.map((word) => ({
+    text: word,
+    count: count[word],
+  }));
+  return countedArray.sort((a, b) => b.count - a.count);
 }

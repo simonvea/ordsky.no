@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 import { CloudContext } from './cloudContext';
 import { CloudState } from './cloudReducer.types';
 import { generateCloud } from '../../utils/cloud/createCloud';
@@ -15,7 +14,6 @@ export interface UseWordsContext {
 
 export const useCloudContext = (): UseWordsContext => {
   const { state, dispatch } = useContext(CloudContext);
-  const history = useHistory();
 
   const createCloudAsync = async (text: string): Promise<void> => {
     dispatch({ type: 'CLOUD_START_COUNT' });
@@ -36,7 +34,6 @@ export const useCloudContext = (): UseWordsContext => {
 
   const createCloud = (cloudInput: CloudInput[]): void => {
     dispatch({ type: 'CLOUD_CREATE' });
-    history.push('/ordsky');
     try {
       const callback = (data: Cloud[]): void =>
         dispatch({ type: 'CLOUD_CREATED', data });

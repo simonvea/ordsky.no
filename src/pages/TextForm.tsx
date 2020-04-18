@@ -33,7 +33,7 @@ export const TextForm: React.FC<TextFormProps> = function TextForm() {
       return;
     }
     createCloudAsync(text);
-    history.push('/ordsky');
+    history.push('/visualization/text');
   };
 
   return (

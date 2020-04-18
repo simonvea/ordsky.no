@@ -1,9 +1,5 @@
 export type WordsInput = { key: string; word: string; size: string };
 
-export type WordCount = {
-  [k: string]: number;
-};
-
 export const initialState = {
   inputs: [{ key: 'input-0', word: '', size: '1' }],
   addedInputs: 1,
