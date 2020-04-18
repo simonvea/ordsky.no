@@ -16,7 +16,7 @@ export const WordCloud: React.FC = function WordCloud() {
     const download = (): void => downloadAsPng(xml);
 
     return (
-      <div>
+      <div className="flex-container flex-container--column">
         <section className="ordsky">
           <img src={xml} alt="ordsky" className="ordsky__img" />
         </section>
