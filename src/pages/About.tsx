@@ -19,7 +19,7 @@ export const About: React.FC = () => {
           Ordsky.no er et lite hobbyprosjekt laget av{' '}
           <a
             className="article__link"
-            href="https://www.simonsier.no/about"
+            href="https://www.simonsier.no/about/"
             target="_blank"
             rel="noopener noreferrer"
           >
