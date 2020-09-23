@@ -1,0 +1,42 @@
+.article p {
+  font-size: 1.125rem;
+  line-height: 1.5625rem;
+  width: calc(100% - 40px);
+  max-width: 600px;
+  text-rendering: optimizeLegibility;
+}
+
+.article__link {
+  color: #000;
+  text-emphasis: underline;
+}
+
+.about {
+  background-color: var(--text-color-primary);
+  color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 8px 16px;
+}
+
+.article {
+  margin: 1rem 0;
+  padding: 1rem;
+}
+
+.article h1,
+.article h2 {
+  margin: 1rem;
+}
+
+.article h1 {
+  font-weight: 500;
+  font-size: 1.8rem;
+  line-height: 2rem;
+}
+
+.article h2 {
+  font-weight: 400;
+  font-size: 1.625rem;
+  line-height: 1.875rem;
+}
