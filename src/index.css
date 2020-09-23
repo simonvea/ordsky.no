@@ -158,11 +158,12 @@ table {
   --secondary-color: #6da34d;
   --secondary-color-light: #c5e99b;
   --secondary-color-dark: #429897;
+  --text-color-primary: #ffffffde;
 }
 
 /* 
 ========================
-====== Genereal ========
+====== General ========
 ========================
 */
 
@@ -173,7 +174,7 @@ table {
 }
 
 html {
-  color: white;
+  color: var(--text-color-primary);
   background-color: #373737;
   font-family: 'Proza Libre', sans-serif;
 }

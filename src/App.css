@@ -11,7 +11,6 @@ This file contains styles for main display and styles that are used in multiple 
 .header,
 .footer {
   text-align: center;
-  background-color: var(--primary-color-dark);
   padding: 10px;
   font-family: 'Cormorant Garamond', serif;
   min-width: 100%;
@@ -19,13 +18,39 @@ This file contains styles for main display and styles that are used in multiple 
 
 .header {
   height: 90px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.24);
+  box-shadow: 2px 3px 3px 2px rgba(0, 0, 0, 0.4);
+  padding: 1rem 2rem;
 }
 
 .header__title {
-  font-size: 30px;
+  font-size: 2rem;
   text-align: center;
   height: 70px;
   line-height: 70px;
+  color: var(--text-color-primary);
+  text-decoration: none;
+}
+
+.header__title a {
+  color: var(--text-color-primary);
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.nav__link {
+  color: var(--text-color-primary);
+  font-size: 1.2rem;
+  margin: 0 5px;
 }
 
 .footer {
@@ -135,6 +160,10 @@ This file contains styles for main display and styles that are used in multiple 
 
 .button--secondary {
   background-color: var(--secondary-color-dark);
+}
+
+.button--small {
+  padding: 8px 16px;
 }
 
 .button--icon {
