@@ -14,9 +14,16 @@ const wordsFilter = (word: string): boolean => {
 export async function countWords(string: string): Promise<WordCount> {
   const regExp = /\S+/gi;
   const wordsRaw = string.toUpperCase().match(regExp);
+
   const words = wordsRaw
-    ?.map((word) => word.replace(/[\d!#$%&'()*,./:;=?^_`{}~´-]/g, ''))
+    ?.map((word) =>
+      word
+        .replace(/[!#$%&'()*+,./:;=?^_`{}~´]/g, '') // TODO: also remove digits "\d"?
+        .replace(/^-/g, '')
+        .replace(/-$/g, '')
+    )
     .filter(wordsFilter);
+
   const count: { [k: string]: number } = {};
 
   if (words) {
