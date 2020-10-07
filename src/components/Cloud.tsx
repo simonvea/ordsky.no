@@ -15,7 +15,9 @@ export const WordCloud: React.FC = function WordCloud() {
     const svg = createCloud(cloud);
     const xml = svgDataURL(svg);
     const download = (): void => {
-      analytics.logEvent('download_cloud');
+      // For some reason logEvent is typed to accept a specific event...
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      analytics.logEvent('download_cloud' as any);
       downloadAsPng(xml);
     };
 
