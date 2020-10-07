@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { svgDataURL, downloadAsPng } from '../utils/downloadAsPng';
 import { createCloud } from '../utils/cloud/createCloud';
 import { useCloudContext } from '../context/cloud/cloudContext.hook';
+import { analytics } from '../firebase';
 
 export const WordCloud: React.FC = function WordCloud() {
   const {
@@ -13,7 +14,10 @@ export const WordCloud: React.FC = function WordCloud() {
   if (cloud) {
     const svg = createCloud(cloud);
     const xml = svgDataURL(svg);
-    const download = (): void => downloadAsPng(xml);
+    const download = (): void => {
+      analytics.logEvent('download_cloud');
+      downloadAsPng(xml);
+    };
 
     return (
       <div className="flex-container flex-container--column">
