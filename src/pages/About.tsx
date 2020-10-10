@@ -20,8 +20,9 @@ export const About: React.FC = () => {
           <a
             className="article__link"
             href="https://www.simonsier.no/about/"
+            // eslint-disable-next-line react/jsx-no-target-blank
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
           >
             Simon Opheim
           </a>
