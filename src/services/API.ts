@@ -1,11 +1,5 @@
-import { Cloud, CloudConfig, CloudInput } from '../utils/cloud/cloud.types';
+import { Cloud, CloudConfig } from '../utils/cloud/cloud.types';
 import { WordCount } from '../utils/countWords';
-
-export interface AnalyticsDTO {
-  data: string | CloudInput[];
-  type: 'words' | 'text';
-  time?: Date;
-}
 
 const baseUrl = '/api';
 
@@ -26,26 +20,6 @@ export class API {
     };
 
     const url = `${this.url}/cloud`;
-    const response = await fetch(url, init);
-
-    if (!response.ok) {
-      const { status } = response;
-      throw new Error(status.toString());
-    }
-
-    return response.json();
-  }
-
-  async analytics(data: AnalyticsDTO): Promise<AnalyticsDTO> {
-    const init = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data }),
-    };
-
-    const url = `${this.url}/analytics`;
     const response = await fetch(url, init);
 
     if (!response.ok) {
