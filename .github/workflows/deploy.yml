@@ -12,10 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm run test
+
       - name: Build
-        run: |
-          npm install
-          REACT_APP_API_KEY=${{ secrets.API_KEY }} npm run build
+        run: REACT_APP_API_KEY=${{ secrets.API_KEY }} npm run build
 
       - name: Upload artifact
         uses: actions/upload-artifact@master
