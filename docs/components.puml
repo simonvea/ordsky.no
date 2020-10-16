@@ -1,0 +1,32 @@
+@startuml Web components
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
+
+hide stereotype
+LAYOUT_AS_SKETCH()
+
+Component(landing_page, "Initial page", "React", "Inital page to choose if to generate or input ID")
+Component(pupil_page, "Word input screen", "React", "Saves words to collection with ID. Only if collection exists.")
+Component(awaiter, "Wait screen", "React", "Listens to collection with ID, keeps track of number of participants (documents in collection). Contains a button to generate cloud if you are initiator.")
+
+Component(cloud_generator, "Cloud Generator", "Typescript", "Generates and saves Word Cloud to collection with ID")
+Component(cloud_page, "Cloud visualizer", "Typescript/Firestore", "Displays generated cloud")
+
+Component(firestore, "Firestore", "Firestore SDK", "Collection with session ID, contains one Doc for each word input")
+
+Rel(landing_page, pupil_page, "If inputing ID")
+
+Rel(landing_page, firestore, "If ID generated", "Creates collection with ID")
+Rel(landing_page, awaiter, "If code generation","Waits for pupil input")
+
+Rel(pupil_page, firestore, "Sends words to collection with ID")
+Rel(pupil_page, awaiter, "Waits for finished session")
+
+Rel(firestore, awaiter, "Updates with number of documents in collection")
+
+Rel(awaiter, cloud_generator, "Initiator (only) generates cloud")
+Rel(cloud_generator, firestore, "Saves cloud")
+Rel(cloud_generator, cloud_page, "Displays generated cloud")
+
+Rel(awaiter, cloud_page, "Visualizes generated cloud")
+
+@enduml
