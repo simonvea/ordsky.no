@@ -4,7 +4,7 @@ import { useCloudContext } from '../context/cloud/cloudContext.hook';
 import { useNotification } from '../hooks';
 import { useFormsContext } from '../context/form/formsContext.hook';
 
-export type TextFormProps = {};
+export type TextFormProps = Record<string, unknown>;
 
 export const TextForm: React.FC<TextFormProps> = function TextForm() {
   const [notification, notify] = useNotification(

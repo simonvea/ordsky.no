@@ -22,7 +22,7 @@ export async function countWords(string: string): Promise<WordCount> {
         .replace(/^-/g, '')
         .replace(/-$/g, '')
     )
-    .filter(wordsFilter);
+    .filter((w) => wordsFilter(w));
 
   const count: { [k: string]: number } = {};
 

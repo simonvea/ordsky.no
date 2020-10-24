@@ -6,7 +6,7 @@ import { useFormsContext } from '../context/form/formsContext.hook';
 import { useCloudContext } from '../context/cloud/cloudContext.hook';
 import { wordsInputToCloudInput } from '../utils/cloud/createCloud';
 
-type WordsFormProps = {};
+type WordsFormProps = Record<string, unknown>;
 
 export const WordsForm: React.FC<WordsFormProps> = function WordsForm() {
   const { state, addInput, clearInputs } = useFormsContext();
