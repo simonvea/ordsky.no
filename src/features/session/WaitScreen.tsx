@@ -1,7 +1,8 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, SecondaryButton } from '../../components/atoms/Button';
+import { Title } from '../../components/atoms/Title';
 
 export type WaitScreenProps = {
   isAdmin?: boolean;
@@ -21,6 +22,7 @@ export const WaitScreen: React.FC<WaitScreenProps> = ({
   onCreateWordCloud,
   onQuit,
 }) => {
+  const params = useParams<{ id: string }>();
   const history = useHistory();
   const hasEntries = numberOfEntries > 0;
 
@@ -31,6 +33,7 @@ export const WaitScreen: React.FC<WaitScreenProps> = ({
 
   return (
     <>
+      <Title>Kode: {params?.id && params.id.toUpperCase()}</Title>
       {hasEntries ? (
         <span>{`${numberOfEntries} har lagt inn ord.`}</span>
       ) : (

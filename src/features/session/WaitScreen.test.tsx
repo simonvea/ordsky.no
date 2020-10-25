@@ -5,11 +5,14 @@ import { WaitScreen } from './WaitScreen';
 const mockHistoryPush = jest.fn();
 const onQuitMock = jest.fn();
 
+const mockId = '4s6fe';
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useHistory: () => ({
     push: mockHistoryPush,
   }),
+  useParams: () => ({ id: mockId }),
 }));
 
 describe('WaitPage component', () => {
@@ -17,6 +20,24 @@ describe('WaitPage component', () => {
     mockHistoryPush.mockClear();
     onQuitMock.mockClear();
   });
+
+  it('displays the id from url as uppercase', () => {
+    // Arrange
+    const { getByText } = render(
+      <WaitScreen
+        numberOfEntries={0}
+        onCreateWordCloud={() => {}}
+        onQuit={onQuitMock}
+      />
+    );
+
+    // Act
+    const text = getByText(`Kode: ${mockId.toUpperCase()}`);
+
+    // Assert
+    expect(text).toBeInTheDocument();
+  });
+
   it('when no words input displays "Venter på ord"', () => {
     // Arrange
     const { getByText } = render(
