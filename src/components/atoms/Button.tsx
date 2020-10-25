@@ -29,13 +29,13 @@ export const Button = styled.button<ButtonProps>`
       props.outline ? 'background-color: var(--secondary-color-dark);' : ''}
   }
 
-  &::disabled {
+  &:disabled {
     cursor: not-allowed;
     opacity: 0.7;
   }
 
-  &::active,
-  &::focus {
+  &:active,
+  &:focus {
     border: none;
   }
 `;
