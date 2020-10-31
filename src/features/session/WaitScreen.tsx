@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, SecondaryButton } from '../../components/atoms/Button';
 import { Title } from '../../components/atoms/Title';
@@ -9,6 +8,7 @@ export type WaitScreenProps = {
   numberOfEntries: number;
   onCreateWordCloud: () => void;
   onQuit: () => void;
+  id: string;
 };
 
 const WaitScreenActionsContainer = styled.section`
@@ -21,19 +21,13 @@ export const WaitScreen: React.FC<WaitScreenProps> = ({
   isAdmin,
   onCreateWordCloud,
   onQuit,
+  id,
 }) => {
-  const params = useParams<{ id: string }>();
-  const history = useHistory();
   const hasEntries = numberOfEntries > 0;
-
-  const handleQuit = (): void => {
-    onQuit();
-    history.push('/session');
-  };
 
   return (
     <>
-      <Title>Kode: {params?.id && params.id.toUpperCase()}</Title>
+      <Title>Kode: {id.toUpperCase()}</Title>
       {hasEntries ? (
         <span>{`${numberOfEntries} har lagt inn ord.`}</span>
       ) : (
@@ -49,7 +43,7 @@ export const WaitScreen: React.FC<WaitScreenProps> = ({
             Lag ordsky
           </Button>
         )}
-        <SecondaryButton type="button" onClick={handleQuit}>
+        <SecondaryButton type="button" onClick={onQuit}>
           Avslutt{' '}
         </SecondaryButton>
       </WaitScreenActionsContainer>
