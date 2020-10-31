@@ -1,11 +1,10 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '../../components/atoms/Button';
 import { Input } from '../../components/atoms/Input';
 import { Label } from '../../components/atoms/Label';
 import { Form } from '../../components/atoms/Form';
-import { generateId } from './helpers';
+import { Title } from '../../components/atoms/Title';
 
 const JoinSessionForm = styled(Form)`
   justify-content: space-around;
@@ -37,35 +36,22 @@ const StartSessionContainer = styled.section`
   min-height: 80vh;
 `;
 
-const Title = styled.h1`
-  font-weight: 500;
-  font-size: 1.8rem;
-  line-height: 2rem;
-  margin: 2rem 1rem;
-`;
-
 export type StartSessionProps = {
   onNewSession: () => void;
+  onJoinSession: (id: string) => void;
 };
 
-export const StartSession: React.FC<StartSessionProps> = ({ onNewSession }) => {
+export const StartSession: React.FC<StartSessionProps> = ({
+  onNewSession,
+  onJoinSession,
+}) => {
   const [idToJoin, setIdToJoin] = React.useState('');
-  const history = useHistory();
-
-  const goToId = (id: string): void => history.push(`/session/${id}`);
-
-  const startNewSession = (): void => {
-    const id = generateId();
-    onNewSession();
-    goToId(id);
-  };
 
   const joinSession = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (idToJoin) {
-      goToId(idToJoin);
-    }
+    onJoinSession(idToJoin);
   };
+
   return (
     <StartSessionContainer>
       <Title>Felles ordsky</Title>
@@ -87,7 +73,7 @@ export const StartSession: React.FC<StartSessionProps> = ({ onNewSession }) => {
         <div>
           <Button
             type="button"
-            onClick={startNewSession}
+            onClick={onNewSession}
             data-testid="start-session-btn"
           >
             Start en ny økt
