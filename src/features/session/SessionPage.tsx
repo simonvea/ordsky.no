@@ -39,6 +39,7 @@ export const SessionPage: React.FC = () => {
       );
     case 'wordsInput':
       return <WordsInput onSubmit={onSubmitWords} />;
+    case 'creating':
     case 'waiting':
       return (
         <WaitScreen
@@ -47,6 +48,7 @@ export const SessionPage: React.FC = () => {
           numberOfEntries={wordEntries}
           onQuit={restart}
           id={id}
+          loading={state.matches('creating')}
         />
       );
     default:
