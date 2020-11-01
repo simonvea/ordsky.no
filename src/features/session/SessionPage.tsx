@@ -3,6 +3,7 @@ import { useMachine } from '@xstate/react';
 import { StartSession } from './StartSession';
 import { WaitScreen } from './WaitScreen';
 import { sessionMachine } from './StateMachine';
+import { WordsInput } from './WordsInput';
 
 export const SessionPage: React.FC = () => {
   const [state, send] = useMachine(sessionMachine);
@@ -24,6 +25,10 @@ export const SessionPage: React.FC = () => {
     send('RESTART');
   };
 
+  const onSubmitWords = (words: string[]): void => {
+    send({ type: 'ADD_WORDS', words });
+  };
+
   switch (state.value) {
     case 'idle':
       return (
@@ -32,6 +37,8 @@ export const SessionPage: React.FC = () => {
           onJoinSession={onJoinSession}
         />
       );
+    case 'wordsInput':
+      return <WordsInput onSubmit={onSubmitWords} />;
     case 'waiting':
       return (
         <WaitScreen
