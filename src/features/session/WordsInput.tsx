@@ -1,23 +1,17 @@
 import React from 'react';
 import { faMinusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled from 'styled-components';
 import { Input } from '../../components/atoms/Input';
 // import { Label } from '../../components/atoms/Label';
 import { Form } from '../../components/atoms/Form';
+import { Row } from '../../components/atoms/Row';
+
 import {
   Button,
   SecondaryButton,
   IconButton,
 } from '../../components/atoms/Button';
 import { formsReducer, initialState } from './wordsInputReducer';
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 0.5rem 0;
-`;
 
 type WordsInputProps = {
   onSubmit: (words: string[]) => void;
