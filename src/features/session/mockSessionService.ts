@@ -4,10 +4,13 @@ import { Cloud } from '../../utils/cloud/cloud.types';
 export class MockSessionService implements SessionsService {
   constructor() {
     const id = setInterval(() => {
-      if (this.wordsListener) this.wordsListener();
+      this.numberOfEntries += 1;
+      if (this.wordsListener) this.wordsListener(this.numberOfEntries);
     }, 2000);
     this.mockCounter = () => clearInterval(id);
   }
+
+  private numberOfEntries = 0;
 
   private mockCounter: () => void;
 
@@ -64,7 +67,7 @@ export class MockSessionService implements SessionsService {
     },
   ];
 
-  private wordsListener?: () => void;
+  private wordsListener?: (totalEntries: number) => void;
 
   private cloudsListener?: (cloud: Cloud[]) => void;
 
@@ -74,7 +77,7 @@ export class MockSessionService implements SessionsService {
     return Promise.resolve();
   }
 
-  onWordsAdded(id: string, callback: () => void): void {
+  onWordsAdded(id: string, callback: (totalEntries: number) => void): void {
     this.wordsListener = callback;
   }
 

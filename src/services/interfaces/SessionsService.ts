@@ -15,7 +15,7 @@ export interface SessionsService {
   /**
    * Runs callback whenever words are added
    */
-  onWordsAdded: (id: string, callback: () => void) => void;
+  onWordsAdded: (id: string, callback: (totalEntries: number) => void) => void;
 
   /**
    * Runs callback when cloud is found in storage

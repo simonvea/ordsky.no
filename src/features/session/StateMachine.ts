@@ -7,6 +7,7 @@ import {
   SessionEvent,
   SessionStateSchema,
   CloudCreatedEvent,
+  WordsAddedEvent,
 } from './StateMachine.types';
 import { MockSessionService } from './mockSessionService';
 import { Cloud } from '../../utils/cloud/cloud.types';
@@ -105,7 +106,8 @@ export const sessionMachine = Machine<
       }),
       addId: assign({ id: (context, event) => (event as JoinSessionEvent).id }),
       addToWordEntries: assign({
-        wordEntries: (context) => context.wordEntries + 1,
+        wordEntries: (context, event) =>
+          (event as WordsAddedEvent).totalEntries,
       }),
       sendWords: (context, event) => {
         service.saveWords(context.id, (event as AddWordsEvent).words);
@@ -122,7 +124,9 @@ export const sessionMachine = Machine<
     /* eslint-disable unicorn/consistent-function-scoping */
     services: {
       listenToWords: (context) => (callback): void => {
-        service.onWordsAdded(context.id, () => callback('WORDS_ADDED'));
+        service.onWordsAdded(context.id, (totalEntries: number) =>
+          callback({ type: 'WORDS_ADDED', totalEntries })
+        );
       },
       listenForCloud: (context) => (callback) => {
         if (context.isAdmin) return; // TODO: Should this be checked for elsewhere?.
