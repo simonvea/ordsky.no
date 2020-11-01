@@ -5,6 +5,7 @@ export interface SessionStateSchema {
   states: {
     idle: Record<string, unknown>;
     wordsInput: Record<string, unknown>;
+    addWords: Record<string, unknown>;
     waiting: Record<string, unknown>;
     creating: Record<string, unknown>;
     created: Record<string, unknown>;

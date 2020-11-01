@@ -40,6 +40,7 @@ export const SessionPage: React.FC = () => {
       );
     case 'wordsInput':
       return <WordsInput id={id} onSubmit={onSubmitWords} />;
+    case 'addWords':
     case 'creating':
     case 'waiting':
       return (
@@ -60,15 +61,10 @@ export const SessionPage: React.FC = () => {
       return <CloudDisplay cloud={cloud} onRestart={restart} />;
     default:
       return (
-        <>
-          <StartSession
-            onNewSession={onNewSession}
-            onJoinSession={onJoinSession}
-          />
-          <button type="button" onClick={restart}>
-            Kill
-          </button>
-        </>
+        <StartSession
+          onNewSession={onNewSession}
+          onJoinSession={onJoinSession}
+        />
       );
   }
 };

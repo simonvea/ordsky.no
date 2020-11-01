@@ -31,6 +31,10 @@ export const sessionMachine = Machine<
     },
     states: {
       idle: {
+        invoke: {
+          id: 'reset',
+          src: 'endSession',
+        },
         on: {
           START_SESSION: {
             target: 'waiting',
@@ -45,10 +49,16 @@ export const sessionMachine = Machine<
       wordsInput: {
         on: {
           ADD_WORDS: {
-            target: 'waiting',
-            actions: ['sendWords'],
+            target: 'addWords',
             cond: (context, event) => event.words && event.words.length > 1,
           },
+        },
+      },
+      addWords: {
+        invoke: {
+          id: 'addWordsService',
+          src: 'sendWords',
+          onDone: 'waiting',
         },
       },
       waiting: {
@@ -94,7 +104,6 @@ export const sessionMachine = Machine<
           id: 'removeListeners',
           src: 'endSession',
         },
-        type: 'final',
       },
     },
   },
@@ -109,9 +118,6 @@ export const sessionMachine = Machine<
         wordEntries: (context, event) =>
           (event as WordsAddedEvent).totalEntries,
       }),
-      sendWords: (context, event) => {
-        service.saveWords(context.id, (event as AddWordsEvent).words);
-      },
       addCloudToContext: assign<SessionContext, SessionEvent>({
         cloud: (context, event) => (event as CloudCreatedEvent).cloud,
       }),
@@ -123,6 +129,8 @@ export const sessionMachine = Machine<
     },
     /* eslint-disable unicorn/consistent-function-scoping */
     services: {
+      sendWords: (context, event) =>
+        service.saveWords(context.id, (event as AddWordsEvent).words),
       listenToWords: (context) => (callback): void => {
         service.onWordsAdded(context.id, (totalEntries: number) =>
           callback({ type: 'WORDS_ADDED', totalEntries })
