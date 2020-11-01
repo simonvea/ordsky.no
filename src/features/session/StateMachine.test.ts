@@ -86,4 +86,59 @@ describe('sessionMachine', () => {
 
     expect(actualState.matches(expectedValue)).toBeTruthy();
   });
+
+  describe('given state waiting', () => {
+    it('when event is CREATE_CLOUD, createCloud service is triggered', () => {
+      // Arrange
+      const mockService = jest.fn();
+
+      const mockSessionMachine = sessionMachine.withConfig({
+        services: {
+          listenforCloud: jest.fn(),
+          listenToWords: jest.fn(),
+          createCloud: mockService,
+        },
+      });
+
+      const sessionService = interpret(mockSessionMachine).start();
+
+      // Get state to 'waiting'
+      sessionService.send({ type: 'START_SESSION' });
+      sessionService.send({ type: 'WORDS_ADDED' });
+
+      // Act
+      sessionService.send({ type: 'CREATE_CLOUD' });
+
+      // Assert
+      expect(mockService).toHaveBeenCalled();
+    });
+
+    it('when event is CLOUD_CREATED, addCloudToContext action is triggered', () => {
+      // Arrange
+      const mockAction = jest.fn();
+
+      const mockSessionMachine = sessionMachine.withConfig({
+        actions: {
+          addCloudToContext: mockAction,
+        },
+        services: {
+          listenforCloud: jest.fn(),
+          listenToWords: jest.fn(),
+          createCloud: jest.fn(),
+        },
+      });
+
+      const sessionService = interpret(mockSessionMachine).start();
+
+      // Get state to 'waiting'
+      sessionService.send({ type: 'START_SESSION' });
+      sessionService.send({ type: 'WORDS_ADDED' });
+
+      // Act
+      sessionService.send({ type: 'CLOUD_CREATED' });
+
+      // Assert
+      expect(mockAction).toHaveBeenCalled();
+    });
+  });
 });

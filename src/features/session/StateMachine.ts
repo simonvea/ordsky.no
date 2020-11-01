@@ -6,6 +6,7 @@ import {
   SessionContext,
   SessionEvent,
   SessionStateSchema,
+  CloudCreatedEvent,
 } from './StateMachine.types';
 
 export const sessionMachine = Machine<
@@ -61,12 +62,22 @@ export const sessionMachine = Machine<
             actions: ['addToWordEntries'],
           },
           CREATE_CLOUD: 'creating',
-          CLOUD_CREATED: 'created',
+          CLOUD_CREATED: {
+            target: 'created',
+            actions: ['addCloudToContext'],
+          },
         },
       },
       creating: {
+        invoke: {
+          id: 'createCloud',
+          src: 'createCloud',
+        },
         on: {
-          CLOUD_CREATED: 'created',
+          CLOUD_CREATED: {
+            target: 'created',
+            actions: ['addCloudToContext'],
+          },
         },
       },
       created: {
@@ -88,30 +99,36 @@ export const sessionMachine = Machine<
         // Send words to backend..
         console.log((event as AddWordsEvent).words);
       },
+      addCloudToContext: assign<SessionContext, SessionEvent>({
+        cloud: (context, event) => (event as CloudCreatedEvent).cloud,
+      }),
       restart: assign<SessionContext, SessionEvent>({
         id: '',
         isAdmin: false,
         wordEntries: 0,
       }),
     },
+    /* eslint-disable unicorn/consistent-function-scoping */
     services: {
-      listenToWords: () => (
-        callback
-        // eslint-disable-next-line unicorn/consistent-function-scoping
-      ): (() => void) => {
+      listenToWords: () => (callback): (() => void) => {
         // TODO: Use context.id in SessionService to listen to correct collection..
         const id = setInterval(() => callback('WORDS_ADDED'), 1000);
 
         return () => clearInterval(id);
       },
-      // eslint-disable-next-line unicorn/consistent-function-scoping
-      listenForCloud: () => (callback) => {
+      listenForCloud: (context) => (callback) => {
+        if (context.isAdmin) return; // TODO: Should this be checked for elsewhere?
         // TODO: Use context.id in SessionService to listen to correct collection..
-
         setTimeout(() => {
           callback('CLOUD_CREATED');
         }, 5000);
       },
+      createCloud: () => (callback) => {
+        setTimeout(() => {
+          callback('CLOUD_CREATED');
+        }, 2000);
+      },
     },
+    /* eslint-enable unicorn/consistent-function-scoping */
   }
 );

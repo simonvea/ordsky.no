@@ -34,4 +34,5 @@ export interface SessionContext {
   isAdmin: boolean;
   wordEntries: number;
   id: string;
+  cloud?: Cloud[];
 }
