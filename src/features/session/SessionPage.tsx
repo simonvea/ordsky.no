@@ -4,10 +4,11 @@ import { StartSession } from './StartSession';
 import { WaitScreen } from './WaitScreen';
 import { sessionMachine } from './StateMachine';
 import { WordsInput } from './WordsInput';
+import { CloudDisplay } from './CloudDisplay';
 
 export const SessionPage: React.FC = () => {
   const [state, send] = useMachine(sessionMachine);
-  const { isAdmin, wordEntries, id } = state.context;
+  const { isAdmin, wordEntries, id, cloud } = state.context;
 
   const onNewSession = (): void => {
     send('START_SESSION');
@@ -51,6 +52,12 @@ export const SessionPage: React.FC = () => {
           loading={state.matches('creating')}
         />
       );
+    case 'created':
+      if (!cloud)
+        return (
+          <span>Oups! Noe gikk galt når jeg forsøkte å hente ordskyen.</span>
+        );
+      return <CloudDisplay cloud={cloud} onRestart={restart} />;
     default:
       return (
         <>
