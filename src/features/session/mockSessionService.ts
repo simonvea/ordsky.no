@@ -2,7 +2,7 @@ import { SessionsService } from '../../services/interfaces/SessionsService';
 import { Cloud } from '../../utils/cloud/cloud.types';
 
 export class MockSessionService implements SessionsService {
-  constructor() {
+  private startMockCounter(): void {
     const id = setInterval(() => {
       this.numberOfEntries += 1;
       if (this.wordsListener) this.wordsListener(this.numberOfEntries);
@@ -12,7 +12,7 @@ export class MockSessionService implements SessionsService {
 
   private numberOfEntries = 0;
 
-  private mockCounter: () => void;
+  private mockCounter: () => void = () => {};
 
   private mockCloudCreater(): void {
     setTimeout(() => {
@@ -78,6 +78,7 @@ export class MockSessionService implements SessionsService {
   }
 
   onWordsAdded(id: string, callback: (totalEntries: number) => void): void {
+    this.startMockCounter();
     this.wordsListener = callback;
   }
 
@@ -98,5 +99,6 @@ export class MockSessionService implements SessionsService {
     this.wordsListener = undefined;
     this.cloudsListener = undefined;
     this.mockCounter();
+    this.numberOfEntries = 0;
   }
 }
