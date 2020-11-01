@@ -1,32 +1,31 @@
 import { Cloud } from '../../utils/cloud/cloud.types';
-import { WordCount } from '../../utils/countWords';
 
 export interface SessionsService {
   /**
    * Saves words to storage
    */
-  saveWordCount: (words: WordCount) => Promise<void>;
+  saveWords: (id: string, words: string[]) => Promise<void>;
 
   /**
    * Gets all word counts from storage and
-   * creates a word cloud
+   * creates a word cloud, also saves it back to storage
    */
-  createCloudFromStoredWordCounts: () => Promise<Cloud>;
+  createCloudFromStoredWordCounts: (id: string) => Promise<Cloud[]>;
 
   /**
-   * Saves word cloud to storage
+   * Runs callback whenever words are added
    */
-  saveCloud: (cloud: Cloud) => Promise<void>;
+  onWordsAdded: (id: string, callback: () => void) => void;
 
   /**
-   * Receives a callback function that will be run
-   * whenever the related storage changes.
-   * The callback will receive the new snapshot of storage
+   * Runs callback when cloud is found in storage
+   *
+   * @param callback callback to run when cloud is found in storage
    */
-  onStorageChange: (cb: (snapshot: unknown) => void) => void;
+  onCloudAdded: (id: string, callback: (cloud: Cloud[]) => void) => void;
 
   /**
-   * Unsubscribes the storage listener
+   * Unsubscribes listeners
    */
-  endSession?: () => void;
+  endSession: (id: string) => void;
 }

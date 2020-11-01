@@ -8,6 +8,10 @@ import {
   SessionStateSchema,
   CloudCreatedEvent,
 } from './StateMachine.types';
+import { MockSessionService } from './mockSessionService';
+import { Cloud } from '../../utils/cloud/cloud.types';
+
+const service = new MockSessionService();
 
 export const sessionMachine = Machine<
   SessionContext,
@@ -72,6 +76,10 @@ export const sessionMachine = Machine<
         invoke: {
           id: 'createCloud',
           src: 'createCloud',
+          onDone: {
+            target: 'created',
+            actions: assign({ cloud: (context, event) => event.data }),
+          },
         },
         on: {
           CLOUD_CREATED: {
@@ -81,6 +89,10 @@ export const sessionMachine = Machine<
         },
       },
       created: {
+        invoke: {
+          id: 'removeListeners',
+          src: 'endSession',
+        },
         type: 'final',
       },
     },
@@ -96,8 +108,7 @@ export const sessionMachine = Machine<
         wordEntries: (context) => context.wordEntries + 1,
       }),
       sendWords: (context, event) => {
-        // Send words to backend..
-        console.log((event as AddWordsEvent).words);
+        service.saveWords(context.id, (event as AddWordsEvent).words);
       },
       addCloudToContext: assign<SessionContext, SessionEvent>({
         cloud: (context, event) => (event as CloudCreatedEvent).cloud,
@@ -110,23 +121,21 @@ export const sessionMachine = Machine<
     },
     /* eslint-disable unicorn/consistent-function-scoping */
     services: {
-      listenToWords: () => (callback): (() => void) => {
-        // TODO: Use context.id in SessionService to listen to correct collection..
-        const id = setInterval(() => callback('WORDS_ADDED'), 1000);
-
-        return () => clearInterval(id);
+      listenToWords: (context) => (callback): void => {
+        service.onWordsAdded(context.id, () => callback('WORDS_ADDED'));
       },
       listenForCloud: (context) => (callback) => {
-        if (context.isAdmin) return; // TODO: Should this be checked for elsewhere?
-        // TODO: Use context.id in SessionService to listen to correct collection..
-        setTimeout(() => {
-          callback('CLOUD_CREATED');
-        }, 5000);
+        if (context.isAdmin) return; // TODO: Should this be checked for elsewhere?.
+        service.onCloudAdded(context.id, (cloud: Cloud[]) =>
+          callback({ type: 'CLOUD_CREATED', cloud })
+        );
       },
-      createCloud: () => (callback) => {
-        setTimeout(() => {
-          callback('CLOUD_CREATED');
-        }, 2000);
+      createCloud: (context) => async () => {
+        const res = await service.createCloudFromStoredWordCounts(context.id);
+        return res;
+      },
+      endSession: (context) => () => {
+        service.endSession(context.id);
       },
     },
     /* eslint-enable unicorn/consistent-function-scoping */
