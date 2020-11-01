@@ -39,7 +39,7 @@ export const SessionPage: React.FC = () => {
         />
       );
     case 'wordsInput':
-      return <WordsInput onSubmit={onSubmitWords} />;
+      return <WordsInput id={id} onSubmit={onSubmitWords} />;
     case 'creating':
     case 'waiting':
       return (

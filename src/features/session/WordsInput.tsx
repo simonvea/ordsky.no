@@ -2,10 +2,9 @@ import React from 'react';
 import { faMinusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Input } from '../../components/atoms/Input';
-// import { Label } from '../../components/atoms/Label';
 import { Form } from '../../components/atoms/Form';
 import { Row } from '../../components/atoms/Row';
-
+import { Title } from '../../components/atoms/Title';
 import {
   Button,
   SecondaryButton,
@@ -14,10 +13,11 @@ import {
 import { formsReducer, initialState } from './wordsInputReducer';
 
 type WordsInputProps = {
+  id: string;
   onSubmit: (words: string[]) => void;
 };
 
-export const WordsInput: React.FC<WordsInputProps> = ({ onSubmit }) => {
+export const WordsInput: React.FC<WordsInputProps> = ({ id, onSubmit }) => {
   const [state, dispatch] = React.useReducer(formsReducer, initialState);
 
   const { inputs } = state;
@@ -33,7 +33,7 @@ export const WordsInput: React.FC<WordsInputProps> = ({ onSubmit }) => {
   const onWordChange = (key: string, word: string): void => {
     const input = {
       key,
-      word,
+      word: word.trim(),
     };
 
     dispatch({
@@ -42,41 +42,60 @@ export const WordsInput: React.FC<WordsInputProps> = ({ onSubmit }) => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const disableSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+  };
+
+  const handleSubmit = (): void => {
     const words = inputs.map((input) => input.word);
     onSubmit(words);
   };
 
+  const addInputOnEnterKey = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ): void => {
+    if (event.key === 'Enter') {
+      addWordWorm();
+    }
+  };
+
   return (
-    <Form onSubmit={handleSubmit}>
-      {inputs.map(({ key, word }) => (
-        <Row key={key}>
-          <Input
-            value={word}
-            onChange={({ target }) => onWordChange(key, target.value)}
-            placeholder="Skriv inn et ord..."
-          />
-          <IconButton
-            type="button"
-            onClick={() => removeWordForm(key)}
-            disabled={inputs.length < 2}
-            aria-label="Remove input row"
-          >
-            <FontAwesomeIcon
-              icon={faMinusSquare}
-              color="rgb(217, 83, 79)"
-              size="lg"
+    <>
+      <Title>Kode: {id.toUpperCase()}</Title>
+
+      <Form onSubmit={disableSubmit}>
+        {inputs.map(({ key, word }) => (
+          <Row key={key}>
+            <Input
+              value={word}
+              onChange={({ target }) => onWordChange(key, target.value)}
+              onKeyDown={addInputOnEnterKey}
+              placeholder="Skriv inn et ord..."
+              ref={(input) => input && input.focus()} // This ends up focusing the last input, which is what we want :D
             />
-          </IconButton>
+            <IconButton
+              type="button"
+              onClick={() => removeWordForm(key)}
+              disabled={inputs.length < 2}
+              aria-label="Remove input row"
+            >
+              <FontAwesomeIcon
+                icon={faMinusSquare}
+                color="rgb(217, 83, 79)"
+                size="lg"
+              />
+            </IconButton>
+          </Row>
+        ))}
+        <Row>
+          <SecondaryButton type="button" onClick={addWordWorm}>
+            Legg til et nytt ord
+          </SecondaryButton>
+          <Button type="button" onClick={handleSubmit}>
+            Send inn ord
+          </Button>
         </Row>
-      ))}
-      <Row>
-        <SecondaryButton type="button" onClick={addWordWorm}>
-          Legg til et nytt ord
-        </SecondaryButton>
-        <Button type="submit">Send inn ord</Button>
-      </Row>
-    </Form>
+      </Form>
+    </>
   );
 };
