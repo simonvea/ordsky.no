@@ -5,6 +5,7 @@ import { WaitScreen } from './WaitScreen';
 import { sessionMachine } from './StateMachine';
 import { WordsInput } from './WordsInput';
 import { CloudDisplay } from './CloudDisplay';
+import { ErrorScreen } from './ErrorScreen';
 
 export const SessionPage: React.FC = () => {
   const [state, send] = useMachine(sessionMachine);
@@ -59,6 +60,8 @@ export const SessionPage: React.FC = () => {
           <span>Oups! Noe gikk galt når jeg forsøkte å hente ordskyen.</span>
         );
       return <CloudDisplay cloud={cloud} onRestart={restart} />;
+    case 'error':
+      return <ErrorScreen onReset={restart} />;
     default:
       return (
         <StartSession

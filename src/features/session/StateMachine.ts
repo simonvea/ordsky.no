@@ -52,6 +52,7 @@ export const sessionMachine = Machine<
             id: 'starSessionService',
             src: 'startSession',
             onDone: 'waiting',
+            onError: 'error',
           },
         ],
       },
@@ -68,6 +69,7 @@ export const sessionMachine = Machine<
           id: 'addWordsService',
           src: 'sendWords',
           onDone: 'waiting',
+          onError: 'error',
         },
       },
       waiting: {
@@ -100,6 +102,7 @@ export const sessionMachine = Machine<
             target: 'created',
             actions: assign({ cloud: (context, event) => event.data }),
           },
+          onError: 'error',
         },
         on: {
           CLOUD_CREATED: {
@@ -114,6 +117,7 @@ export const sessionMachine = Machine<
           src: 'endSession',
         },
       },
+      error: {},
     },
   },
   {

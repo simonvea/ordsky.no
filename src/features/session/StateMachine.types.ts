@@ -10,6 +10,7 @@ export interface SessionStateSchema {
     waiting: Record<string, unknown>;
     creating: Record<string, unknown>;
     created: Record<string, unknown>;
+    error: Record<string, unknown>;
   };
 }
 
