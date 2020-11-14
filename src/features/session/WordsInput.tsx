@@ -47,7 +47,7 @@ export const WordsInput: React.FC<WordsInputProps> = ({ id, onSubmit }) => {
   };
 
   const handleSubmit = (): void => {
-    const words = inputs.map((input) => input.word);
+    const words = inputs.map((input) => input.word).filter((word) => !!word);
     onSubmit(words);
   };
 
