@@ -58,10 +58,10 @@ export const StartSession: React.FC<StartSessionProps> = ({
       <SessionInfoContainer>
         <p>På denne siden kan du skape en felles ordsky.</p>
         <p>
-          For å starte en ny felles økt trykk på &quot;Start en ny økt.&quot; Du
-          vil da bli satt som administrator for denne økten. Det vil si at det
-          er du som er ansvarlig for å trykke &quot;Lag ordsky&quot; når alle
-          har sendt inn sine ord.
+          For å starte en ny felles økt, trykk på &quot;Start en ny økt.&quot;
+          Du vil da bli satt som administrator for denne økten. Det vil si at
+          det er du som er ansvarlig for å trykke &quot;Lag ordsky&quot; når
+          alle har sendt inn sine ord.
         </p>
         <p>
           For å bli med i en økt som noen andre har startet, skriv inn den

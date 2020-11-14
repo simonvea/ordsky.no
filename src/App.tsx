@@ -45,6 +45,25 @@ const App: React.FC = function App() {
           >
             Ny Ordsky
           </Link>
+          <Link
+            to="/session"
+            className="button button--small"
+            style={{ margin: '0 5px' }}
+            role="button"
+          >
+            <span
+              style={{
+                backgroundColor: '#d21502',
+                borderRadius: '4px',
+                padding: '2px 6px',
+                marginRight: '4px',
+                fontWeight: 'bold',
+              }}
+            >
+              Ny!
+            </span>
+            Lag en felles ordsky
+          </Link>
           <Link to="/about" className="nav__link">
             Om Ordsky.no
           </Link>
