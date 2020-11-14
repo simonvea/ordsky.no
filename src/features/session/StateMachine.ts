@@ -9,10 +9,10 @@ import {
   CloudCreatedEvent,
   WordsAddedEvent,
 } from './StateMachine.types';
-import { MockSessionService } from './mockSessionService';
+import { OrdskyService } from './OrdskyService';
 import { Cloud } from '../../utils/cloud/cloud.types';
 
-const service = new MockSessionService();
+const service = new OrdskyService();
 
 export const sessionMachine = Machine<
   SessionContext,
@@ -37,7 +37,7 @@ export const sessionMachine = Machine<
         },
         on: {
           START_SESSION: {
-            target: 'waiting',
+            target: 'startSession',
             actions: ['setAsAdmin', 'generateAndAddId'],
           },
           JOIN_SESSION: {
@@ -45,6 +45,15 @@ export const sessionMachine = Machine<
             actions: ['addId'],
           },
         },
+      },
+      startSession: {
+        invoke: [
+          {
+            id: 'starSessionService',
+            src: 'startSession',
+            onDone: 'waiting',
+          },
+        ],
       },
       wordsInput: {
         on: {
@@ -129,6 +138,9 @@ export const sessionMachine = Machine<
     },
     /* eslint-disable unicorn/consistent-function-scoping */
     services: {
+      startSession: async (context) => {
+        service.startSession(context.id);
+      },
       sendWords: (context, event) =>
         service.saveWords(context.id, (event as AddWordsEvent).words),
       listenToWords: (context) => (callback): void => {

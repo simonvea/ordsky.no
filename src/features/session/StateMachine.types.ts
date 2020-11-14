@@ -4,6 +4,7 @@ import { Cloud } from '../../utils/cloud/cloud.types';
 export interface SessionStateSchema {
   states: {
     idle: Record<string, unknown>;
+    startSession: Record<string, unknown>;
     wordsInput: Record<string, unknown>;
     addWords: Record<string, unknown>;
     waiting: Record<string, unknown>;
@@ -13,6 +14,7 @@ export interface SessionStateSchema {
 }
 
 export type StartSessionEvent = { type: 'START_SESSION' };
+export type SessionStartedEvent = { type: 'SESSION_STARTED' };
 export type JoinSessionEvent = { type: 'JOIN_SESSION'; id: string };
 export type AddWordsEvent = { type: 'ADD_WORDS'; words: string[] };
 export type WordsAddedEvent = { type: 'WORDS_ADDED'; totalEntries: number };
@@ -23,6 +25,7 @@ export type Restart = { type: 'RESTART' };
 // The events that the machine handles
 export type SessionEvent =
   | StartSessionEvent
+  | SessionStartedEvent
   | JoinSessionEvent
   | AddWordsEvent
   | WordsAddedEvent
