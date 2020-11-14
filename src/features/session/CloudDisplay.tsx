@@ -7,7 +7,7 @@ import { Button, SecondaryButton } from '../../components/atoms/Button';
 import { Container } from '../../components/atoms/Container';
 import { Row } from '../../components/atoms/Row';
 
-// import { analytics } from '../firebase';
+import { analytics } from '../../firebase';
 
 export type CloudDisplayProps = {
   cloud: Cloud[];
@@ -35,7 +35,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
   const download = (): void => {
     // For some reason logEvent is typed to accept a specific event...
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // analytics.logEvent('download_cloud' as any);
+    analytics.logEvent('download_cloud' as any);
     downloadAsPng(xml);
   };
 
