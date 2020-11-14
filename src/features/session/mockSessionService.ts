@@ -82,8 +82,8 @@ export class MockSessionService implements SessionsService {
     this.wordsListener = callback;
   }
 
-  async createCloudFromStoredWordCounts(id: string): Promise<Cloud[]> {
-    const cloud = await new Promise<Cloud[]>((resolve, reject) => {
+  async createCloudFromStoredWordCounts(): Promise<Cloud[]> {
+    const cloud = await new Promise<Cloud[]>((resolve) => {
       setTimeout(() => {
         resolve(this.cloud);
       }, 3000);
@@ -95,7 +95,7 @@ export class MockSessionService implements SessionsService {
     this.cloudsListener = callback;
   }
 
-  endSession(id: string): void {
+  endSession(): void {
     this.wordsListener = undefined;
     this.cloudsListener = undefined;
     this.mockCounter();

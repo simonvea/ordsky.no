@@ -84,6 +84,7 @@ describe('sessionMachine', () => {
   });
 
   // TODO: fix these tests..
+  // eslint-disable-next-line jest/no-disabled-tests
   describe.skip('given state waiting', () => {
     it('when event is CREATE_CLOUD, createCloud service is triggered', () => {
       // Arrange

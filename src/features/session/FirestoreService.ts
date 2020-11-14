@@ -11,8 +11,7 @@ export class FirestoreSession implements SessionsService {
 
   private wordsCollection = 'words';
 
-  public endSession(id: string): void {
-    console.log('ending session', id);
+  public endSession(): void {
     this.listeners.forEach((listener) => listener());
   }
 
