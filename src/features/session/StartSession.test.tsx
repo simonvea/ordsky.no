@@ -18,6 +18,7 @@ jest.mock('./helpers', () => ({
 }));
 
 const onNewSession = jest.fn();
+const onJoinSession = jest.fn();
 
 describe('StartSession component', () => {
   beforeEach(() => {
@@ -27,7 +28,7 @@ describe('StartSession component', () => {
   it('when clicking start new session, then onNewSession prop gets called', () => {
     // Arrange
     const { getByTestId } = render(
-      <StartSession onNewSession={onNewSession} />
+      <StartSession onNewSession={onNewSession} onJoinSession={onJoinSession} />
     );
 
     const button = getByTestId('start-session-btn');
@@ -39,10 +40,14 @@ describe('StartSession component', () => {
     expect(onNewSession).toHaveBeenCalled();
   });
 
-  it('when clicking start new session, then history gets pushed to /session/mockId', () => {
+  it('when clicking start new session, then onNewSession prop is called', () => {
     // Arrange
+    const onNewSessionMock = jest.fn();
     const { getByTestId } = render(
-      <StartSession onNewSession={onNewSession} />
+      <StartSession
+        onNewSession={onNewSessionMock}
+        onJoinSession={onJoinSession}
+      />
     );
 
     const button = getByTestId('start-session-btn');
@@ -51,13 +56,13 @@ describe('StartSession component', () => {
     fireEvent.click(button);
 
     // Assert
-    expect(mockHistoryPush).toHaveBeenCalledWith(`/session/${mockId}`);
+    expect(onNewSessionMock).toHaveBeenCalled();
   });
 
   it('when no input Id, button is disabled', () => {
     // Arrange
     const { getByTestId } = render(
-      <StartSession onNewSession={onNewSession} />
+      <StartSession onNewSession={onNewSession} onJoinSession={onJoinSession} />
     );
 
     const button = getByTestId('join-session-btn');
@@ -67,10 +72,14 @@ describe('StartSession component', () => {
   });
 
   describe('given input with length equal to 5', () => {
-    it('when clicking join session, then history get pushed to /session/inputId', () => {
+    it('when clicking join session, then onJoinSession prop is called', () => {
       // Arrange
+      const onJoinSessionMock = jest.fn();
       const { getByTestId, getByLabelText } = render(
-        <StartSession onNewSession={onNewSession} />
+        <StartSession
+          onNewSession={onNewSession}
+          onJoinSession={onJoinSessionMock}
+        />
       );
 
       const button = getByTestId('join-session-btn');
@@ -81,7 +90,7 @@ describe('StartSession component', () => {
       fireEvent.click(button);
 
       // Assert
-      expect(mockHistoryPush).toHaveBeenCalledWith(`/session/${mockId}`);
+      expect(onJoinSessionMock).toHaveBeenCalledWith(mockId);
     });
   });
 });

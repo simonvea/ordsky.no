@@ -2,11 +2,11 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { WordsInput } from './WordsInput';
 
-describe('StartSession component', () => {
+describe('WordsInput component', () => {
   it('when clicking "legg til et nytt ord", then one additional input is visible', () => {
     // Arrange
     const { getByText, getAllByPlaceholderText } = render(
-      <WordsInput onSubmit={jest.fn} />
+      <WordsInput id="124124" onSubmit={jest.fn} />
     );
 
     const button = getByText(/legg til et nytt ord/i);
@@ -29,7 +29,7 @@ describe('StartSession component', () => {
     const mockSubmit = jest.fn();
 
     const { getByText, getAllByPlaceholderText } = render(
-      <WordsInput onSubmit={mockSubmit} />
+      <WordsInput id="124124" onSubmit={mockSubmit} />
     );
 
     const addFieldsButton = getByText(/legg til et nytt ord/i);
