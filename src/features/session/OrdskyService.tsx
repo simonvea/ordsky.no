@@ -21,7 +21,7 @@ export class OrdskyService implements SessionsService {
     });
   }
 
-  public endSession(id: string): void {
+  public endSession(): void {
     if (this.socket) this.socket.close();
   }
 

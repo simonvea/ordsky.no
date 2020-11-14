@@ -162,8 +162,8 @@ export const sessionMachine = Machine<
         const res = await service.createCloudFromStoredWordCounts(context.id);
         return res;
       },
-      endSession: (context) => () => {
-        service.endSession(context.id);
+      endSession: () => () => {
+        service.endSession();
       },
     },
     /* eslint-enable unicorn/consistent-function-scoping */
