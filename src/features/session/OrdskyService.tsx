@@ -75,7 +75,9 @@ export class OrdskyService implements SessionsService {
     const counted = new Set();
     let wordCount: WordCount = [];
 
-    words.forEach((word) => {
+    words.forEach((w) => {
+      const word = w.toUpperCase();
+
       if (counted.has(word)) {
         wordCount = wordCount.map((count) => ({
           text: count.text,
