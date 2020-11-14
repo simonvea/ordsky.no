@@ -11,7 +11,8 @@ export class FirestoreSession implements SessionsService {
 
   private wordsCollection = 'words';
 
-  public endSession(): void {
+  public endSession(id: string): void {
+    console.log('ending session', id);
     this.listeners.forEach((listener) => listener());
   }
 
@@ -23,7 +24,7 @@ export class FirestoreSession implements SessionsService {
       .doc(id)
       .collection(this.wordsCollection)
       .doc()
-      .set(words);
+      .set({ words });
   }
 
   onWordsAdded(id: string, callback: (totalEntries: number) => void): void {
@@ -84,6 +85,7 @@ export class FirestoreSession implements SessionsService {
       generateCloud(cloudInput, callback);
     });
 
+    // Send to backend
     await this.storage.collection(this.baseCollection).doc(id).update({
       cloud,
     });
