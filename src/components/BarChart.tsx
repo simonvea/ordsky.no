@@ -16,6 +16,7 @@ export const BarChart: React.FC<BarChartProps> = function BarChart({
   backgroundColors,
   title,
 }) {
+  // eslint-disable-next-line unicorn/no-null
   const canvas = useRef<HTMLCanvasElement>(null);
   Chart.defaults.global.defaultFontColor = 'white';
   useLayoutEffect(() => {

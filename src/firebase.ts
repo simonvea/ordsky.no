@@ -1,4 +1,5 @@
 import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 import 'firebase/analytics';
 
 if (process.env.NODE_ENV === 'production') {
@@ -18,3 +19,5 @@ export const analytics =
   process.env.NODE_ENV === 'production'
     ? firebase.analytics()
     : { logEvent: () => {} };
+
+export const db = firebase.firestore();
