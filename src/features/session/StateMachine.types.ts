@@ -40,4 +40,5 @@ export interface SessionContext {
   wordEntries: number;
   id: string;
   cloud?: Cloud[];
+  errorMessage?: string;
 }

@@ -21,6 +21,22 @@ export class OrdskyService implements SessionsService {
     });
   }
 
+  private restApiUrl =
+    'https://s4wsje5xxj.execute-api.eu-north-1.amazonaws.com/prod';
+
+  public async isLiveSession(id: string): Promise<void> {
+    const response = await fetch(`${this.restApiUrl}/${id}`);
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.Item && !data.Item.cloud) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error('Item does not exist'));
+    }
+    return Promise.reject(new Error(response.status.toString()));
+  }
+
   public endSession(): void {
     if (this.socket) this.socket.close();
   }

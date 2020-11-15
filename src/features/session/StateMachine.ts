@@ -57,6 +57,14 @@ export const sessionMachine = Machine<
         ],
       },
       wordsInput: {
+        invoke: {
+          id: 'verifySession',
+          src: 'checkSession',
+          onError: {
+            target: 'error',
+            actions: ['assignErrorMessage'],
+          },
+        },
         on: {
           ADD_WORDS: {
             target: 'addWords',
@@ -139,6 +147,9 @@ export const sessionMachine = Machine<
         isAdmin: false,
         wordEntries: 0,
       }),
+      assignErrorMessage: assign<SessionContext, SessionEvent>({
+        errorMessage: `Ingen økt med den id'en ble funnet.`,
+      }),
     },
     /* eslint-disable unicorn/consistent-function-scoping */
     services: {
@@ -165,6 +176,7 @@ export const sessionMachine = Machine<
       endSession: () => () => {
         service.endSession();
       },
+      checkSession: (context) => service.isLiveSession(context.id),
     },
     /* eslint-enable unicorn/consistent-function-scoping */
   }

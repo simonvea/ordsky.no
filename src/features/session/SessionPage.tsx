@@ -9,7 +9,7 @@ import { ErrorScreen } from './ErrorScreen';
 
 export const SessionPage: React.FC = () => {
   const [state, send] = useMachine(sessionMachine);
-  const { isAdmin, wordEntries, id, cloud } = state.context;
+  const { isAdmin, wordEntries, id, cloud, errorMessage } = state.context;
 
   const onNewSession = (): void => {
     send('START_SESSION');
@@ -40,7 +40,7 @@ export const SessionPage: React.FC = () => {
         />
       );
     case 'wordsInput':
-      return <WordsInput id={id} onSubmit={onSubmitWords} />;
+      return <WordsInput id={id} onSubmit={onSubmitWords} onQuit={restart} />;
     case 'addWords':
     case 'creating':
     case 'waiting':
@@ -61,7 +61,7 @@ export const SessionPage: React.FC = () => {
         );
       return <CloudDisplay cloud={cloud} onRestart={restart} />;
     case 'error':
-      return <ErrorScreen onReset={restart} />;
+      return <ErrorScreen message={errorMessage} onReset={restart} />;
     default:
       return (
         <StartSession

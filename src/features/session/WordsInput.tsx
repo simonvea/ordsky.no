@@ -15,9 +15,14 @@ import { formsReducer, initialState } from './wordsInputReducer';
 type WordsInputProps = {
   id: string;
   onSubmit: (words: string[]) => void;
+  onQuit: () => void;
 };
 
-export const WordsInput: React.FC<WordsInputProps> = ({ id, onSubmit }) => {
+export const WordsInput: React.FC<WordsInputProps> = ({
+  id,
+  onSubmit,
+  onQuit,
+}) => {
   const [state, dispatch] = React.useReducer(formsReducer, initialState);
 
   const { inputs } = state;
@@ -93,6 +98,11 @@ export const WordsInput: React.FC<WordsInputProps> = ({ id, onSubmit }) => {
           </SecondaryButton>
           <Button type="button" onClick={handleSubmit}>
             Send inn ord
+          </Button>
+        </Row>
+        <Row>
+          <Button type="button" outline onClick={onQuit}>
+            Avslutt
           </Button>
         </Row>
       </Form>
