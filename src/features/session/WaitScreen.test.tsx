@@ -126,7 +126,7 @@ describe('WaitPage component', () => {
   describe('given isAdmin', () => {
     it('when numberOfEntries is 0, then "lag ordsky" button is disabled', () => {
       // Arrange
-      const { getByText } = render(
+      const { getByRole } = render(
         <WaitScreen
           id={mockId}
           numberOfEntries={0}
@@ -137,7 +137,7 @@ describe('WaitPage component', () => {
       );
 
       // Act
-      const text = getByText(/lag ordsky/i);
+      const text = getByRole('button', { name: /lag ordsky/i });
 
       // Assert
       expect(text).toBeDisabled();
@@ -146,7 +146,7 @@ describe('WaitPage component', () => {
     it('when clicking "Lag ordsky", calls onCreateWordCloud prop', () => {
       // Arrange
       const onCreateMock = jest.fn();
-      const { getByText } = render(
+      const { getByRole } = render(
         <WaitScreen
           id={mockId}
           numberOfEntries={10}
@@ -156,7 +156,7 @@ describe('WaitPage component', () => {
         />
       );
 
-      const text = getByText(/lag ordsky/i);
+      const text = getByRole('button', { name: /lag ordsky/i });
 
       // Act
       fireEvent.click(text);
@@ -167,7 +167,7 @@ describe('WaitPage component', () => {
 
     it('when loading prop is true, then "lag ordsky" button is disabled', () => {
       // Arrange
-      const { getByText } = render(
+      const { getByRole } = render(
         <WaitScreen
           id={mockId}
           numberOfEntries={5}
@@ -179,7 +179,7 @@ describe('WaitPage component', () => {
       );
 
       // Act
-      const text = getByText(/lag ordsky/i);
+      const text = getByRole('button', { name: /lag ordsky/i });
 
       // Assert
       expect(text).toBeDisabled();
