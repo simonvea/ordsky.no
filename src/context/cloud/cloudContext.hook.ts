@@ -3,8 +3,8 @@ import { CloudContext } from './cloudContext';
 import { CloudState } from './cloudReducer.types';
 import { generateCloud } from '../../utils/cloud/createCloud';
 import { Cloud, CloudInput, CloudConfig } from '../../utils/cloud/cloud.types';
-import { apiService } from '../../services/API';
 import { countWords } from '../../utils/countWords';
+import { createCloud as createCloudFire } from '../../firebase';
 
 export interface UseWordsContext {
   state: CloudState;
@@ -25,7 +25,7 @@ export const useCloudContext = (): UseWordsContext => {
         svgHeight: 300,
         svgWidth: 500,
       };
-      const data = await apiService.createCloud(wordCount, config);
+      const { data } = await createCloudFire({ words: wordCount, config });
       dispatch({ type: 'CLOUD_CREATED', data });
     } catch (error) {
       dispatch({ type: 'CLOUD_ERROR', error: (error as Error).message });
