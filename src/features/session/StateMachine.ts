@@ -11,6 +11,7 @@ import {
 } from './StateMachine.types';
 import { OrdskyService } from './OrdskyService';
 import { Cloud } from '../../utils/cloud/cloud.types';
+import { WordCount } from '../../utils/countWords';
 
 const service = new OrdskyService();
 
@@ -108,7 +109,10 @@ export const sessionMachine = Machine<
           src: 'createCloud',
           onDone: {
             target: 'created',
-            actions: assign({ cloud: (context, event) => event.data }),
+            actions: assign({
+              cloud: (context, event) => event.data.cloud,
+              wordCount: (context, event) => event.data.wordCount,
+            }),
           },
           onError: 'error',
         },
@@ -141,6 +145,7 @@ export const sessionMachine = Machine<
       }),
       addCloudToContext: assign<SessionContext, SessionEvent>({
         cloud: (context, event) => (event as CloudCreatedEvent).cloud,
+        wordCount: (context, event) => (event as CloudCreatedEvent).wordCount,
       }),
       restart: assign<SessionContext, SessionEvent>({
         id: '',
@@ -165,8 +170,10 @@ export const sessionMachine = Machine<
       },
       listenForCloud: (context) => (callback) => {
         if (context.isAdmin) return; // TODO: Should this be checked for elsewhere?.
-        service.onCloudAdded(context.id, (cloud: Cloud[]) =>
-          callback({ type: 'CLOUD_CREATED', cloud })
+        service.onCloudAdded(
+          context.id,
+          ({ cloud, wordCount }: { cloud: Cloud[]; wordCount: WordCount }) =>
+            callback({ type: 'CLOUD_CREATED', cloud, wordCount })
         );
       },
       createCloud: (context) => async () => {

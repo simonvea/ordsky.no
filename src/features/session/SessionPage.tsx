@@ -9,7 +9,14 @@ import { ErrorScreen } from './ErrorScreen';
 
 export const SessionPage: React.FC = () => {
   const [state, send] = useMachine(sessionMachine);
-  const { isAdmin, wordEntries, id, cloud, errorMessage } = state.context;
+  const {
+    isAdmin,
+    wordEntries,
+    id,
+    cloud,
+    wordCount,
+    errorMessage,
+  } = state.context;
 
   const onNewSession = (): void => {
     send('START_SESSION');
@@ -55,11 +62,16 @@ export const SessionPage: React.FC = () => {
         />
       );
     case 'created':
-      if (!cloud)
+      if (!cloud || !wordCount)
         return (
-          <span>Oups! Noe gikk galt når jeg forsøkte å hente ordskyen.</span>
+          <ErrorScreen
+            message="Oups! Noe gikk galt når jeg forsøkte å hente ordskyen."
+            onReset={restart}
+          />
         );
-      return <CloudDisplay cloud={cloud} onRestart={restart} />;
+      return (
+        <CloudDisplay cloud={cloud} wordCount={wordCount} onRestart={restart} />
+      );
     case 'error':
       return <ErrorScreen message={errorMessage} onReset={restart} />;
     default:

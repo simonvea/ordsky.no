@@ -1,4 +1,5 @@
 import { Cloud } from '../../utils/cloud/cloud.types';
+import { WordCount } from '../../utils/countWords';
 
 // The hierarchical (recursive) schema for the states
 export interface SessionStateSchema {
@@ -20,7 +21,11 @@ export type JoinSessionEvent = { type: 'JOIN_SESSION'; id: string };
 export type AddWordsEvent = { type: 'ADD_WORDS'; words: string[] };
 export type WordsAddedEvent = { type: 'WORDS_ADDED'; totalEntries: number };
 export type CreateCloudEvent = { type: 'CREATE_CLOUD' };
-export type CloudCreatedEvent = { type: 'CLOUD_CREATED'; cloud: Cloud[] };
+export type CloudCreatedEvent = {
+  type: 'CLOUD_CREATED';
+  cloud: Cloud[];
+  wordCount: WordCount;
+};
 export type Restart = { type: 'RESTART' };
 
 // The events that the machine handles
@@ -40,5 +45,6 @@ export interface SessionContext {
   wordEntries: number;
   id: string;
   cloud?: Cloud[];
+  wordCount?: WordCount;
   errorMessage?: string;
 }

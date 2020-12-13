@@ -1,5 +1,6 @@
 import { SessionsService } from '../../services/interfaces/SessionsService';
 import { Cloud } from '../../utils/cloud/cloud.types';
+import { WordCount } from '../../utils/countWords';
 
 export class MockSessionService implements SessionsService {
   private startMockCounter(): void {
@@ -16,7 +17,8 @@ export class MockSessionService implements SessionsService {
 
   private mockCloudCreater(): void {
     setTimeout(() => {
-      if (this.cloudsListener) this.cloudsListener(this.cloud);
+      if (this.cloudsListener)
+        this.cloudsListener({ cloud: this.cloud, wordCount: this.wordCount });
     }, 6000);
   }
 
@@ -67,9 +69,17 @@ export class MockSessionService implements SessionsService {
     },
   ];
 
+  private wordCount: WordCount = [
+    { text: 'hello', count: 2 },
+    { text: 'world', count: 5 },
+  ];
+
   private wordsListener?: (totalEntries: number) => void;
 
-  private cloudsListener?: (cloud: Cloud[]) => void;
+  private cloudsListener?: (cparams: {
+    cloud: Cloud[];
+    wordCount: WordCount;
+  }) => void;
 
   async saveWords(id: string, words: string[]): Promise<void> {
     this.words.push(...words);
@@ -82,16 +92,22 @@ export class MockSessionService implements SessionsService {
     this.wordsListener = callback;
   }
 
-  async createCloudFromStoredWordCounts(): Promise<Cloud[]> {
+  async createCloudFromStoredWordCounts(): Promise<{
+    cloud: Cloud[];
+    wordCount: WordCount;
+  }> {
     const cloud = await new Promise<Cloud[]>((resolve) => {
       setTimeout(() => {
         resolve(this.cloud);
       }, 3000);
     });
-    return cloud;
+    return { cloud, wordCount: this.wordCount };
   }
 
-  onCloudAdded(id: string, callback: (cloud: Cloud[]) => void): void {
+  onCloudAdded(
+    id: string,
+    callback: (params: { cloud: Cloud[]; wordCount: WordCount }) => void
+  ): void {
     this.cloudsListener = callback;
   }
 

@@ -65,7 +65,9 @@ export class OrdskyService implements SessionsService {
     });
   }
 
-  async createCloudFromStoredWordCounts(id: string): Promise<Cloud[]> {
+  async createCloudFromStoredWordCounts(
+    id: string
+  ): Promise<{ cloud: Cloud[]; wordCount: WordCount }> {
     const wordsPromise = new Promise<string[]>((resolve, reject) => {
       const error = setTimeout(
         () => reject(new Error('Did not get a response in time')),
@@ -126,18 +128,22 @@ export class OrdskyService implements SessionsService {
         action: 'savecloud',
         id: id.toUpperCase(),
         cloud,
+        wordCount: sortedWordCount,
       })
     );
 
-    return cloud;
+    return { cloud, wordCount };
   }
 
-  public onCloudAdded(id: string, callback: (cloud: Cloud[]) => void): void {
+  public onCloudAdded(
+    id: string,
+    callback: (params: { cloud: Cloud[]; wordCount: WordCount }) => void
+  ): void {
     this.socket.addEventListener('message', (event) => {
       const data = JSON.parse(event.data);
 
       if (data.type === 'CLOUD_CREATED') {
-        callback(data.cloud);
+        callback({ cloud: data.cloud, wordCount: data.wordCount });
       }
     });
   }
