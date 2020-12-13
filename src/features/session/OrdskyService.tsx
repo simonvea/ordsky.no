@@ -122,13 +122,16 @@ export class OrdskyService implements SessionsService {
       generateCloud(cloudInput, callback);
     });
 
+    // To save WriteCapacity we only send top 10 words.
+    const wordCountToSend = sortedWordCount.slice(0, 10);
+
     // Send to backend
     this.socket.send(
       JSON.stringify({
         action: 'savecloud',
         id: id.toUpperCase(),
         cloud,
-        wordCount: sortedWordCount,
+        wordCount: wordCountToSend,
       })
     );
 
