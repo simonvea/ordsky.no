@@ -70,7 +70,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
           Last ned ordsky
         </SecondaryButton>
         <Button type="button" onClick={onRestart}>
-          Bli med i en ny session
+          Bli med i en ny økt
         </Button>
       </Row>
       <Row>

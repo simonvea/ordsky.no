@@ -50,7 +50,7 @@ export const About: React.FC = () => {
           tilbakemeldinger. Send meg gjerne en{' '}
           <a
             className="article__link"
-            href="mailto:simon.opheim+ordsky@gmail.com?subject=Jeg liker ordsky.no, men"
+            href="mailto:simon@ordsky.no?subject=Jeg liker ordsky.no, men"
             target="_blank"
             rel="noopener noreferrer"
           >
