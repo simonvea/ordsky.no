@@ -1,10 +1,14 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
-import { CloudState, CloudActions, initialState } from './cloudReducer.types';
+import { CloudState, CloudActions } from './cloudReducer.types';
+
+export const initialState = {
+  loading: false,
+};
 
 export const wordsReducer = produce(
   // eslint-disable-next-line consistent-return
-  (draft: CloudState = initialState, action: CloudActions) => {
+  (draft: CloudState, action: CloudActions) => {
     switch (action.type) {
       case 'CLOUD_START_COUNT':
         draft.loading = true;

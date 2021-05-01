@@ -9,7 +9,7 @@ import {
 
 export const formsReducer = produce(
   // eslint-disable-next-line consistent-return
-  (draft: FormsState = initialState, action: FormsActions) => {
+  (draft: FormsState, action: FormsActions) => {
     switch (action.type) {
       case 'WORDS_ADD_INPUT': {
         const key = `input-${draft.addedInputs}`;

@@ -1,6 +1,6 @@
-import React, { createContext, useReducer, Dispatch, Reducer } from 'react';
-import { wordsReducer } from './cloudReducer';
-import { initialState, CloudState, CloudActions } from './cloudReducer.types';
+import React, { createContext, useReducer, Dispatch } from 'react';
+import { wordsReducer, initialState } from './cloudReducer';
+import { CloudState, CloudActions } from './cloudReducer.types';
 
 export interface WordsContext {
   state: CloudState;
@@ -10,10 +10,8 @@ export interface WordsContext {
 export const CloudContext = createContext({} as WordsContext);
 
 export const CloudProvider: React.FC = ({ children }) => {
-  const [state, dispatch] = useReducer<Reducer<CloudState, CloudActions>>(
-    wordsReducer,
-    initialState
-  );
+  const [state, dispatch] = useReducer(wordsReducer, initialState);
+
   return (
     <CloudContext.Provider value={{ state, dispatch }}>
       {children}

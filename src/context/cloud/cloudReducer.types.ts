@@ -1,10 +1,6 @@
 import { WordCount } from '../../utils/countWords';
 import { Cloud } from '../../utils/cloud/cloud.types';
 
-export const initialState = {
-  loading: false,
-};
-
 export interface CloudState {
   loading: boolean;
   wordCount?: WordCount;
