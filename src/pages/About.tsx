@@ -17,10 +17,10 @@ export const About: React.FC = () => {
         <h1>Om Ordsky.no</h1>
         <p>
           Ordsky.no er et lite hobbyprosjekt laget av{' '}
+          {/* eslint-disable-next-line react/jsx-no-target-blank */}
           <a
             className="article__link"
             href="https://www.simonsier.no/about/"
-            // eslint-disable-next-line react/jsx-no-target-blank
             target="_blank"
             rel="noopener"
           >
