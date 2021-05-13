@@ -1,25 +1,21 @@
 import React from 'react';
 import { faMinusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Input } from '../../components/atoms/Input';
-import { Form } from '../../components/atoms/Form';
-import { Row } from '../../components/atoms/Row';
-import { Title } from '../../components/atoms/Title';
-import {
-  Button,
-  SecondaryButton,
-  IconButton,
-} from '../../components/atoms/Button';
+import { Input } from '../atoms/Input';
+import { Form } from '../atoms/Form';
+import { Row } from '../atoms/Row';
+import { Title } from '../atoms/Title';
+import { Button, SecondaryButton, IconButton } from '../atoms/Button';
 import { formsReducer, initialState } from './wordsInputReducer';
 
 type WordsInputProps = {
-  id: string;
+  title?: string;
   onSubmit: (words: string[]) => void;
   onQuit: () => void;
 };
 
 export const WordsInput: React.FC<WordsInputProps> = ({
-  id,
+  title,
   onSubmit,
   onQuit,
 }) => {
@@ -66,7 +62,7 @@ export const WordsInput: React.FC<WordsInputProps> = ({
 
   return (
     <>
-      <Title>Kode: {id.toUpperCase()}</Title>
+      {title && <Title>{title}</Title>}
 
       <Form onSubmit={disableSubmit}>
         {inputs.map(({ key, word }) => (

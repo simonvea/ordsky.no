@@ -3,7 +3,7 @@ import { useMachine } from '@xstate/react';
 import { StartSession } from './StartSession';
 import { WaitScreen } from './WaitScreen';
 import { sessionMachine } from './StateMachine';
-import { WordsInput } from './WordsInput';
+import { WordsInput } from '../../components/molecules/WordsInput';
 import { CloudDisplay } from './CloudDisplay';
 import { ErrorScreen } from './ErrorScreen';
 
@@ -38,6 +38,8 @@ export const SessionPage: React.FC = () => {
     send({ type: 'ADD_WORDS', words });
   };
 
+  const wordsInputTitle = `Kode: ${id.toUpperCase()}`;
+
   switch (state.value) {
     case 'idle':
       return (
@@ -47,7 +49,13 @@ export const SessionPage: React.FC = () => {
         />
       );
     case 'wordsInput':
-      return <WordsInput id={id} onSubmit={onSubmitWords} onQuit={restart} />;
+      return (
+        <WordsInput
+          title={wordsInputTitle}
+          onSubmit={onSubmitWords}
+          onQuit={restart}
+        />
+      );
     case 'addWords':
     case 'creating':
     case 'waiting':

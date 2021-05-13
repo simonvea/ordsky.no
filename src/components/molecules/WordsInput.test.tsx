@@ -6,7 +6,7 @@ describe('WordsInput component', () => {
   it('when clicking "legg til et nytt ord", then one additional input is visible', () => {
     // Arrange
     const { getByText, getAllByPlaceholderText } = render(
-      <WordsInput id="124124" onSubmit={jest.fn} onQuit={jest.fn} />
+      <WordsInput title="124124" onSubmit={jest.fn} onQuit={jest.fn} />
     );
 
     const button = getByText(/legg til et nytt ord/i);
@@ -29,7 +29,7 @@ describe('WordsInput component', () => {
     const mockSubmit = jest.fn();
 
     const { getByText, getAllByPlaceholderText } = render(
-      <WordsInput id="124124" onSubmit={mockSubmit} onQuit={jest.fn} />
+      <WordsInput title="124124" onSubmit={mockSubmit} onQuit={jest.fn} />
     );
 
     const addFieldsButton = getByText(/legg til et nytt ord/i);
