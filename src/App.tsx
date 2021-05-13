@@ -9,10 +9,11 @@ import { WordsForm } from './pages/WordsForm';
 import { TextForm } from './pages/TextForm';
 import { About } from './pages/About';
 import { TermsBanner } from './components/TermsBanner';
-import { SessionPage } from './features/session/SessionPage';
 import { OrdskyHeader } from './components/molecules/Header';
 
 const Visualization = lazy(() => import('./pages/Visualization'));
+const SessionPage = lazy(() => import('./features/session/SessionPage'));
+
 const SHOW_TERMS_KEY = 'displayedTerms';
 
 const App: React.FC = function App() {

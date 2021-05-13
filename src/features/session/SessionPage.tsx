@@ -7,7 +7,7 @@ import { WordsInput } from '../../components/molecules/WordsInput';
 import { CloudDisplay } from './CloudDisplay';
 import { ErrorScreen } from './ErrorScreen';
 
-export const SessionPage: React.FC = () => {
+const SessionPage: React.FC = () => {
   const [state, send] = useMachine(sessionMachine);
   const {
     isAdmin,
@@ -91,3 +91,7 @@ export const SessionPage: React.FC = () => {
       );
   }
 };
+
+// Exporting as default in order to use lazy loading
+// eslint-disable-next-line import/no-default-export
+export default SessionPage;
