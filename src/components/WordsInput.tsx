@@ -49,6 +49,7 @@ export const WordsInput: React.FC<WordsInputProps> = function WordsInput({
             onChange={handleWordChange}
             placeholder="Skriv inn ord..."
             id={`${inputKey}-word`}
+            ref={(input) => input && input.focus()}
           />
         </label>
         <label htmlFor={`${inputKey}-size`}>
