@@ -1,6 +1,7 @@
 import getRandomColor from 'randomcolor';
 import { WordCount } from '../countWords';
 import { CloudInput } from './cloud.types';
+import { reduceTooBigWords } from './createCloud';
 
 const MAX_ARRAY_SIZE = 50;
 
@@ -35,7 +36,7 @@ export const wordCountToCloudInput = (wordCount: WordCount): CloudInput[] => {
     currentMin: minValue,
   });
 
-  return normalizedSizes;
+  return reduceTooBigWords(normalizedSizes);
 };
 
 type NormalizeSizesInput = {
@@ -51,7 +52,7 @@ function normalizeSizes({
   currentMax,
   currentMin,
   absoluteMax = 70,
-  absoluteMin = 20,
+  absoluteMin = 10,
 }: NormalizeSizesInput): CloudInput[] {
   const normalize = (size: number): number => {
     const normalized =

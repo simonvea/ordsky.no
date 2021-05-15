@@ -53,23 +53,45 @@ export const generateCloud = (
     .start();
 };
 
+export const reduceTooBigWords = (
+  words: CloudInput[],
+  maxPixels = 300,
+  minSize = 10
+): CloudInput[] => {
+  let sizeReduction = 0;
+
+  return words.map((n) => {
+    const { size, text } = n;
+
+    if ((size - sizeReduction) * text.length > maxPixels) {
+      sizeReduction = Math.ceil(size - maxPixels / text.length);
+    }
+
+    return {
+      ...n,
+      size: size - sizeReduction > minSize ? size - sizeReduction : minSize,
+    };
+  });
+};
+
 export function normalizeSizes(
   words: CloudInput[],
-  minSize = 20,
-  maxSize = 60
+  minSize = 10,
+  maxSize = 70
 ): CloudInput[] {
-  const sizes = words.map((word) => {
-    return Number.isNaN(word.size) ? 1 : word.size;
-  });
-  const max = Math.max(...sizes);
-  const min = Math.min(...sizes);
+  const wordsSorted = words.sort((a, b) => b.size - a.size);
+
+  const max = wordsSorted[0].size;
+  const min = wordsSorted[wordsSorted.length - 1].size;
+
   const normalize = (size: number): number => {
     const normalized = ((size - min) / (max - min)) * maxSize;
     return normalized > minSize ? normalized : minSize;
   };
-  return words.map((word, index) => ({
+
+  return words.map((word) => ({
     ...word,
-    size: normalize(sizes[index]),
+    size: normalize(word.size),
   }));
 }
 
@@ -84,8 +106,10 @@ export const addColorToWordsInput = (words: WordsInput[]): CloudInput[] => {
 export const wordsInputToCloudInput = (
   wordsInput: WordsInput[]
 ): CloudInput[] => {
+  const MIN_SIZE = 10;
+  const MAX_PIXELS = 300;
+
   const wordsWithColor = addColorToWordsInput(wordsInput);
   const wordsWithSize = normalizeSizes(wordsWithColor);
-  const wordsSorted = wordsWithSize.sort((a, b) => b.size - a.size);
-  return wordsSorted;
+  return reduceTooBigWords(wordsWithSize, MAX_PIXELS, MIN_SIZE);
 };
