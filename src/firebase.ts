@@ -20,7 +20,3 @@ export const analytics =
   process.env.NODE_ENV === 'production'
     ? firebase.analytics()
     : { logEvent: () => {} };
-
-export const db = firebase.firestore();
-export const functions = firebase.app().functions('europe-west3'); // Needs to be same region as function.
-export const createCloud = functions.httpsCallable('createCloud');
