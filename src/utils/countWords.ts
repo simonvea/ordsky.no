@@ -28,10 +28,7 @@ export async function countWords(string: string): Promise<WordCount> {
 
   if (words) {
     words.forEach((word) => {
-      const isCounted = Object.keys(count).some(
-        (countedWord) => countedWord === word
-      );
-      if (isCounted) {
+      if (count[word]) {
         count[word] += 1;
       } else {
         count[word] = 1;
