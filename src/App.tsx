@@ -1,24 +1,22 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import './App.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { CloudProvider } from './context/cloud/cloudContext';
-import { Home } from './pages/Home';
-import { FormsProvider } from './context/form/formsContext';
-import { Spinner } from './components/Spinner';
-import { WordsForm } from './pages/WordsForm';
-import { TextForm } from './pages/TextForm';
-import { About } from './pages/About';
-import { TermsBanner } from './components/TermsBanner';
-import { OrdskyHeader } from './components/molecules/Header';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import { Home } from './home';
+import { Spinner } from './common/molecules/Spinner';
+import { TermsBanner } from './common/organisms/TermsBanner';
+import { OrdskyHeader } from './common/molecules/Header';
+import { ErrorBoundary } from './common/organisms/ErrorBoundary';
+import { Main } from './common/atoms/Main';
+import { WordsPage, WordsProvider } from './words';
+import { TextPage, TextProvider } from './text';
+import { About } from './about';
 
-const Visualization = lazy(() => import('./pages/Visualization'));
-const SessionPage = lazy(() => import('./features/session/SessionPage'));
+const CollaborativePage = lazy(() => import('./collaborative'));
 
 const SHOW_TERMS_KEY = 'displayedTerms';
 
 const App: React.FC = function App() {
   const [showTerms, setShowTerms] = React.useState(true);
+  const history = useHistory();
 
   const today = new Date();
 
@@ -33,30 +31,42 @@ const App: React.FC = function App() {
     setShowTerms(false);
     localStorage.setItem(SHOW_TERMS_KEY, today.toISOString());
   };
+
+  const navigateToWordsPage = (): void => history.push('/words');
+  const navigateToTextPage = (): void => history.push('/text');
+
   return (
-    <Router>
+    <>
       <OrdskyHeader />
-      <main className="main-container">
+      <Main>
         <ErrorBoundary>
-          <CloudProvider>
-            <FormsProvider>
+          <WordsProvider>
+            <TextProvider>
               <Suspense fallback={<Spinner message="Laster side..." />}>
                 <Switch>
-                  <Route path="/text-input" component={TextForm} />
-                  <Route path="/form-input" component={WordsForm} />
-                  <Route path="/visualization" component={Visualization} />
-                  <Route path="/about" component={About} />
-                  <Route path="/session" component={SessionPage} />
-                  <Route exact path="/" component={Home} />
+                  <Route path="/words">
+                    <WordsPage onClickToTextForm={navigateToTextPage} />
+                  </Route>
+                  <Route path="/text">
+                    <TextPage onClickToWordsForm={navigateToWordsPage} />
+                  </Route>
+                  <Route path="/collab">
+                    <CollaborativePage />
+                  </Route>
+                  <Route path="/about">
+                    <About />
+                  </Route>
+                  <Route path="/">
+                    <Home onClickCreate={navigateToWordsPage} />
+                  </Route>
                 </Switch>
               </Suspense>
-            </FormsProvider>
-          </CloudProvider>
+            </TextProvider>
+          </WordsProvider>
           {showTerms && <TermsBanner onClose={onCloseTerms} />}
         </ErrorBoundary>
-      </main>
-      <footer className="footer" />
-    </Router>
+      </Main>
+    </>
   );
 };
 

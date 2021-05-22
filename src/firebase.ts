@@ -1,7 +1,5 @@
 import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import 'firebase/analytics';
-import 'firebase/functions';
 
 // if (process.env.NODE_ENV === 'production') {
 firebase.initializeApp({
