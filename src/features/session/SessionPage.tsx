@@ -5,7 +5,7 @@ import { WaitScreen } from './WaitScreen';
 import { sessionMachine } from './StateMachine';
 import { WordsInput } from '../../components/molecules/WordsInput';
 import { CloudDisplay } from './CloudDisplay';
-import { ErrorScreen } from './ErrorScreen';
+import { ErrorScreen } from '../../components/molecules/ErrorScreen';
 
 const SessionPage: React.FC = () => {
   const [state, send] = useMachine(sessionMachine);

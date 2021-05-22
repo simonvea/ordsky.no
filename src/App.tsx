@@ -10,6 +10,7 @@ import { TextForm } from './pages/TextForm';
 import { About } from './pages/About';
 import { TermsBanner } from './components/TermsBanner';
 import { OrdskyHeader } from './components/molecules/Header';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const Visualization = lazy(() => import('./pages/Visualization'));
 const SessionPage = lazy(() => import('./features/session/SessionPage'));
@@ -36,21 +37,23 @@ const App: React.FC = function App() {
     <Router>
       <OrdskyHeader />
       <main className="main-container">
-        <CloudProvider>
-          <FormsProvider>
-            <Suspense fallback={<Spinner message="Laster side..." />}>
-              <Switch>
-                <Route path="/text-input" component={TextForm} />
-                <Route path="/form-input" component={WordsForm} />
-                <Route path="/visualization" component={Visualization} />
-                <Route path="/about" component={About} />
-                <Route path="/session" component={SessionPage} />
-                <Route exact path="/" component={Home} />
-              </Switch>
-            </Suspense>
-          </FormsProvider>
-        </CloudProvider>
-        {showTerms && <TermsBanner onClose={onCloseTerms} />}
+        <ErrorBoundary>
+          <CloudProvider>
+            <FormsProvider>
+              <Suspense fallback={<Spinner message="Laster side..." />}>
+                <Switch>
+                  <Route path="/text-input" component={TextForm} />
+                  <Route path="/form-input" component={WordsForm} />
+                  <Route path="/visualization" component={Visualization} />
+                  <Route path="/about" component={About} />
+                  <Route path="/session" component={SessionPage} />
+                  <Route exact path="/" component={Home} />
+                </Switch>
+              </Suspense>
+            </FormsProvider>
+          </CloudProvider>
+          {showTerms && <TermsBanner onClose={onCloseTerms} />}
+        </ErrorBoundary>
       </main>
       <footer className="footer" />
     </Router>

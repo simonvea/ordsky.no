@@ -29,12 +29,12 @@ describe('ErrorScreen component', () => {
     expect(hasText).toBeTruthy();
   });
 
-  it('when clicking "Start på nytt", then calls onReset prop', () => {
+  it('when clicking "Prøv igjen", then calls onReset prop', () => {
     // Arrange
     const onResetMock = jest.fn();
     const { getByText } = render(<ErrorScreen onReset={onResetMock} />);
 
-    const button = getByText(/start på nytt/i);
+    const button = getByText(/Prøv igjen/i);
     // Act
     fireEvent.click(button);
 

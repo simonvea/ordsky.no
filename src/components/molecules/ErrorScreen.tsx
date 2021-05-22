@@ -1,6 +1,6 @@
 import React from 'react';
-import { Container } from '../../components/atoms/Container';
-import { Button } from '../../components/atoms/Button';
+import { Container } from '../atoms/Container';
+import { Button } from '../atoms/Button';
 
 export type ErrorScreenProps = {
   message?: string;
@@ -17,7 +17,7 @@ export const ErrorScreen: React.FC<ErrorScreenProps> = ({
     <Container>
       <p>{message || genericMessage}</p>
       <Button type="button" onClick={onReset}>
-        Start på nytt
+        Prøv igjen
       </Button>
     </Container>
   );
