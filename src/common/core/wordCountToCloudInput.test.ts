@@ -11,6 +11,7 @@ describe('wordCountToCloudInput', () => {
     const finished = new Date();
 
     const seconds = (Number(finished) - Number(start)) / 1000;
+    // eslint-disable-next-line no-console
     console.log('spent', seconds);
     output.forEach((input, i) => {
       expect(input.text).toEqual(cloudInput[i].text);

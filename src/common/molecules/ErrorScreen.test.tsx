@@ -34,7 +34,7 @@ describe('ErrorScreen component', () => {
     const onResetMock = jest.fn();
     const { getByText } = render(<ErrorScreen onReset={onResetMock} />);
 
-    const button = getByText(/Prøv igjen/i);
+    const button = getByText(/prøv igjen/i);
     // Act
     fireEvent.click(button);
 
