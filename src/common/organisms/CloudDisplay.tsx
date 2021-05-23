@@ -4,7 +4,7 @@ import { svgDataURL, downloadAsPng } from '../core/downloadAsPng';
 import { Button, SecondaryButton } from '../atoms/Button';
 import { Row } from '../atoms/Row';
 
-import { analytics } from '../../firebase';
+import { logger } from '../core/analytics';
 import { BarChart } from '../molecules/BarChart';
 import { WordCount, Cloud } from '../core/cloud.types';
 import { createCloudSvg } from '../core/createCloud';
@@ -43,9 +43,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
   const svg = createCloudSvg(cloud); // This is probably what should be saved?
   const xml = svgDataURL(svg); // Or this?
   const download = (): void => {
-    // For some reason logEvent is typed to accept a specific event...
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    analytics.logEvent('download_cloud' as any);
+    logger.logEvent('download_cloud');
     downloadAsPng(xml);
   };
 

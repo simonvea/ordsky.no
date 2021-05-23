@@ -11,6 +11,7 @@ import {
 } from './StateMachine.types';
 import { OrdskyService } from './OrdskyService';
 import { Cloud, WordCount } from '../common/core/cloud.types';
+import { logger } from '../common/core/analytics';
 
 const service = new OrdskyService();
 
@@ -64,6 +65,9 @@ export const sessionMachine = Machine<
             target: 'error',
             actions: ['assignErrorMessage'],
           },
+          onDone: {
+            actions: ['logJoined'],
+          },
         },
         on: {
           ADD_WORDS: {
@@ -108,10 +112,13 @@ export const sessionMachine = Machine<
           src: 'createCloud',
           onDone: {
             target: 'created',
-            actions: assign({
-              cloud: (context, event) => event.data.cloud,
-              wordCount: (context, event) => event.data.wordCount,
-            }),
+            actions: [
+              assign({
+                cloud: (context, event) => event.data.cloud,
+                wordCount: (context, event) => event.data.wordCount,
+              }),
+              'logCreated',
+            ],
           },
           onError: 'error',
         },
@@ -128,7 +135,9 @@ export const sessionMachine = Machine<
           src: 'endSession',
         },
       },
-      error: {},
+      error: {
+        entry: ['logError'],
+      },
     },
   },
   {
@@ -154,6 +163,18 @@ export const sessionMachine = Machine<
       assignErrorMessage: assign<SessionContext, SessionEvent>({
         errorMessage: `Ingen økt med den id'en ble funnet.`,
       }),
+      logJoined: () => {
+        logger.logEvent('collab_joined');
+      },
+      logCreated: () => {
+        logger.logEvent('collab_cloud_created');
+      },
+      logError: (context) => {
+        logger.logError({
+          description: `Error in collabService. Message: ${context.errorMessage}`,
+          fatal: false,
+        });
+      },
     },
     /* eslint-disable unicorn/consistent-function-scoping */
     services: {

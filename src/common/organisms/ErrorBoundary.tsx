@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo } from 'react';
+import { logger } from '../core/analytics';
 import { ErrorScreen } from '../molecules/ErrorScreen';
 
 type ErrorBoundaryState = {
@@ -11,9 +12,7 @@ export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
-  // TODO: Actually send this log..
-  // eslint-disable-next-line no-console
-  logError = console.error;
+  logError = logger.logError;
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
@@ -29,7 +28,10 @@ export class ErrorBoundary extends Component<
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
     // Log the error to an error reporting service
-    this.logError(error, info);
+    this.logError({
+      description: `Error from ErrorBoundary. Error: ${error}, callstack: ${info}`,
+      fatal: true,
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
