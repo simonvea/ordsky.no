@@ -37,4 +37,3 @@ The state folder contains the application state.
 ## Integrations
 
 The app connects to an API hosted in AWS for the collaborative session feature.
-Google Analytics is used for analytics.

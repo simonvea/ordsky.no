@@ -19,7 +19,7 @@ jobs:
         run: npm run test
 
       - name: Build
-        run: REACT_APP_API_KEY=${{ secrets.API_KEY }} npm run build
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-artifact@master

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { SecondaryTitle } from '../common/atoms/SecondaryTitle';
 import { Title } from '../common/atoms/Title';
 
 const AboutContainer = styled.section`
@@ -82,54 +81,6 @@ export const About: React.FC = () => {
             mail
           </Link>
           .
-        </p>
-      </Article>
-      <Article>
-        <SecondaryTitle id="cookies">
-          Informasjonskapsler og personvern
-        </SecondaryTitle>
-        <p>Ordsky.no bruker informasjonskapsler.</p>
-        <p>
-          Bruk av informasjonskapsler er regulert i Lov om elektronisk
-          kommunikasjon (ekomloven) § 2-7b. En informasjonskapsel er en liten
-          tekstfil som nettstedet ber om å få lagre på din datamaskin.
-          Informasjonskapselen samler inn informasjon om hvordan du bruker
-          nettstedet – for eksempel hvilke sider du går til oftest og hvilke
-          valg du gjør mens du bruker dem.
-        </p>
-        <p>
-          Informasjonen gir meg statistikk jeg kan bruke når jeg utvikler
-          nettstedet videre.
-        </p>
-        <p>
-          Jeg får statistikken fra verktøyet Google Analytics. Det medfører at
-          din bruk av denne nettsiden, inklusiv din ip-adresse, kan bli overført
-          til og lagret av Google. Denne informasjonen vil i så fall bli
-          behandlet i tråd med{' '}
-          <Link
-            href="https://policies.google.com/technologies/partner-sites?hl=no"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            Googles personvernpolicy
-          </Link>
-          .{' '}
-        </p>
-        <p>
-          Informasjonskapselene kan ikke identifisere hvem du er og lagrer ingen
-          personlige opplysninger.
-        </p>
-        <p>
-          Dersom du ønsker å deaktivere informasjonskapsler for din nettleser,
-          kan du gjøre dette via nettleserens sikkerhetsinnstillinger. Du kan
-          også stille inn nettleseren slik at du blir varslet hver gang
-          nettstedet prøver å legge en informasjonskapsel på datamaskinen.
-          Gjennom nettleseren kan du også slette informasjonskapsler som
-          allerede er lagret på maskinen.
-        </p>
-        <p>
-          Se nettleserens hjelpesider for mer informasjon om hvordan du gjør
-          dette.
         </p>
       </Article>
     </AboutContainer>

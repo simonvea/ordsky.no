@@ -1,8 +1,7 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { Home } from './home';
 import { Spinner } from './common/molecules/Spinner';
-import { TermsBanner } from './common/organisms/TermsBanner';
 import { OrdskyHeader } from './common/molecules/Header';
 import { ErrorBoundary } from './common/organisms/ErrorBoundary';
 import { Main } from './common/atoms/Main';
@@ -12,25 +11,8 @@ import { About } from './about';
 
 const CollaborativePage = lazy(() => import('./collaborative'));
 
-const SHOW_TERMS_KEY = 'displayedTerms';
-
 const App: React.FC = function App() {
-  const [showTerms, setShowTerms] = React.useState(true);
   const history = useHistory();
-
-  const today = new Date();
-
-  useEffect(() => {
-    const showedTerms = localStorage.getItem(SHOW_TERMS_KEY);
-    if (showedTerms) {
-      setShowTerms(false);
-    }
-  }, []);
-
-  const onCloseTerms: () => void = () => {
-    setShowTerms(false);
-    localStorage.setItem(SHOW_TERMS_KEY, today.toISOString());
-  };
 
   const navigateToWordsPage = (): void => history.push('/words');
   const navigateToTextPage = (): void => history.push('/text');
@@ -63,7 +45,6 @@ const App: React.FC = function App() {
               </Suspense>
             </TextProvider>
           </WordsProvider>
-          {showTerms && <TermsBanner onClose={onCloseTerms} />}
         </ErrorBoundary>
       </Main>
     </>

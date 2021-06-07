@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { analytics } from '../../firebase';
 
 export type ExceptionEventParams = {
   description: string;
@@ -14,26 +13,24 @@ export type AnalyticEvents =
   | 'text_cloud_created';
 
 class Logger {
-  private googleLogger?: firebase.analytics.Analytics;
+  private isProduction: boolean;
 
   constructor() {
-    if (process.env.NODE_ENV === 'production') {
-      this.googleLogger = analytics();
-    }
+    this.isProduction = process.env.NODE_ENV === 'production';
   }
 
   logEvent(event: AnalyticEvents): void {
-    if (this.googleLogger) {
-      return this.googleLogger.logEvent<AnalyticEvents>(event);
+    if (this.isProduction) {
+      return;
     }
-    return console.info(event);
+    console.info(event);
   }
 
   logError(params: ExceptionEventParams): void {
-    if (this.googleLogger) {
-      return this.googleLogger.logEvent('exception', params);
+    if (this.isProduction) {
+      return;
     }
-    return console.error(params);
+    console.error(params);
   }
 }
 
