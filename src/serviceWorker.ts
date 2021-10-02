@@ -19,8 +19,8 @@ const isLocalhost = Boolean(
     // [::1] is the IPv6 localhost address.
     window.location.hostname === '[::1]' ||
     // 127.0.0.0/8 are considered localhost for IPv4.
-    window.location.hostname.match(
-      /^127(?:\.(?:25[0-5]|2[0-4]\d|[01]?\d{1,2})){3}$/
+    /^127(?:\.(?:25[0-5]|2[0-4]\d|[01]?\d{1,2})){3}$/.test(
+      window.location.hostname
     )
 );
 
@@ -71,12 +71,12 @@ function registerValidSW(swUrl: string, config?: Config): void {
     .register(swUrl)
     .then((registration) => {
       // eslint-disable-next-line no-param-reassign
-      registration.onupdatefound = () => {
+      registration.addEventListener('updatefound', () => {
         const installingWorker = registration.installing;
         if (installingWorker === null) {
           return;
         }
-        installingWorker.onstatechange = () => {
+        installingWorker.addEventListener('statechange', () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
               // At this point, the updated precached content has been fetched,
@@ -103,8 +103,8 @@ function registerValidSW(swUrl: string, config?: Config): void {
               }
             }
           }
-        };
-      };
+        });
+      });
     })
     .catch((error) => {
       console.error('Error during service worker registration:', error);

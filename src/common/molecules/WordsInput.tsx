@@ -14,11 +14,7 @@ type WordsInputProps = {
   onQuit: () => void;
 };
 
-export const WordsInput: React.FC<WordsInputProps> = ({
-  title,
-  onSubmit,
-  onQuit,
-}) => {
+const WordsInput: React.FC<WordsInputProps> = ({ title, onSubmit, onQuit }) => {
   const [state, dispatch] = React.useReducer(formsReducer, initialState);
 
   const { inputs } = state;
@@ -105,3 +101,9 @@ export const WordsInput: React.FC<WordsInputProps> = ({
     </>
   );
 };
+
+WordsInput.defaultProps = {
+  title: '',
+};
+
+export { WordsInput };

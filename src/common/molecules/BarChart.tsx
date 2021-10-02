@@ -1,5 +1,11 @@
-import React, { useRef, useLayoutEffect } from 'react';
-import Chart from 'chart.js';
+import React, { useRef, useEffect } from 'react';
+import {
+  Chart,
+  BarController,
+  LinearScale,
+  CategoryScale,
+  BarElement,
+} from 'chart.js';
 import styled from 'styled-components';
 import { Container } from '../atoms/Container';
 
@@ -17,6 +23,9 @@ const BarChartContainer = styled.div`
   max-width: 550px;
 `;
 
+Chart.register(BarController, LinearScale, CategoryScale, BarElement);
+Chart.defaults.color = 'white';
+
 export const BarChart: React.FC<BarChartProps> = function BarChart({
   labels,
   data,
@@ -25,12 +34,11 @@ export const BarChart: React.FC<BarChartProps> = function BarChart({
 }) {
   // eslint-disable-next-line unicorn/no-null
   const canvas = useRef<HTMLCanvasElement>(null);
-  Chart.defaults.global.defaultFontColor = 'white';
-  useLayoutEffect(() => {
+  useEffect(() => {
     const ctx = canvas.current?.getContext('2d');
+    let chart: Chart;
     if (ctx) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const chart = new Chart(ctx, {
+      chart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels,
@@ -44,22 +52,21 @@ export const BarChart: React.FC<BarChartProps> = function BarChart({
           ],
         },
         options: {
-          legend: {
-            display: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
           },
           responsive: true,
           scales: {
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                },
-              },
-            ],
+            y: {
+              beginAtZero: true,
+            },
           },
         },
       });
     }
+    return () => chart.destroy();
   }, [canvas, data, labels, title, backgroundColors]);
   return (
     <Container>

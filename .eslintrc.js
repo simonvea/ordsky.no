@@ -7,6 +7,7 @@ module.exports = {
     'unicorn',
   ],
   extends: [
+    'airbnb',
     'airbnb-typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:eslint-comments/recommended',
@@ -14,8 +15,6 @@ module.exports = {
     // 'plugin:promise/recommended',
     'plugin:unicorn/recommended',
     'prettier',
-    'prettier/react',
-    'prettier/@typescript-eslint',
   ],
   parserOptions: {
     project: './tsconfig.json',
@@ -29,6 +28,7 @@ module.exports = {
     'no-use-before-define': 0,
     'react/prop-types': 0,
     'unicorn/filename-case': 0,
+    'unicorn/no-array-for-each': 0,
     // Too restrictive, writing ugly code to defend against a very unlikely scenario: https://eslint.org/docs/rules/no-prototype-builtins
     'no-prototype-builtins': 'off',
     // https://basarat.gitbooks.io/typescript/docs/tips/defaultIsBad.html

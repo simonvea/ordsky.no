@@ -39,7 +39,9 @@ export const useCloud = (): UseWordsContext => {
       } catch (error) {
         dispatch({ type: 'CLOUD_ERROR', error: (error as Error).message });
         logger.logError({
-          description: `Error while creating cloud from words: ${error.message}`,
+          description: `Error while creating cloud from words: ${
+            (error as Error).message
+          }`,
           fatal: false,
         });
       }
@@ -66,7 +68,9 @@ export const useCloud = (): UseWordsContext => {
       } catch (error) {
         dispatch({ type: 'CLOUD_ERROR', error: (error as Error).message });
         logger.logError({
-          description: `Error while creating cloud from text: ${error.message}`,
+          description: `Error while creating cloud from text: ${
+            (error as Error).message
+          }`,
           fatal: false,
         });
       }
@@ -74,9 +78,10 @@ export const useCloud = (): UseWordsContext => {
     [dispatch]
   );
 
-  const reset = useCallback((): void => dispatch({ type: 'CLOUD_RESET' }), [
-    dispatch,
-  ]);
+  const reset = useCallback(
+    (): void => dispatch({ type: 'CLOUD_RESET' }),
+    [dispatch]
+  );
 
   return {
     state,

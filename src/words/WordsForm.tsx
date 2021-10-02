@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/explicit-length-check */
 import React, { FormEvent } from 'react';
 import styled from 'styled-components';
 import { Button, SecondaryButton } from '../common/atoms/Button';
@@ -102,3 +103,4 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
     </form>
   );
 };
+/* eslint-enable unicorn/explicit-length-check */

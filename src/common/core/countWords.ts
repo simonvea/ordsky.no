@@ -4,9 +4,8 @@ import { WordCount } from './cloud.types';
 const isNotNumber = (w: string): boolean =>
   Number.isNaN(Number.parseInt(w, 10));
 
-const wordsFilter = (word: string): boolean => {
-  return word.length > 2 && isNotNumber && !filter.includes(word);
-};
+const wordsFilter = (word: string): boolean =>
+  word.length > 2 && isNotNumber && !filter.includes(word);
 
 export async function countWords(string: string): Promise<WordCount> {
   const regExp = /\S+/gi;

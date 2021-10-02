@@ -34,8 +34,8 @@ export function createCloudSvg(
 export const createCloud = (
   words: CloudInput[],
   config?: CloudConfig
-): Promise<Cloud[]> => {
-  return new Promise((resolve) => {
+): Promise<Cloud[]> =>
+  new Promise((resolve) => {
     const svgWidth = config?.svgWidth || 500;
     const svgHeight = config?.svgHeight || 300;
     const paddingBetweenWords = config?.padding || 2;
@@ -53,7 +53,6 @@ export const createCloud = (
       .on('end', resolve)
       .start();
   });
-};
 
 export const reduceTooBigWords = (
   words: CloudInput[],

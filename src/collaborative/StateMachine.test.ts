@@ -162,7 +162,11 @@ describe('sessionMachine', () => {
       sessionService.send({ type: 'WORDS_ADDED', totalEntries: 5 });
 
       // Act
-      sessionService.send({ type: 'CLOUD_CREATED', cloud: [] });
+      sessionService.send({
+        type: 'CLOUD_CREATED',
+        cloud: [],
+        wordCount: [{ text: '', count: 2 }],
+      });
 
       // Assert
       expect(mockAction).toHaveBeenCalled();

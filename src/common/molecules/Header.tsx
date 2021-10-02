@@ -64,21 +64,19 @@ const NavLink = styled(Link)`
   margin: 0 5px;
 `;
 
-export const OrdskyHeader: React.FC = () => {
-  return (
-    <Header>
-      <Title>
-        <Link to="/">Ordsky.no</Link>
-      </Title>
-      <Nav>
-        <NavButton to="/words" role="button">
-          Ny Ordsky
-        </NavButton>
-        <NavButton to="/collab" role="button">
-          Lag en felles ordsky
-        </NavButton>
-        <NavLink to="/about">Om Ordsky.no</NavLink>
-      </Nav>
-    </Header>
-  );
-};
+export const OrdskyHeader: React.FC = () => (
+  <Header>
+    <Title>
+      <Link to="/">Ordsky.no</Link>
+    </Title>
+    <Nav>
+      <NavButton to="/words" role="button">
+        Ny Ordsky
+      </NavButton>
+      <NavButton to="/collab" role="button">
+        Lag en felles ordsky
+      </NavButton>
+      <NavLink to="/about">Om Ordsky.no</NavLink>
+    </Nav>
+  </Header>
+);
