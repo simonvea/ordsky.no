@@ -45,6 +45,33 @@ describe('sessionMachine', () => {
     expect(sendWordsMock).toHaveBeenCalled();
   });
 
+  it('given only one word, when event is ADD_WORDS, sendWords service is called', () => {
+    // Arrange
+    const sendWordsMock = jest.fn();
+
+    const mockSessionMachine = sessionMachine.withConfig({
+      services: {
+        listenToWords: jest.fn(),
+        listenforCloud: jest.fn(),
+        sendWords: sendWordsMock,
+      },
+    });
+
+    const fetchService = interpret<
+      SessionContext,
+      SessionStateSchema,
+      SessionEvent
+    >(mockSessionMachine).start();
+
+    fetchService.send({ type: 'JOIN_SESSION', id: 'huh' });
+
+    // Act
+    fetchService.send({ type: 'ADD_WORDS', words: ['one'] });
+
+    // Assert
+    expect(sendWordsMock).toHaveBeenCalled();
+  });
+
   it('when event is START_SESSION, setAsAdmin action is triggered', () => {
     let adminEvent = false;
 

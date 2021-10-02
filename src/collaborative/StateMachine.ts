@@ -72,7 +72,7 @@ export const sessionMachine = Machine<
         on: {
           ADD_WORDS: {
             target: 'addWords',
-            cond: (context, event) => event.words && event.words.length > 1,
+            cond: (context, event) => event.words && event.words.length > 0,
           },
         },
       },
@@ -183,11 +183,13 @@ export const sessionMachine = Machine<
       },
       sendWords: (context, event) =>
         service.saveWords(context.id, (event as AddWordsEvent).words),
-      listenToWords: (context) => (callback): void => {
-        service.onWordsAdded(context.id, (totalEntries: number) =>
-          callback({ type: 'WORDS_ADDED', totalEntries })
-        );
-      },
+      listenToWords:
+        (context) =>
+        (callback): void => {
+          service.onWordsAdded(context.id, (totalEntries: number) =>
+            callback({ type: 'WORDS_ADDED', totalEntries })
+          );
+        },
       listenForCloud: (context) => (callback) => {
         if (context.isAdmin) return; // TODO: Should this be checked for elsewhere?.
         service.onCloudAdded(
