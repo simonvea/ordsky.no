@@ -4,7 +4,7 @@ import {
 } from './wordCountToCloudInput';
 import wordcount from './wordcount.json';
 import cloudInput from './cloudInput.json';
-import { CloudInput } from './cloud.types';
+import { CloudInput, WordCount } from './cloud.types';
 
 describe('wordCountToCloudInput', () => {
   test('transforms word count to CloudInput', () => {
@@ -20,6 +20,22 @@ describe('wordCountToCloudInput', () => {
     output.forEach((input, i) => {
       expect(input.text).toEqual(cloudInput[i].text);
     });
+  });
+
+  it('given wordCount, when called then original wordcount stays the same', () => {
+    // This is due to runtime errors when trying to sort an immutable array, which it will be in production
+    // Arrange
+    const count = Object.freeze([
+      { text: 'dgsadg', count: 1 },
+      { text: 'asdgasdg', count: 2 },
+    ]);
+
+    // Act
+
+    wordCountToCloudInput(count as WordCount);
+
+    // Assert
+    expect(count).toBeDefined();
   });
 });
 
