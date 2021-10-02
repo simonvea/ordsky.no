@@ -1,15 +1,21 @@
 import getRandomColor from 'randomcolor';
-import { CloudInput, WordCount } from './cloud.types';
-import { reduceTooBigWords } from './createCloud';
+import { Cloud, CloudInput, WordCount } from './cloud.types';
+import { createCloud } from './createCloud';
+
+export const createCloudFromWordCount = async (
+  wordCount: WordCount
+): Promise<Cloud[]> => {
+  const cloudInput: CloudInput[] = wordCountToCloudInput(wordCount);
+
+  return createCloud(cloudInput);
+};
 
 const MAX_ARRAY_SIZE = 50;
 
-export const wordCountToCloudInput = (wordCount: WordCount): CloudInput[] => {
-  if (wordCount[0].count < wordCount[wordCount.length - 1].count) {
-    throw new Error('Expected a sorted array!');
-  }
+export function wordCountToCloudInput(wordCount: WordCount): CloudInput[] {
+  const wordsSorted = wordCount.sort((a, b) => b.count - a.count);
 
-  const count = wordCount.slice(0, MAX_ARRAY_SIZE);
+  const count = wordsSorted.slice(0, MAX_ARRAY_SIZE);
 
   const maxValue = count[0].count;
   const minValue = count[count.length - 1].count;
@@ -27,7 +33,7 @@ export const wordCountToCloudInput = (wordCount: WordCount): CloudInput[] => {
   });
 
   return reduceTooBigWords(normalizedSizes);
-};
+}
 
 type NormalizeSizesInput = {
   words: CloudInput[];
@@ -53,4 +59,25 @@ function normalizeSizes({
     ...word,
     size: normalize(word.size),
   }));
+}
+
+export function reduceTooBigWords(
+  words: CloudInput[],
+  maxPixels = 300,
+  minSize = 10
+): CloudInput[] {
+  let sizeReduction = 0;
+
+  return words.map((n) => {
+    const { size, text } = n;
+
+    if ((size - sizeReduction) * text.length > maxPixels) {
+      sizeReduction = Math.ceil(size - maxPixels / text.length);
+    }
+
+    return {
+      ...n,
+      size: size - sizeReduction > minSize ? size - sizeReduction : minSize,
+    };
+  });
 }

@@ -1,11 +1,10 @@
 import { useReducer, useCallback } from 'react';
-import { Cloud, CloudInput, WordCount } from '../core/cloud.types';
-import { createCloud } from '../core/createCloud';
-import { wordCountToCloudInput } from '../core/wordCountToCloudInput';
+import { createCloudFromWordCount } from '../core/wordCountToCloudInput';
 import { countWords } from '../core/countWords';
 import { CloudState } from './cloudReducer.types';
 import { wordsReducer, initialState } from './cloudReducer';
 import { logger } from '../core/analytics';
+import { WordCount } from '../core/cloud.types';
 
 export interface UseWordsContext {
   state: CloudState;
@@ -15,14 +14,6 @@ export interface UseWordsContext {
     reset: () => void;
   };
 }
-
-const createCloudFromWordCount = async (
-  wordCount: WordCount
-): Promise<Cloud[]> => {
-  const cloudInput: CloudInput[] = wordCountToCloudInput(wordCount);
-
-  return createCloud(cloudInput);
-};
 
 export const useCloud = (): UseWordsContext => {
   const [state, dispatch] = useReducer(wordsReducer, initialState);
