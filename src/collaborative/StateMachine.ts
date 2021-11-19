@@ -43,7 +43,7 @@ export const sessionMachine = Machine<
           },
           JOIN_SESSION: {
             target: 'wordsInput',
-            actions: ['addId'],
+            actions: ['addId', 'setAdminStatus'],
           },
         },
       },
@@ -143,6 +143,9 @@ export const sessionMachine = Machine<
   {
     actions: {
       setAsAdmin: assign<SessionContext, SessionEvent>({ isAdmin: true }),
+      setAdminStatus: assign<SessionContext, SessionEvent>({
+        isAdmin: (context, event) => !!(event as JoinSessionEvent).isAdmin,
+      }),
       generateAndAddId: assign<SessionContext, SessionEvent>({
         id: () => generateId(),
       }),

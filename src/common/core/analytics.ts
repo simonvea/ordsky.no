@@ -3,6 +3,7 @@
 export type ExceptionEventParams = {
   description: string;
   fatal: boolean;
+  error?: Error;
 };
 
 export type AnalyticEvents =

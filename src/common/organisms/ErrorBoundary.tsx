@@ -27,10 +27,10 @@ export class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    // Log the error to an error reporting service
     this.logError({
-      description: `Error from ErrorBoundary. Error: ${error}, callstack: ${info}`,
+      description: `Error from ErrorBoundary. Componentstack: ${info}`,
       fatal: true,
+      error,
     });
   }
 

@@ -16,7 +16,11 @@ export interface SessionStateSchema {
 
 export type StartSessionEvent = { type: 'START_SESSION' };
 export type SessionStartedEvent = { type: 'SESSION_STARTED' };
-export type JoinSessionEvent = { type: 'JOIN_SESSION'; id: string };
+export type JoinSessionEvent = {
+  type: 'JOIN_SESSION';
+  id: string;
+  isAdmin?: boolean;
+};
 export type AddWordsEvent = { type: 'ADD_WORDS'; words: string[] };
 export type WordsAddedEvent = { type: 'WORDS_ADDED'; totalEntries: number };
 export type CreateCloudEvent = { type: 'CREATE_CLOUD' };

@@ -109,14 +109,9 @@ export class OrdskyService implements SessionsService {
       }
     });
 
-    const sortedWordCount = wordCount.sort((a, b) => b.count - a.count);
-
-    const cloudInput = wordCountToCloudInput(sortedWordCount);
+    const cloudInput = wordCountToCloudInput(wordCount);
 
     const cloud = await createCloud(cloudInput);
-
-    // To save WriteCapacity we only send top 10 words.
-    const wordCountToSend = sortedWordCount.slice(0, 10);
 
     // Send to backend
     this.socket.send(
@@ -124,7 +119,7 @@ export class OrdskyService implements SessionsService {
         action: 'savecloud',
         id: id.toUpperCase(),
         cloud,
-        wordCount: wordCountToSend,
+        wordCount,
       })
     );
 

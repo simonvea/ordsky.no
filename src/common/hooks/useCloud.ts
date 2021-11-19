@@ -34,6 +34,7 @@ export const useCloud = (): UseWordsContext => {
             (error as Error).message
           }`,
           fatal: false,
+          error: error as Error,
         });
       }
     },
@@ -63,6 +64,7 @@ export const useCloud = (): UseWordsContext => {
             (error as Error).message
           }`,
           fatal: false,
+          error: error as Error,
         });
       }
     },
