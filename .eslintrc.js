@@ -5,6 +5,7 @@ module.exports = {
     'jest',
     'promise',
     'unicorn',
+    "jest-dom"
   ],
   extends: [
     'airbnb',
@@ -12,6 +13,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:eslint-comments/recommended',
     'plugin:jest/recommended',
+    'plugin:jest-dom/recommended',
     // 'plugin:promise/recommended',
     'plugin:unicorn/recommended',
     'prettier',
