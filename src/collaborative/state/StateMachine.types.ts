@@ -1,19 +1,5 @@
 import { WordCount, Cloud } from "../../common/core/cloud.types";
 
-// The hierarchical (recursive) schema for the states
-export interface SessionStateSchema {
-  states: {
-    idle: Record<string, unknown>;
-    startSession: Record<string, unknown>;
-    wordsInput: Record<string, unknown>;
-    addWords: Record<string, unknown>;
-    waiting: Record<string, unknown>;
-    creating: Record<string, unknown>;
-    created: Record<string, unknown>;
-    error: Record<string, unknown>;
-  };
-}
-
 export type StartSessionEvent = { type: "START_SESSION" };
 export type SessionStartedEvent = { type: "SESSION_STARTED" };
 export type JoinSessionEvent = { type: "JOIN_SESSION"; id: string };
@@ -47,3 +33,37 @@ export interface SessionContext {
   wordCount?: WordCount;
   errorMessage?: string;
 }
+// The hierarchical (recursive) schema for the states
+export type SessionTypestate =
+  | {
+      value: "idle";
+      context: SessionContext & { isAdmin: false; wordEntries: 0; id: "" };
+    }
+  | {
+      value: "startSession";
+      context: SessionContext;
+    }
+  | {
+      value: "wordsInput";
+      context: SessionContext;
+    }
+  | {
+      value: "addWords";
+      context: SessionContext;
+    }
+  | {
+      value: "waiting";
+      context: SessionContext;
+    }
+  | {
+      value: "creating";
+      context: SessionContext;
+    }
+  | {
+      value: "created";
+      context: SessionContext;
+    }
+  | {
+      value: "error";
+      context: SessionContext;
+    };

@@ -1,11 +1,11 @@
-import { Machine, assign } from "xstate";
+import { assign, createMachine } from "xstate";
 import { generateId } from "../helpers";
 import {
   JoinSessionEvent,
   AddWordsEvent,
   SessionContext,
   SessionEvent,
-  SessionStateSchema,
+  SessionTypestate,
   CloudCreatedEvent,
   WordsAddedEvent,
 } from "./StateMachine.types";
@@ -15,10 +15,10 @@ import { logger } from "../../common/core/analytics";
 
 const service = new OrdskyService();
 
-export const sessionMachine = Machine<
+export const sessionMachine = createMachine<
   SessionContext,
-  SessionStateSchema,
-  SessionEvent
+  SessionEvent,
+  SessionTypestate
 >(
   {
     id: "session",
@@ -72,7 +72,7 @@ export const sessionMachine = Machine<
         on: {
           ADD_WORDS: {
             target: "addWords",
-            cond: (context, event) => event.words && event.words.length > 0,
+            cond: "Word is not empty",
           },
         },
       },
@@ -112,13 +112,7 @@ export const sessionMachine = Machine<
           src: "createCloud",
           onDone: {
             target: "created",
-            actions: [
-              assign({
-                cloud: (context, event) => event.data.cloud,
-                wordCount: (context, event) => event.data.wordCount,
-              }),
-              "logCreated",
-            ],
+            actions: ["addCreatedCloudToContext", "logCreated"],
           },
           onError: "error",
         },
@@ -141,19 +135,33 @@ export const sessionMachine = Machine<
     },
   },
   {
+    guards: {
+      "Word is not empty": (context, event) =>
+        (event as AddWordsEvent).words &&
+        (event as AddWordsEvent).words.length > 0,
+    },
     actions: {
       setAsAdmin: assign<SessionContext, SessionEvent>({ isAdmin: true }),
       generateAndAddId: assign<SessionContext, SessionEvent>({
         id: () => generateId(),
       }),
-      addId: assign({ id: (context, event) => (event as JoinSessionEvent).id }),
-      addToWordEntries: assign({
+      addId: assign<SessionContext, SessionEvent>({
+        id: (context, event) => (event as JoinSessionEvent).id,
+      }),
+      addToWordEntries: assign<SessionContext, SessionEvent>({
         wordEntries: (context, event) =>
           (event as WordsAddedEvent).totalEntries,
       }),
-      addCloudToContext: assign({
+      addCloudToContext: assign<SessionContext, SessionEvent>({
         cloud: (context, event) => (event as CloudCreatedEvent).cloud,
         wordCount: (context, event) => (event as CloudCreatedEvent).wordCount,
+      }),
+      addCreatedCloudToContext: assign({
+        cloud: (context, event) =>
+          (event as unknown as { data: { cloud: Cloud[] } }).data.cloud,
+        wordCount: (context, event) =>
+          (event as unknown as { data: { wordCount: WordCount } }).data
+            .wordCount,
       }),
       restart: assign<SessionContext, SessionEvent>({
         id: "",
