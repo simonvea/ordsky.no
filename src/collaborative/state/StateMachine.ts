@@ -1,5 +1,5 @@
-import { Machine, assign } from 'xstate';
-import { generateId } from './helpers';
+import { Machine, assign } from "xstate";
+import { generateId } from "../helpers";
 import {
   JoinSessionEvent,
   AddWordsEvent,
@@ -8,10 +8,10 @@ import {
   SessionStateSchema,
   CloudCreatedEvent,
   WordsAddedEvent,
-} from './StateMachine.types';
-import { OrdskyService } from './OrdskyService';
-import { Cloud, WordCount } from '../common/core/cloud.types';
-import { logger } from '../common/core/analytics';
+} from "./StateMachine.types";
+import { OrdskyService } from "../services/OrdskyService";
+import { Cloud, WordCount } from "../../common/core/cloud.types";
+import { logger } from "../../common/core/analytics";
 
 const service = new OrdskyService();
 
@@ -21,122 +21,122 @@ export const sessionMachine = Machine<
   SessionEvent
 >(
   {
-    id: 'session',
-    context: { isAdmin: false, wordEntries: 0, id: '' },
-    initial: 'idle',
+    id: "session",
+    context: { isAdmin: false, wordEntries: 0, id: "" },
+    initial: "idle",
     on: {
       RESTART: {
-        target: 'idle',
-        actions: ['restart'],
+        target: "idle",
+        actions: ["restart"],
       },
     },
     states: {
       idle: {
         invoke: {
-          id: 'reset',
-          src: 'endSession',
+          id: "reset",
+          src: "endSession",
         },
         on: {
           START_SESSION: {
-            target: 'startSession',
-            actions: ['setAsAdmin', 'generateAndAddId'],
+            target: "startSession",
+            actions: ["setAsAdmin", "generateAndAddId"],
           },
           JOIN_SESSION: {
-            target: 'wordsInput',
-            actions: ['addId'],
+            target: "wordsInput",
+            actions: ["addId"],
           },
         },
       },
       startSession: {
         invoke: [
           {
-            id: 'starSessionService',
-            src: 'startSession',
-            onDone: 'waiting',
-            onError: 'error',
+            id: "starSessionService",
+            src: "startSession",
+            onDone: "waiting",
+            onError: "error",
           },
         ],
       },
       wordsInput: {
         invoke: {
-          id: 'verifySession',
-          src: 'checkSession',
+          id: "verifySession",
+          src: "checkSession",
           onError: {
-            target: 'error',
-            actions: ['assignErrorMessage'],
+            target: "error",
+            actions: ["assignErrorMessage"],
           },
           onDone: {
-            actions: ['logJoined'],
+            actions: ["logJoined"],
           },
         },
         on: {
           ADD_WORDS: {
-            target: 'addWords',
+            target: "addWords",
             cond: (context, event) => event.words && event.words.length > 0,
           },
         },
       },
       addWords: {
         invoke: {
-          id: 'addWordsService',
-          src: 'sendWords',
-          onDone: 'waiting',
-          onError: 'error',
+          id: "addWordsService",
+          src: "sendWords",
+          onDone: "waiting",
+          onError: "error",
         },
       },
       waiting: {
         invoke: [
           {
-            id: 'wordsListener',
-            src: 'listenToWords',
+            id: "wordsListener",
+            src: "listenToWords",
           },
           {
-            id: 'cloudListener',
-            src: 'listenForCloud',
+            id: "cloudListener",
+            src: "listenForCloud",
           },
         ],
         on: {
           WORDS_ADDED: {
-            actions: ['addToWordEntries'],
+            actions: ["addToWordEntries"],
           },
-          CREATE_CLOUD: 'creating',
+          CREATE_CLOUD: "creating",
           CLOUD_CREATED: {
-            target: 'created',
-            actions: ['addCloudToContext'],
+            target: "created",
+            actions: ["addCloudToContext"],
           },
         },
       },
       creating: {
         invoke: {
-          id: 'createCloud',
-          src: 'createCloud',
+          id: "createCloud",
+          src: "createCloud",
           onDone: {
-            target: 'created',
+            target: "created",
             actions: [
               assign({
                 cloud: (context, event) => event.data.cloud,
                 wordCount: (context, event) => event.data.wordCount,
               }),
-              'logCreated',
+              "logCreated",
             ],
           },
-          onError: 'error',
+          onError: "error",
         },
         on: {
           CLOUD_CREATED: {
-            target: 'created',
-            actions: ['addCloudToContext'],
+            target: "created",
+            actions: ["addCloudToContext"],
           },
         },
       },
       created: {
         invoke: {
-          id: 'removeListeners',
-          src: 'endSession',
+          id: "removeListeners",
+          src: "endSession",
         },
       },
       error: {
-        entry: ['logError'],
+        entry: ["logError"],
       },
     },
   },
@@ -156,7 +156,7 @@ export const sessionMachine = Machine<
         wordCount: (context, event) => (event as CloudCreatedEvent).wordCount,
       }),
       restart: assign<SessionContext, SessionEvent>({
-        id: '',
+        id: "",
         isAdmin: false,
         wordEntries: 0,
       }),
@@ -164,10 +164,10 @@ export const sessionMachine = Machine<
         errorMessage: `Ingen økt med den id'en ble funnet.`,
       }),
       logJoined: () => {
-        logger.logEvent('collab_joined');
+        logger.logEvent("collab_joined");
       },
       logCreated: () => {
-        logger.logEvent('collab_cloud_created');
+        logger.logEvent("collab_cloud_created");
       },
       logError: (context) => {
         logger.logError({
@@ -187,7 +187,7 @@ export const sessionMachine = Machine<
         (context) =>
         (callback): void => {
           service.onWordsAdded(context.id, (totalEntries: number) =>
-            callback({ type: 'WORDS_ADDED', totalEntries })
+            callback({ type: "WORDS_ADDED", totalEntries })
           );
         },
       listenForCloud: (context) => (callback) => {
@@ -195,7 +195,7 @@ export const sessionMachine = Machine<
         service.onCloudAdded(
           context.id,
           ({ cloud, wordCount }: { cloud: Cloud[]; wordCount: WordCount }) =>
-            callback({ type: 'CLOUD_CREATED', cloud, wordCount })
+            callback({ type: "CLOUD_CREATED", cloud, wordCount })
         );
       },
       createCloud: (context) => async () => {

@@ -1,27 +1,27 @@
-import { Cloud, WordCount } from '../common/core/cloud.types';
-import { createCloud } from '../common/core/createCloud';
-import { wordCountToCloudInput } from '../common/core/wordCountToCloudInput';
-import { SessionsService } from './SessionsService';
+import { Cloud, WordCount } from "../../common/core/cloud.types";
+import { createCloud } from "../../common/core/createCloud";
+import { wordCountToCloudInput } from "../../common/core/wordCountToCloudInput";
+import { SessionsService } from "./SessionsService";
 
 export class OrdskyService implements SessionsService {
-  private endpoint = 'wss://api.ordsky.no';
+  private endpoint = "wss://api.ordsky.no";
 
   private socket!: WebSocket;
 
   public startSession(id: string): void {
     this.socket = new WebSocket(this.endpoint);
-    this.socket.addEventListener('open', () => {
+    this.socket.addEventListener("open", () => {
       this.socket.send(
         JSON.stringify({
           id: id.toUpperCase(),
-          action: 'startsession',
+          action: "startsession",
         })
       );
     });
   }
 
   private restApiUrl =
-    'https://s4wsje5xxj.execute-api.eu-north-1.amazonaws.com/prod';
+    "https://s4wsje5xxj.execute-api.eu-north-1.amazonaws.com/prod";
 
   public async isLiveSession(id: string): Promise<void> {
     const response = await fetch(`${this.restApiUrl}/${id}`);
@@ -31,7 +31,7 @@ export class OrdskyService implements SessionsService {
       if (data.Item && !data.Item.cloud) {
         return;
       }
-      throw new Error('Item does not exist');
+      throw new Error("Item does not exist");
     }
     throw new Error(response.status.toString());
   }
@@ -43,10 +43,10 @@ export class OrdskyService implements SessionsService {
   async saveWords(id: string, words: string[]): Promise<void> {
     this.socket = new WebSocket(this.endpoint);
 
-    this.socket.addEventListener('open', () => {
+    this.socket.addEventListener("open", () => {
       this.socket.send(
         JSON.stringify({
-          action: 'savewords',
+          action: "savewords",
           id: id.toUpperCase(),
           words,
         })
@@ -55,10 +55,10 @@ export class OrdskyService implements SessionsService {
   }
 
   onWordsAdded(id: string, callback: (totalEntries: number) => void): void {
-    this.socket.addEventListener('message', (event) => {
+    this.socket.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
 
-      if (data.type === 'WORDS_ADDED') {
+      if (data.type === "WORDS_ADDED") {
         callback(data.numberOfEntries);
       }
     });
@@ -69,19 +69,19 @@ export class OrdskyService implements SessionsService {
   ): Promise<{ cloud: Cloud[]; wordCount: WordCount }> {
     const wordsPromise = new Promise<string[]>((resolve, reject) => {
       const error = setTimeout(
-        () => reject(new Error('Did not get a response in time')),
+        () => reject(new Error("Did not get a response in time")),
         8000
       );
-      this.socket.addEventListener('message', (event) => {
+      this.socket.addEventListener("message", (event) => {
         const data = JSON.parse(event.data);
-        if (data.type === 'GET_WORDS') {
+        if (data.type === "GET_WORDS") {
           clearTimeout(error);
           resolve(data.words);
         }
       });
       this.socket.send(
         JSON.stringify({
-          action: 'getwords',
+          action: "getwords",
           id: id.toUpperCase(),
         })
       );
@@ -121,7 +121,7 @@ export class OrdskyService implements SessionsService {
     // Send to backend
     this.socket.send(
       JSON.stringify({
-        action: 'savecloud',
+        action: "savecloud",
         id: id.toUpperCase(),
         cloud,
         wordCount: wordCountToSend,
@@ -135,10 +135,10 @@ export class OrdskyService implements SessionsService {
     id: string,
     callback: (params: { cloud: Cloud[]; wordCount: WordCount }) => void
   ): void {
-    this.socket.addEventListener('message', (event) => {
+    this.socket.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
 
-      if (data.type === 'CLOUD_CREATED') {
+      if (data.type === "CLOUD_CREATED") {
         callback({ cloud: data.cloud, wordCount: data.wordCount });
       }
     });

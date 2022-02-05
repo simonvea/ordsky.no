@@ -1,8 +1,8 @@
 import React from "react";
 import { useMachine } from "@xstate/react";
-import { StartSession } from "./StartSession";
-import { WaitScreen } from "./WaitScreen";
-import { sessionMachine } from "./StateMachine";
+import { StartSession } from "./components/StartSession";
+import { WaitScreen } from "./components/WaitScreen";
+import { sessionMachine } from "./state/StateMachine";
 import { ErrorScreen } from "../common/molecules/ErrorScreen";
 import { CloudDisplay } from "../common/organisms/CloudDisplay";
 import { WordsInput } from "../common/molecules/WordsInput";
