@@ -29,11 +29,11 @@ export class OrdskyService implements SessionsService {
     if (response.ok) {
       const data = await response.json();
       if (data.Item && !data.Item.cloud) {
-        return Promise.resolve();
+        return;
       }
-      return Promise.reject(new Error('Item does not exist'));
+      throw new Error('Item does not exist');
     }
-    return Promise.reject(new Error(response.status.toString()));
+    throw new Error(response.status.toString());
   }
 
   public endSession(): void {

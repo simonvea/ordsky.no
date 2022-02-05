@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 const Title: React.FC = styled.h1`
   font-size: 2rem;
@@ -25,7 +25,7 @@ const Header: React.FC = styled.header`
   box-shadow: 2px 3px 3px 2px rgba(0, 0, 0, 0.4);
   padding: 1rem 2rem;
   text-align: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   min-width: 100%;
 `;
 
@@ -64,19 +64,21 @@ const NavLink = styled(Link)`
   margin: 0 5px;
 `;
 
-export const OrdskyHeader: React.FC = () => (
-  <Header>
-    <Title>
-      <Link to="/">Ordsky.no</Link>
-    </Title>
-    <Nav>
-      <NavButton to="/words" role="button">
-        Ny Ordsky
-      </NavButton>
-      <NavButton to="/collab" role="button">
-        Lag en felles ordsky
-      </NavButton>
-      <NavLink to="/about">Om Ordsky.no</NavLink>
-    </Nav>
-  </Header>
-);
+export function OrdskyHeader(): React.ReactElement {
+  return (
+    <Header>
+      <Title>
+        <Link to="/">Ordsky.no</Link>
+      </Title>
+      <Nav>
+        <NavButton to="/words" role="button">
+          Ny Ordsky
+        </NavButton>
+        <NavButton to="/collab" role="button">
+          Lag en felles ordsky
+        </NavButton>
+        <NavLink to="/about">Om Ordsky.no</NavLink>
+      </Nav>
+    </Header>
+  );
+}

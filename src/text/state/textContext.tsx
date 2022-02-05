@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useMemo } from "react";
 
 export interface Context {
   state: { text: string };
@@ -10,16 +10,21 @@ export interface Context {
 
 export const TextContext = createContext({} as Context);
 
-export const TextProvider: React.FC = ({ children }) => {
-  const [text, updateText] = React.useState('');
+type ProviderProps = {
+  children: React.ReactNode;
+};
 
-  const clearText = (): void => updateText('');
+export function TextProvider({ children }: ProviderProps): React.ReactElement {
+  const [text, updateText] = React.useState("");
+
+  const clearText = (): void => updateText("");
+
+  const context = useMemo(
+    () => ({ state: { text }, actions: { updateText, clearText } }),
+    [text]
+  );
 
   return (
-    <TextContext.Provider
-      value={{ state: { text }, actions: { updateText, clearText } }}
-    >
-      {children}
-    </TextContext.Provider>
+    <TextContext.Provider value={context}>{children}</TextContext.Provider>
   );
-};
+}

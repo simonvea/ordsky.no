@@ -1,6 +1,6 @@
-import React, { Component, ErrorInfo } from 'react';
-import { logger } from '../core/analytics';
-import { ErrorScreen } from '../molecules/ErrorScreen';
+import React, { Component, ErrorInfo } from "react";
+import { logger } from "../core/analytics";
+import { ErrorScreen } from "../molecules/ErrorScreen";
 
 type ErrorBoundaryState = {
   hasError: boolean;

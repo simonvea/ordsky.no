@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Button, SecondaryButton } from '../common/atoms/Button';
-import { TextContainer } from '../common/atoms/TextContainer';
-import { Title } from '../common/atoms/Title';
-import { Spinner } from '../common/molecules/Spinner';
+import React from "react";
+import styled from "styled-components";
+import { Button, SecondaryButton } from "../common/atoms/Button";
+import { TextContainer } from "../common/atoms/TextContainer";
+import { Title } from "../common/atoms/Title";
+import { Spinner } from "../common/molecules/Spinner";
 
 export type WaitScreenProps = {
   isAdmin?: boolean;
@@ -19,14 +19,14 @@ const WaitScreenActionsContainer = styled.section`
   margin-top: 1.5rem;
 `;
 
-export const WaitScreen: React.FC<WaitScreenProps> = ({
+export function WaitScreen({
   numberOfEntries,
   isAdmin,
   onCreateWordCloud,
   onQuit,
   id,
   loading,
-}) => {
+}: WaitScreenProps): React.ReactElement {
   const hasEntries = numberOfEntries > 0;
 
   return (
@@ -64,9 +64,9 @@ export const WaitScreen: React.FC<WaitScreenProps> = ({
           </Button>
         )}
         <SecondaryButton type="button" onClick={onQuit}>
-          Avslutt{' '}
+          Avslutt{" "}
         </SecondaryButton>
       </WaitScreenActionsContainer>
     </>
   );
-};
+}

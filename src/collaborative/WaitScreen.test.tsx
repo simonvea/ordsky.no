@@ -120,7 +120,7 @@ describe('WaitPage component', () => {
     const text = queryByText(/lager ordsky/i);
 
     // Assert
-    expect(text).toBeTruthy();
+    expect(text).toBeInTheDocument();
   });
 
   describe('given isAdmin', () => {

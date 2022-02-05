@@ -1,56 +1,50 @@
-import React from 'react';
-import { useMachine } from '@xstate/react';
-import { StartSession } from './StartSession';
-import { WaitScreen } from './WaitScreen';
-import { sessionMachine } from './StateMachine';
-import { ErrorScreen } from '../common/molecules/ErrorScreen';
-import { CloudDisplay } from '../common/organisms/CloudDisplay';
-import { WordsInput } from '../common/molecules/WordsInput';
+import React from "react";
+import { useMachine } from "@xstate/react";
+import { StartSession } from "./StartSession";
+import { WaitScreen } from "./WaitScreen";
+import { sessionMachine } from "./StateMachine";
+import { ErrorScreen } from "../common/molecules/ErrorScreen";
+import { CloudDisplay } from "../common/organisms/CloudDisplay";
+import { WordsInput } from "../common/molecules/WordsInput";
 
-export const CollaborativePage: React.FC = () => {
+export function CollaborativePage(): React.ReactElement {
   const [state, send] = useMachine(sessionMachine);
-  const {
-    isAdmin,
-    wordEntries,
-    id,
-    cloud,
-    wordCount,
-    errorMessage,
-  } = state.context;
+  const { isAdmin, wordEntries, id, cloud, wordCount, errorMessage } =
+    state.context;
 
   const onNewSession = (): void => {
-    send('START_SESSION');
+    send("START_SESSION");
   };
 
   const onJoinSession = (idToJoin: string): void => {
-    send({ type: 'JOIN_SESSION', id: idToJoin });
+    send({ type: "JOIN_SESSION", id: idToJoin });
   };
 
   const onCreateCloud = (): void => {
-    send('CREATE_CLOUD');
+    send("CREATE_CLOUD");
   };
 
   const restart = (): void => {
-    send('RESTART');
+    send("RESTART");
   };
 
   const onSubmitWords = (words: string[]): void => {
-    send({ type: 'ADD_WORDS', words });
+    send({ type: "ADD_WORDS", words });
   };
 
   const wordsInputTitle = `Kode: ${id.toUpperCase()}`;
 
-  const restartText = 'Bli med i en ny økt';
+  const restartText = "Bli med i en ny økt";
 
   switch (state.value) {
-    case 'idle':
+    case "idle":
       return (
         <StartSession
           onNewSession={onNewSession}
           onJoinSession={onJoinSession}
         />
       );
-    case 'wordsInput':
+    case "wordsInput":
       return (
         <WordsInput
           title={wordsInputTitle}
@@ -58,9 +52,9 @@ export const CollaborativePage: React.FC = () => {
           onQuit={restart}
         />
       );
-    case 'addWords':
-    case 'creating':
-    case 'waiting':
+    case "addWords":
+    case "creating":
+    case "waiting":
       return (
         <WaitScreen
           isAdmin={isAdmin}
@@ -68,10 +62,10 @@ export const CollaborativePage: React.FC = () => {
           numberOfEntries={wordEntries}
           onQuit={restart}
           id={id}
-          loading={state.matches('creating')}
+          loading={state.matches("creating")}
         />
       );
-    case 'created':
+    case "created":
       if (!cloud || !wordCount)
         return (
           <ErrorScreen
@@ -87,7 +81,7 @@ export const CollaborativePage: React.FC = () => {
           restartText={restartText}
         />
       );
-    case 'error':
+    case "error":
       return <ErrorScreen message={errorMessage} onReset={restart} />;
     default:
       return (
@@ -97,4 +91,4 @@ export const CollaborativePage: React.FC = () => {
         />
       );
   }
-};
+}

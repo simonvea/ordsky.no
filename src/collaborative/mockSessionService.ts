@@ -83,7 +83,7 @@ export class MockSessionService implements SessionsService {
   async saveWords(id: string, words: string[]): Promise<void> {
     this.words.push(...words);
     this.mockCloudCreater();
-    return Promise.resolve();
+    
   }
 
   onWordsAdded(id: string, callback: (totalEntries: number) => void): void {

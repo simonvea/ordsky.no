@@ -1,17 +1,17 @@
-import React from 'react';
-import { Button } from '../atoms/Button';
-import { Column } from '../atoms/Column';
+import React from "react";
+import { Button } from "../atoms/Button";
+import { Column } from "../atoms/Column";
 
 export type ErrorScreenProps = {
   message?: string;
   onReset: () => void;
 };
 
-export const ErrorScreen: React.FC<ErrorScreenProps> = ({
+export function ErrorScreen({
   message,
   onReset,
-}) => {
-  const genericMessage = 'Oups, noe galt har skjedd. Beklager.';
+}: ErrorScreenProps): React.ReactElement {
+  const genericMessage = "Oups, noe galt har skjedd. Beklager.";
 
   return (
     <Column>
@@ -21,4 +21,4 @@ export const ErrorScreen: React.FC<ErrorScreenProps> = ({
       </Button>
     </Column>
   );
-};
+}

@@ -1,6 +1,12 @@
-import React, { createContext, useReducer, Reducer, useCallback } from 'react';
-import { formsReducer } from './wordsReducer';
-import { initialState, WordsState, WordsActions } from './wordsReducer.types';
+import React, {
+  createContext,
+  useReducer,
+  Reducer,
+  useCallback,
+  useMemo,
+} from "react";
+import { formsReducer } from "./wordsReducer";
+import { initialState, WordsState, WordsActions } from "./wordsReducer.types";
 
 export interface Context {
   state: WordsState;
@@ -15,19 +21,23 @@ export interface Context {
 
 export const WordsContext = createContext({} as Context);
 
-export const WordsProvider: React.FC = ({ children }) => {
+type ProviderProps = {
+  children: React.ReactNode;
+};
+
+export function WordsProvider({ children }: ProviderProps): React.ReactElement {
   const [state, dispatch] = useReducer<Reducer<WordsState, WordsActions>>(
     formsReducer,
     initialState
   );
 
   const addInput = useCallback(
-    (): void => dispatch({ type: 'WORDS_ADD_INPUT' }),
+    (): void => dispatch({ type: "WORDS_ADD_INPUT" }),
     []
   );
 
   const removeInput = useCallback(
-    (key: string): void => dispatch({ type: 'WORDS_REMOVE_INPUT', key }),
+    (key: string): void => dispatch({ type: "WORDS_REMOVE_INPUT", key }),
     []
   );
 
@@ -35,7 +45,7 @@ export const WordsProvider: React.FC = ({ children }) => {
     (key: string, word: string): void => {
       const oldInput = state.inputs.find((input) => input.key === key);
       if (oldInput) {
-        dispatch({ type: 'WORDS_UPDATE_INPUT', input: { ...oldInput, word } });
+        dispatch({ type: "WORDS_UPDATE_INPUT", input: { ...oldInput, word } });
       }
     },
     [state.inputs]
@@ -45,14 +55,14 @@ export const WordsProvider: React.FC = ({ children }) => {
     const oldInput = state.inputs.find((input) => input.key === key);
     if (oldInput) {
       dispatch({
-        type: 'WORDS_UPDATE_INPUT',
+        type: "WORDS_UPDATE_INPUT",
         input: { ...oldInput, size },
       });
     }
   };
 
   const clearInputs = useCallback(
-    (): void => dispatch({ type: 'WORDS_CLEAR_INPUTS' }),
+    (): void => dispatch({ type: "WORDS_CLEAR_INPUTS" }),
     []
   );
 
@@ -64,9 +74,9 @@ export const WordsProvider: React.FC = ({ children }) => {
     clearInputs,
   };
 
+  const context = useMemo(() => ({ state, actions }), [state]);
+
   return (
-    <WordsContext.Provider value={{ state, actions }}>
-      {children}
-    </WordsContext.Provider>
+    <WordsContext.Provider value={context}>{children}</WordsContext.Provider>
   );
-};
+}

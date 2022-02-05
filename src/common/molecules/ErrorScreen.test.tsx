@@ -14,7 +14,7 @@ describe('ErrorScreen component', () => {
     const hasText = queryByText(message);
 
     // Assert
-    expect(hasText).toBeTruthy();
+    expect(hasText).toBeInTheDocument();
   });
 
   it('when error message is not in props, then displays a generic message', () => {
@@ -26,7 +26,7 @@ describe('ErrorScreen component', () => {
     const hasText = queryByText(message);
 
     // Assert
-    expect(hasText).toBeTruthy();
+    expect(hasText).toBeInTheDocument();
   });
 
   it('when clicking "Prøv igjen", then calls onReset prop', () => {

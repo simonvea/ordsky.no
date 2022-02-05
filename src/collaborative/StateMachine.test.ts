@@ -1,10 +1,5 @@
 import { interpret } from 'xstate';
 import { sessionMachine } from './StateMachine';
-import {
-  SessionContext,
-  SessionEvent,
-  SessionStateSchema,
-} from './StateMachine.types';
 
 describe('sessionMachine', () => {
   it('when event is ADD_WORDS, new state is addWords', () => {
@@ -30,11 +25,7 @@ describe('sessionMachine', () => {
       },
     });
 
-    const fetchService = interpret<
-      SessionContext,
-      SessionStateSchema,
-      SessionEvent
-    >(mockSessionMachine).start();
+    const fetchService = interpret(mockSessionMachine).start();
 
     fetchService.send({ type: 'JOIN_SESSION', id: 'huh' });
 
@@ -57,11 +48,7 @@ describe('sessionMachine', () => {
       },
     });
 
-    const fetchService = interpret<
-      SessionContext,
-      SessionStateSchema,
-      SessionEvent
-    >(mockSessionMachine).start();
+    const fetchService = interpret(mockSessionMachine).start();
 
     fetchService.send({ type: 'JOIN_SESSION', id: 'huh' });
 

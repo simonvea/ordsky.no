@@ -1,12 +1,12 @@
-import React from 'react';
-import { faMinusSquare } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Input } from '../atoms/Input';
-import { Form } from '../atoms/Form';
-import { Row } from '../atoms/Row';
-import { Title } from '../atoms/Title';
-import { Button, SecondaryButton, IconButton } from '../atoms/Button';
-import { formsReducer, initialState } from './wordsInputReducer';
+import React from "react";
+import { faMinusSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Input } from "../atoms/Input";
+import { Form } from "../atoms/Form";
+import { Row } from "../atoms/Row";
+import { Title } from "../atoms/Title";
+import { Button, SecondaryButton, IconButton } from "../atoms/Button";
+import { formsReducer, initialState } from "./wordsInputReducer";
 
 type WordsInputProps = {
   title?: string;
@@ -14,17 +14,21 @@ type WordsInputProps = {
   onQuit: () => void;
 };
 
-const WordsInput: React.FC<WordsInputProps> = ({ title, onSubmit, onQuit }) => {
+function WordsInput({
+  title,
+  onSubmit,
+  onQuit,
+}: WordsInputProps): React.ReactElement {
   const [state, dispatch] = React.useReducer(formsReducer, initialState);
 
   const { inputs } = state;
 
   const addWordWorm = (): void => {
-    dispatch({ type: 'WORDS_ADD_INPUT' });
+    dispatch({ type: "WORDS_ADD_INPUT" });
   };
 
   const removeWordForm = (key: string): void => {
-    dispatch({ type: 'WORDS_REMOVE_INPUT', key });
+    dispatch({ type: "WORDS_REMOVE_INPUT", key });
   };
 
   const onWordChange = (key: string, word: string): void => {
@@ -34,7 +38,7 @@ const WordsInput: React.FC<WordsInputProps> = ({ title, onSubmit, onQuit }) => {
     };
 
     dispatch({
-      type: 'WORDS_UPDATE_INPUT',
+      type: "WORDS_UPDATE_INPUT",
       input,
     });
   };
@@ -51,7 +55,7 @@ const WordsInput: React.FC<WordsInputProps> = ({ title, onSubmit, onQuit }) => {
   const addInputOnEnterKey = (
     event: React.KeyboardEvent<HTMLInputElement>
   ): void => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       addWordWorm();
     }
   };
@@ -100,10 +104,10 @@ const WordsInput: React.FC<WordsInputProps> = ({ title, onSubmit, onQuit }) => {
       </Form>
     </>
   );
-};
+}
 
 WordsInput.defaultProps = {
-  title: '',
+  title: "",
 };
 
 export { WordsInput };
