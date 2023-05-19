@@ -8,7 +8,7 @@ import {
   SessionTypestate,
   CloudCreatedEvent,
   WordsAddedEvent,
-} from './StateMachine.types';
+} from './SessionMachine.types';
 import { OrdskyService } from '../services/OrdskyService';
 import { Cloud, WordCount } from '../../common/core/cloud.types';
 import { logger } from '../../common/core/analytics';

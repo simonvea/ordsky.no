@@ -1,94 +1,89 @@
-import React from "react";
-import { useMachine } from "@xstate/react";
-import { StartSession } from "./components/StartSession";
-import { WaitScreen } from "./components/WaitScreen";
-import { sessionMachine } from "./state/StateMachine";
-import { ErrorScreen } from "../common/molecules/ErrorScreen";
-import { CloudDisplay } from "../common/organisms/CloudDisplay";
-import { WordsInput } from "../common/molecules/WordsInput";
+import React from 'react';
+import { useMachine } from '@xstate/react';
+import { StartSession } from './components/StartSession';
+import { WaitScreen } from './components/WaitScreen';
+import { sessionMachine } from './state/SessionMachine';
+import { ErrorScreen } from '../common/molecules/ErrorScreen';
+import { CloudDisplay } from '../common/organisms/CloudDisplay';
+import { WordsInput } from '../common/molecules/WordsInput';
 
 export function CollaborativePage(): React.ReactElement {
-  const [state, send] = useMachine(sessionMachine);
+  const [current, send] = useMachine(sessionMachine);
   const { isAdmin, wordEntries, id, cloud, wordCount, errorMessage } =
-    state.context;
+    current.context;
 
   const onNewSession = (): void => {
-    send("START_SESSION");
+    send('START_SESSION');
   };
 
   const onJoinSession = (idToJoin: string): void => {
-    send({ type: "JOIN_SESSION", id: idToJoin });
+    send({ type: 'JOIN_SESSION', id: idToJoin });
   };
 
   const onCreateCloud = (): void => {
-    send("CREATE_CLOUD");
+    send('CREATE_CLOUD');
   };
 
   const restart = (): void => {
-    send("RESTART");
+    send('RESTART');
   };
 
   const onSubmitWords = (words: string[]): void => {
-    send({ type: "ADD_WORDS", words });
+    send({ type: 'ADD_WORDS', words });
   };
 
   const wordsInputTitle = `Kode: ${id.toUpperCase()}`;
 
-  const restartText = "Bli med i en ny økt";
+  const restartText = 'Bli med i en ny økt';
 
-  switch (state.value) {
-    case "idle":
-      return (
+  const isWaiting =
+    current.matches('addWords') ||
+    current.matches('creating') ||
+    current.matches('waiting');
+
+  return (
+    <>
+      {current.matches('idle') && (
         <StartSession
           onNewSession={onNewSession}
           onJoinSession={onJoinSession}
         />
-      );
-    case "wordsInput":
-      return (
+      )}
+      {current.matches('wordsInput') && (
         <WordsInput
           title={wordsInputTitle}
           onSubmit={onSubmitWords}
           onQuit={restart}
         />
-      );
-    case "addWords":
-    case "creating":
-    case "waiting":
-      return (
+      )}
+      {isWaiting && (
         <WaitScreen
           isAdmin={isAdmin}
           onCreateWordCloud={onCreateCloud}
           numberOfEntries={wordEntries}
           onQuit={restart}
           id={id}
-          loading={state.matches("creating")}
+          loading={current.matches('creating')}
         />
-      );
-    case "created":
-      if (!cloud || !wordCount)
-        return (
-          <ErrorScreen
-            message="Oups! Noe gikk galt når jeg forsøkte å hente ordskyen."
-            onReset={restart}
-          />
-        );
-      return (
+      )}
+      {current.matches('created') && !!cloud && !!wordCount && (
         <CloudDisplay
           cloud={cloud}
           wordCount={wordCount}
           onRestart={restart}
           restartText={restartText}
         />
-      );
-    case "error":
-      return <ErrorScreen message={errorMessage} onReset={restart} />;
-    default:
-      return (
-        <StartSession
-          onNewSession={onNewSession}
-          onJoinSession={onJoinSession}
-        />
-      );
-  }
+      )}
+      {(current.matches('created') && !cloud) ||
+        (!!wordCount && (
+          <ErrorScreen
+            message="Oups! Noe gikk galt når jeg forsøkte å hente ordskyen."
+            onReset={restart}
+          />
+        ))}
+      {current.matches('error') && (
+        <ErrorScreen message={errorMessage} onReset={restart} />
+      )}
+    </>
+  );
 }
