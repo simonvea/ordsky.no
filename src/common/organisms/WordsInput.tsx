@@ -70,7 +70,7 @@ export const WordsInput: React.FC<WordsInputProps> = function WordsInput({
         <RowNumber>{`${number}.`}</RowNumber>
         <Label htmlFor={`${number}-word`}>
           <Input
-            warning={validationError}
+            $warning={validationError}
             type="text"
             value={word}
             onChange={handleWordChange}
@@ -80,8 +80,8 @@ export const WordsInput: React.FC<WordsInputProps> = function WordsInput({
         </Label>
         <Label htmlFor={`${number}-size`}>
           <Input
-            small
-            warning={!!word && !size}
+            $small
+            $warning={!!word && !size}
             type="number"
             value={size}
             onChange={handleSizehange}

@@ -60,7 +60,7 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
         </Button>
       </Container>
       <Container>
-        <Button type="button" outline onClick={onClickWords}>
+        <Button type="button" $outline onClick={onClickWords}>
           Tilbake til ordskjema
         </Button>
       </Container>

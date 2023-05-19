@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
 export type ButtonProps = {
-  outline?: boolean;
-  small?: boolean;
+  $outline?: boolean;
+  $small?: boolean;
 };
 
 export const Button = styled.button<ButtonProps>`
   background-color: ${(props) =>
-    props.outline ? 'transparent' : 'var(--secondary-color)'};
+    props.$outline ? 'transparent' : 'var(--secondary-color)'};
   border: none;
   border-radius: 4px;
   color: white;
-  padding: ${(props) => (props.small ? '8px 16px' : '15px 32px')};
+  padding: ${(props) => (props.$small ? '8px 16px' : '15px 32px')};
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -26,7 +26,7 @@ export const Button = styled.button<ButtonProps>`
     cursor: pointer;
     opacity: 1;
     ${(props) =>
-      props.outline ? 'background-color: var(--secondary-color-dark);' : ''}
+      props.$outline ? 'background-color: var(--secondary-color-dark);' : ''}
   }
 
   &:disabled {

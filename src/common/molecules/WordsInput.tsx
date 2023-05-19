@@ -1,12 +1,12 @@
-import React from "react";
-import { faMinusSquare } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Input } from "../atoms/Input";
-import { Form } from "../atoms/Form";
-import { Row } from "../atoms/Row";
-import { Title } from "../atoms/Title";
-import { Button, SecondaryButton, IconButton } from "../atoms/Button";
-import { formsReducer, initialState } from "./wordsInputReducer";
+import React from 'react';
+import { faMinusSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Input } from '../atoms/Input';
+import { Form } from '../atoms/Form';
+import { Row } from '../atoms/Row';
+import { Title } from '../atoms/Title';
+import { Button, SecondaryButton, IconButton } from '../atoms/Button';
+import { formsReducer, initialState } from './wordsInputReducer';
 
 type WordsInputProps = {
   title?: string;
@@ -24,11 +24,11 @@ function WordsInput({
   const { inputs } = state;
 
   const addWordWorm = (): void => {
-    dispatch({ type: "WORDS_ADD_INPUT" });
+    dispatch({ type: 'WORDS_ADD_INPUT' });
   };
 
   const removeWordForm = (key: string): void => {
-    dispatch({ type: "WORDS_REMOVE_INPUT", key });
+    dispatch({ type: 'WORDS_REMOVE_INPUT', key });
   };
 
   const onWordChange = (key: string, word: string): void => {
@@ -38,7 +38,7 @@ function WordsInput({
     };
 
     dispatch({
-      type: "WORDS_UPDATE_INPUT",
+      type: 'WORDS_UPDATE_INPUT',
       input,
     });
   };
@@ -55,7 +55,7 @@ function WordsInput({
   const addInputOnEnterKey = (
     event: React.KeyboardEvent<HTMLInputElement>
   ): void => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       addWordWorm();
     }
   };
@@ -97,7 +97,7 @@ function WordsInput({
           </Button>
         </Row>
         <Row>
-          <Button type="button" outline onClick={onQuit}>
+          <Button type="button" $outline onClick={onQuit}>
             Avslutt
           </Button>
         </Row>
@@ -107,7 +107,7 @@ function WordsInput({
 }
 
 WordsInput.defaultProps = {
-  title: "",
+  title: '',
 };
 
 export { WordsInput };

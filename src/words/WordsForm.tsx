@@ -84,10 +84,10 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
           />
         ))}
         <Container>
-          <Button type="button" outline onClick={addInput}>
+          <Button type="button" $outline onClick={addInput}>
             Legg til et ord
           </Button>
-          <Button type="button" outline onClick={onClickText}>
+          <Button type="button" $outline onClick={onClickText}>
             ... eller lim inn en tekst
           </Button>
         </Container>
