@@ -5,7 +5,7 @@ module.exports = {
     'jest',
     'promise',
     'unicorn',
-    "jest-dom"
+    'jest-dom',
   ],
   extends: [
     'airbnb',
@@ -21,6 +21,17 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
+  overrides: [
+    {
+      files: ['src/**/*.ts'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: ['./tsconfig.json'],
+      },
+      rules: {},
+    },
+  ],
   env: {
     node: true,
     browser: true,
