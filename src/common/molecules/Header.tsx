@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Title: React.FC = styled.h1`
+const Title = styled.h1`
   font-size: 2rem;
   text-align: center;
   height: 70px;
@@ -16,7 +16,7 @@ const Title: React.FC = styled.h1`
   }
 `;
 
-const Header: React.FC = styled.header`
+const Header = styled.header`
   height: 90px;
   display: flex;
   justify-content: space-between;
@@ -29,7 +29,7 @@ const Header: React.FC = styled.header`
   min-width: 100%;
 `;
 
-const Nav: React.FC = styled.nav`
+const Nav = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;

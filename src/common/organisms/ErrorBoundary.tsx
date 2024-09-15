@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo } from "react";
+import React, { Component, ErrorInfo, ReactNode } from "react";
 import { logger } from "../core/analytics";
 import { ErrorScreen } from "../molecules/ErrorScreen";
 
@@ -43,6 +43,6 @@ export class ErrorBoundary extends Component<
     if (this.state.hasError) {
       return <ErrorScreen onReset={this.onReset} />;
     }
-    return this.props.children;
+    return this.props.children as ReactNode;
   }
 }
