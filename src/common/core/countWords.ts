@@ -5,7 +5,7 @@ const isNotNumber = (w: string): boolean =>
   Number.isNaN(Number.parseInt(w, 10));
 
 const wordsFilter = (word: string): boolean =>
-  word.length > 2 && isNotNumber && !filter.includes(word);
+  word.length > 2 && isNotNumber(word) && !filter.includes(word);
 
 export async function countWords(string: string): Promise<WordCount> {
   const regExp = /\S+/gi;
