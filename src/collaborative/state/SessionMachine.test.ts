@@ -1,162 +1,105 @@
-import { interpret } from "xstate";
-import { sessionMachine } from "./SessionMachine";
+import { createActor, fromPromise, getNextSnapshot } from 'xstate';
+import { sessionMachine } from './SessionMachine';
 
-describe("sessionMachine", () => {
-  it("when event is ADD_WORDS, new state is addWords", () => {
-    const expectedValue = "addWords";
-
-    const actualState = sessionMachine.transition("wordsInput", {
-      type: "ADD_WORDS",
-      words: ["one", "two", "three"],
-    });
-
-    expect(actualState.matches(expectedValue)).toBeTruthy();
+describe('sessionMachine', () => {
+  it("should start in the 'idle' state", () => {
+    const fetchService = createActor(sessionMachine).start();
+    expect(fetchService.getSnapshot().value).toBe('idle');
   });
 
-  it("when event is ADD_WORDS, sendWords service is called", () => {
-    // Arrange
-    const sendWordsMock = jest.fn();
+  it("should transition to 'startSession' on 'START_SESSION' event", () => {
+    const fetchService = createActor(sessionMachine).start();
+    fetchService.send({ type: 'START_SESSION' });
+    expect(fetchService.getSnapshot().value).toBe('startSession');
+  });
 
-    const mockSessionMachine = sessionMachine.withConfig({
-      services: {
-        listenToWords: jest.fn(),
-        listenforCloud: jest.fn(),
-        sendWords: sendWordsMock,
+  it("should transition to 'wordsInput' on 'JOIN_SESSION' event", () => {
+    // Arrange
+    const mockSessionMachine = sessionMachine.provide({
+      actors: {
+        checkSession: fromPromise<void, { id: string }>(() =>
+          Promise.resolve()
+        ),
       },
     });
 
-    const fetchService = interpret(mockSessionMachine).start();
-
-    fetchService.send({ type: "JOIN_SESSION", id: "huh" });
+    const fetchService = createActor(mockSessionMachine).start();
 
     // Act
-    fetchService.send({ type: "ADD_WORDS", words: ["one", "two", "three"] });
+    fetchService.send({ type: 'JOIN_SESSION', id: '123' });
 
     // Assert
-    expect(sendWordsMock).toHaveBeenCalled();
+    expect(fetchService.getSnapshot().value).toBe('wordsInput');
   });
 
-  it("given only one word, when event is ADD_WORDS, sendWords service is called", () => {
+  it("should transition to 'rejoining' on 'REJOIN_SESSION' event", () => {
     // Arrange
-    const sendWordsMock = jest.fn();
-
-    const mockSessionMachine = sessionMachine.withConfig({
-      services: {
-        listenToWords: jest.fn(),
-        listenforCloud: jest.fn(),
-        sendWords: sendWordsMock,
+    const mockSessionMachine = sessionMachine.provide({
+      actors: {
+        checkSession: fromPromise<void, { id: string }>(() =>
+          Promise.resolve()
+        ),
       },
     });
-
-    const fetchService = interpret(mockSessionMachine).start();
-
-    fetchService.send({ type: "JOIN_SESSION", id: "huh" });
+    const fetchService = createActor(mockSessionMachine).start();
 
     // Act
-    fetchService.send({ type: "ADD_WORDS", words: ["one"] });
+    fetchService.send({ type: 'REJOIN_SESSION', id: '123' });
 
     // Assert
-    expect(sendWordsMock).toHaveBeenCalled();
+    expect(fetchService.getSnapshot().value).toBe('rejoining');
   });
 
-  it("when event is START_SESSION, setAsAdmin action is triggered", () => {
-    let adminEvent = false;
-
-    const mockSessionMachine = sessionMachine.withConfig({
-      actions: {
-        setAsAdmin: () => {
-          adminEvent = true;
-        },
-      },
-    });
-
-    const fetchService = interpret(mockSessionMachine).start();
-
-    fetchService.send({ type: "START_SESSION" });
-
-    expect(adminEvent).toBe(true);
-  });
-
-  it("when generateID, sets context isAdmin to true", () => {
-    const actualState = sessionMachine.transition("idle", "START_SESSION");
-
-    expect(actualState.context.isAdmin).toBeTruthy();
-  });
-
-  it("when generateID, sets context id", () => {
-    const actualState = sessionMachine.transition("idle", "START_SESSION");
-
-    expect(actualState.context.id).toBeTruthy();
-  });
-
-  it("when event is START_SESSION, new state is startSession", () => {
-    const expectedValue = "startSession"; // the expected state value
-
-    const actualState = sessionMachine.transition("idle", "START_SESSION");
-
-    expect(actualState.matches(expectedValue)).toBeTruthy();
-  });
-
-  // TODO: fix these tests..
-  // eslint-disable-next-line jest/no-disabled-tests
-  describe.skip("given state waiting", () => {
-    it("when event is CREATE_CLOUD, createCloud service is triggered", () => {
+  describe('Given wordsInput state', () => {
+    it("should transition to 'addWords' on 'ADD_WORDS' event with non-empty words", () => {
       // Arrange
-      const mockService = jest.fn();
-
-      const mockSessionMachine = sessionMachine.withConfig({
-        services: {
-          startSession: jest.fn(),
-          listenforCloud: jest.fn(),
-          listenToWords: jest.fn(),
-          createCloud: mockService,
-        },
+      const mockSessionMachine = sessionMachine.provide({
+        actors: { sendWords: jest.fn() as any },
       });
 
-      const sessionService = interpret(mockSessionMachine).start();
-
-      // Get state to 'waiting'
-      sessionService.send({ type: "START_SESSION" });
-      sessionService.send({ type: "WORDS_ADDED", totalEntries: 5 });
-
-      // Act
-      sessionService.send({ type: "CREATE_CLOUD" });
+      const addInputState = getNextSnapshot(
+        mockSessionMachine,
+        mockSessionMachine.resolveState({
+          value: 'wordsInput',
+          context: { id: '123', isAdmin: false, wordEntries: 0 },
+        }),
+        { type: 'ADD_WORDS', words: ['word1', 'word2'] }
+      );
 
       // Assert
-      expect(mockService).toHaveBeenCalled();
+      expect(addInputState.value).toBe('addWords');
+    });
+  });
+
+  describe('Given waiting state', () => {
+    it("should transition to 'creating' on 'CREATE_CLOUD' event", () => {
+      const nextSnapshot = getNextSnapshot(
+        sessionMachine,
+        sessionMachine.resolveState({
+          value: 'waiting',
+          context: { id: '123', isAdmin: true, wordEntries: 0 },
+        }),
+        { type: 'CREATE_CLOUD' }
+      );
+
+      expect(nextSnapshot.value).toBe('creating');
     });
 
-    it("when event is CLOUD_CREATED, addCloudToContext action is triggered", () => {
-      // Arrange
-      const mockAction = jest.fn();
+    it("should transition to 'created' on 'CLOUD_CREATED' event", () => {
+      const nextSnapshot = getNextSnapshot(
+        sessionMachine,
+        sessionMachine.resolveState({
+          value: 'waiting',
+          context: { id: '123', isAdmin: true, wordEntries: 0 },
+        }),
+        {
+          type: 'CLOUD_CREATED',
+          cloud: [],
+          wordCount: [{ text: 'a', count: 2 }],
+        }
+      );
 
-      const mockSessionMachine = sessionMachine.withConfig({
-        actions: {
-          addCloudToContext: mockAction,
-        },
-        services: {
-          startSession: jest.fn(),
-          listenforCloud: jest.fn(),
-          listenToWords: jest.fn(),
-          createCloud: jest.fn(),
-        },
-      });
-
-      const sessionService = interpret(mockSessionMachine).start();
-
-      // Get state to 'waiting'
-      sessionService.send({ type: "START_SESSION" });
-      sessionService.send({ type: "WORDS_ADDED", totalEntries: 5 });
-
-      // Act
-      sessionService.send({
-        type: "CLOUD_CREATED",
-        cloud: [],
-        wordCount: [{ text: "", count: 2 }],
-      });
-
-      // Assert
-      expect(mockAction).toHaveBeenCalled();
+      expect(nextSnapshot.value).toBe('created');
     });
   });
 });
