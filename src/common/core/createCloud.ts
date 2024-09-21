@@ -40,14 +40,16 @@ export const createCloud = (
     const svgHeight = config?.svgHeight || 300;
     const paddingBetweenWords = config?.padding || 2;
     // eslint-disable-next-line no-bitwise
-    // const rotationDeg = config?.rotationDeg || (~~(Math.random() * 6) - 3) * 30; TODO: Implement
+    const rotationDeg =
+      config?.rotationDeg || (Math.trunc(Math.random() * 6) - 3) * 30;
+    // TODO: Implement;
     const font = config?.font || 'Impact';
 
     d3cloud()
       .size([svgWidth, svgHeight])
       .words(words)
       .padding(paddingBetweenWords)
-      // .rotate(() => rotationDeg)
+      .rotate(() => rotationDeg)
       .font(font)
       .fontSize((d) => d.size as number)
       .on('end', resolve)
