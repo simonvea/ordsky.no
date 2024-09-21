@@ -27,7 +27,7 @@ export const sessionMachine = setup({
     events: {} as SessionEvent,
   },
   guards: {
-    'Word is not empty': (context, event) =>
+    'Word is not empty': ({ event }) =>
       (event as AddWordsEvent).words &&
       (event as AddWordsEvent).words.length > 0,
   },
@@ -43,7 +43,7 @@ export const sessionMachine = setup({
       id: () => generateId(),
     }),
     addToWordEntries: assign({
-      wordEntries: (context, event) => (event as WordsAddedEvent).totalEntries,
+      wordEntries: ({ event }) => (event as WordsAddedEvent).totalEntries,
     }),
     addCloudToContext: assign({
       cloud: ({ event }) => (event as CloudCreatedEvent).cloud,
@@ -51,9 +51,10 @@ export const sessionMachine = setup({
     }),
     addCreatedCloudToContext: assign({
       cloud: ({ event }) =>
-        (event as unknown as { data: { cloud: Cloud[] } }).data.cloud,
+        (event as unknown as { output: { cloud: Cloud[] } }).output.cloud,
       wordCount: ({ event }) =>
-        (event as unknown as { data: { wordCount: WordCount } }).data.wordCount,
+        (event as unknown as { output: { wordCount: WordCount } }).output
+          .wordCount,
     }),
     restart: assign({
       id: '',
@@ -194,7 +195,7 @@ export const sessionMachine = setup({
       on: {
         ADD_WORDS: {
           target: 'addWords',
-          cond: 'Word is not empty',
+          guard: 'Word is not empty',
         },
       },
     },

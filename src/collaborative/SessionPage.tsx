@@ -8,12 +8,12 @@ import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { WordsInput } from '../common/molecules/WordsInput';
 
 export function CollaborativePage(): React.ReactElement {
-  const [current, send] = useMachine(sessionMachine);
+  const [snapshot, send] = useMachine(sessionMachine);
   const { isAdmin, wordEntries, id, cloud, wordCount, errorMessage } =
-    current.context;
+    snapshot.context;
 
   const onNewSession = (): void => {
-    send('START_SESSION');
+    send({ type: 'START_SESSION' });
   };
 
   const onJoinSession = (idToJoin: string): void => {
@@ -21,11 +21,11 @@ export function CollaborativePage(): React.ReactElement {
   };
 
   const onCreateCloud = (): void => {
-    send('CREATE_CLOUD');
+    send({ type: 'CREATE_CLOUD' });
   };
 
   const restart = (): void => {
-    send('RESTART');
+    send({ type: 'RESTART' });
   };
 
   const onSubmitWords = (words: string[]): void => {
@@ -37,19 +37,19 @@ export function CollaborativePage(): React.ReactElement {
   const restartText = 'Bli med i en ny økt';
 
   const isWaiting =
-    current.matches('addWords') ||
-    current.matches('creating') ||
-    current.matches('waiting');
+    snapshot.matches('addWords') ||
+    snapshot.matches('creating') ||
+    snapshot.matches('waiting');
 
   return (
     <>
-      {current.matches('idle') && (
+      {snapshot.matches('idle') && (
         <StartSession
           onNewSession={onNewSession}
           onJoinSession={onJoinSession}
         />
       )}
-      {current.matches('wordsInput') && (
+      {snapshot.matches('wordsInput') && (
         <WordsInput
           title={wordsInputTitle}
           onSubmit={onSubmitWords}
@@ -63,10 +63,10 @@ export function CollaborativePage(): React.ReactElement {
           numberOfEntries={wordEntries}
           onQuit={restart}
           id={id}
-          loading={current.matches('creating')}
+          loading={snapshot.matches('creating')}
         />
       )}
-      {current.matches('created') && !!cloud && !!wordCount && (
+      {snapshot.matches('created') && !!cloud && !!wordCount && (
         <CloudDisplay
           cloud={cloud}
           wordCount={wordCount}
@@ -74,14 +74,14 @@ export function CollaborativePage(): React.ReactElement {
           restartText={restartText}
         />
       )}
-      {(current.matches('created') && !cloud) ||
+      {(snapshot.matches('created') && !cloud) ||
         (!!wordCount && (
           <ErrorScreen
             message="Oups! Noe gikk galt når jeg forsøkte å hente ordskyen."
             onReset={restart}
           />
         ))}
-      {current.matches('error') && (
+      {snapshot.matches('error') && (
         <ErrorScreen message={errorMessage} onReset={restart} />
       )}
     </>
