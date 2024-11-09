@@ -74,13 +74,12 @@ export function CollaborativePage(): React.ReactElement {
           restartText={restartText}
         />
       )}
-      {(snapshot.matches('created') && !cloud) ||
-        (!!wordCount && (
-          <ErrorScreen
-            message="Oups! Noe gikk galt når jeg forsøkte å hente ordskyen."
-            onReset={restart}
-          />
-        ))}
+      {snapshot.matches('created') && !cloud && (
+        <ErrorScreen
+          message="Oups! Noe gikk galt når jeg forsøkte å hente ordskyen."
+          onReset={restart}
+        />
+      )}
       {snapshot.matches('error') && (
         <ErrorScreen message={errorMessage} onReset={restart} />
       )}
