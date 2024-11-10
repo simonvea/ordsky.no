@@ -8,9 +8,6 @@ module.exports = {
     'jest-dom',
   ],
   extends: [
-    'airbnb',
-    'airbnb-typescript',
-    'plugin:@typescript-eslint/recommended',
     'plugin:eslint-comments/recommended',
     'plugin:jest/recommended',
     'plugin:jest-dom/recommended',
