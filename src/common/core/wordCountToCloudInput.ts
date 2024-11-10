@@ -18,7 +18,7 @@ export function wordCountToCloudInput(wordCount: WordCount): CloudInput[] {
   const count = wordsSorted.slice(0, MAX_ARRAY_SIZE);
 
   const maxValue = count[0].count;
-  const minValue = count.at(-1).count;
+  const minValue = count.at(-1)?.count || 0;
 
   const cloudInput = count.map((word) => ({
     text: word.text.toUpperCase(),
