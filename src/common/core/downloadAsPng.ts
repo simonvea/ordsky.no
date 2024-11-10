@@ -21,7 +21,7 @@ export const downloadAsPng = (xml: string): void => {
 
 function downloadOrdsky(url: string): void {
   const event = new MouseEvent('click', {
-    view: window,
+    view: globalThis,
     bubbles: true,
     cancelable: true,
   });

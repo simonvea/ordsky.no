@@ -18,7 +18,7 @@ export function wordCountToCloudInput(wordCount: WordCount): CloudInput[] {
   const count = wordsSorted.slice(0, MAX_ARRAY_SIZE);
 
   const maxValue = count[0].count;
-  const minValue = count[count.length - 1].count;
+  const minValue = count.at(-1).count;
 
   const cloudInput = count.map((word) => ({
     text: word.text.toUpperCase(),
@@ -53,7 +53,7 @@ function normalizeSizes({
   const normalize = (size: number): number => {
     const normalized =
       ((size - currentMin) / (currentMax - currentMin)) * absoluteMax;
-    return normalized > absoluteMin ? normalized : absoluteMin;
+    return Math.max(normalized, absoluteMin);
   };
   return words.map((word) => ({
     ...word,
@@ -77,7 +77,7 @@ export function reduceTooBigWords(
 
     return {
       ...n,
-      size: size - sizeReduction > minSize ? size - sizeReduction : minSize,
+      size: Math.max(size - sizeReduction, minSize),
     };
   });
 }

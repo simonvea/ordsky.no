@@ -15,7 +15,7 @@ describe('wordCountToCloudInput', () => {
     const finished = new Date();
 
     const seconds = (Number(finished) - Number(start)) / 1000;
-    // eslint-disable-next-line no-console
+     
     console.log('spent', seconds);
     output.forEach((input, i) => {
       expect(input.text).toEqual(cloudInput[i].text);
@@ -122,7 +122,7 @@ describe('reduceTooBigWords', () => {
     const expected = input.map((i) => ({
       ...i,
       size:
-        i.size - reduceFontWith > minSize ? i.size - reduceFontWith : minSize,
+        Math.max(i.size - reduceFontWith, minSize),
     }));
 
     const result = reduceTooBigWords(input, maxPixels, minSize);

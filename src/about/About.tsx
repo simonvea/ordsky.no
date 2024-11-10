@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import styled from "styled-components";
-import { Title } from "../common/atoms/Title";
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import { Title } from '../common/atoms/Title';
 
 const AboutContainer = styled.section`
   background-color: var(--text-color-primary);
@@ -34,7 +34,7 @@ export function About(): React.ReactElement {
 
   useEffect(() => {
     if (hash) {
-      document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
+      document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [hash]);
 
@@ -43,8 +43,7 @@ export function About(): React.ReactElement {
       <Article>
         <Title>Om Ordsky.no</Title>
         <p>
-          Ordsky.no er et lite hobbyprosjekt laget av{" "}
-          {/* eslint-disable-next-line react/jsx-no-target-blank */}
+          Ordsky.no er et lite hobbyprosjekt laget av{' '}
           <Link
             href="https://www.simonsier.no/about/"
             target="_blank"
@@ -55,7 +54,7 @@ export function About(): React.ReactElement {
           .
         </p>
         <p>
-          Da jeg har mye å gjøre og{" "}
+          Da jeg har mye å gjøre og{' '}
           <Link
             href="https://github.com/simonvea"
             target="_blank"
@@ -72,7 +71,7 @@ export function About(): React.ReactElement {
         </p>
         <p>
           Om det er noe du mener bør fikses kjapt, eller du har andre
-          tilbakemeldinger. Send meg gjerne en{" "}
+          tilbakemeldinger. Send meg gjerne en{' '}
           <Link
             href="mailto:simon@ordsky.no?subject=Jeg liker ordsky.no, men"
             target="_blank"

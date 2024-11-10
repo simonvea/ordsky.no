@@ -39,7 +39,7 @@ export const createCloud = (
     const svgWidth = config?.svgWidth || 500;
     const svgHeight = config?.svgHeight || 300;
     const paddingBetweenWords = config?.padding || 2;
-    // eslint-disable-next-line no-bitwise
+     
     const rotationDeg =
       config?.rotationDeg || (Math.trunc(Math.random() * 6) - 3) * 30;
     // TODO: Implement;

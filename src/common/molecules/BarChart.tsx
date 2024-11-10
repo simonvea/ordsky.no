@@ -32,7 +32,7 @@ export const BarChart: React.FC<BarChartProps> = function BarChart({
   backgroundColors,
   title,
 }) {
-  // eslint-disable-next-line unicorn/no-null
+   
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const ctx = canvas.current?.getContext('2d');

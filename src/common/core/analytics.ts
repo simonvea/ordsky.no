@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 
 export type ExceptionEventParams = {
   description: string;
@@ -36,4 +36,4 @@ class Logger {
 
 export const logger = new Logger();
 
-/* eslint-enable no-console */
+ 

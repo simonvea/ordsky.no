@@ -14,9 +14,9 @@ export async function countWords(string: string): Promise<WordCount> {
   const words = wordsRaw
     ?.map((word) =>
       word
-        .replace(/[!#$%&'()*+,./:;=?^_`{}~´]/g, '') // TODO: also remove digits "\d"?
-        .replace(/^-/g, '')
-        .replace(/-$/g, '')
+        .replaceAll(/[!#$%&'()*+,./:;=?^_`{}~´]/g, '') // TODO: also remove digits "\d"?
+        .replaceAll(/^-/g, '')
+        .replaceAll(/-$/g, '')
     )
     .filter((w) => wordsFilter(w));
 

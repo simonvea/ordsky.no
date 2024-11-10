@@ -34,9 +34,9 @@ export class ErrorBoundary extends Component<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
+   
   onReset(): void {
-    window.location.reload();
+    globalThis.location.reload();
   }
 
   render(): React.ReactNode {
