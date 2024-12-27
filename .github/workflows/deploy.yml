@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install
         run: npm ci
@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: Upload artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
           name: build
           path: build
@@ -36,15 +36,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Download Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v4
         with:
           name: build
           path: build
 
-      - name: Deploy to Firebase
-        run: |
-          sudo npm install -g firebase-tools
-          firebase deploy --project ${{ secrets.FIREBASE_PROJECT_ID }} --token ${{ secrets.FIREBASE_TOKEN }} --only hosting
+      - name: Deploy to Cloudflare
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ordsky-no
+          directory: build
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
