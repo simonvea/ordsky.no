@@ -10,7 +10,8 @@ export type AnalyticEvents =
   | 'collab_joined'
   | 'collab_cloud_created'
   | 'words_cloud_created'
-  | 'text_cloud_created';
+  | 'text_cloud_created'
+  | 'collab_rejoined';
 
 class Logger {
   private isProduction: boolean;

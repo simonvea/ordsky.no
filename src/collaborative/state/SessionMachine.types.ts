@@ -3,6 +3,7 @@ import { WordCount, Cloud } from '../../common/core/cloud.types';
 export type StartSessionEvent = { type: 'START_SESSION' };
 export type SessionStartedEvent = { type: 'SESSION_STARTED' };
 export type JoinSessionEvent = { type: 'JOIN_SESSION'; id: string };
+export type RejoinSessionEvent = { type: 'REJOIN_SESSION'; id: string };
 export type AddWordsEvent = { type: 'ADD_WORDS'; words: string[] };
 export type WordsAddedEvent = { type: 'WORDS_ADDED'; totalEntries: number };
 export type CreateCloudEvent = { type: 'CREATE_CLOUD' };
@@ -18,6 +19,7 @@ export type SessionEvent =
   | StartSessionEvent
   | SessionStartedEvent
   | JoinSessionEvent
+  | RejoinSessionEvent
   | AddWordsEvent
   | WordsAddedEvent
   | CreateCloudEvent
@@ -53,6 +55,10 @@ export type SessionTypestate =
     }
   | {
       value: 'waiting';
+      context: SessionContext;
+    }
+  | {
+      value: 'rejoining';
       context: SessionContext;
     }
   | {
