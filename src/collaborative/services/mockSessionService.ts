@@ -1,5 +1,5 @@
-import { SessionsService } from "./SessionsService";
-import { WordCount, Cloud } from "../../common/core/cloud.types";
+import { SessionsService } from './SessionsService';
+import { WordCount, Cloud } from '../../common/core/cloud.types';
 
 export class MockSessionService implements SessionsService {
   private startMockCounter(): void {
@@ -25,16 +25,16 @@ export class MockSessionService implements SessionsService {
 
   private cloud: Cloud[] = [
     {
-      fill: "#e58c69",
-      font: "Impact",
+      fill: '#e58c69',
+      font: 'Impact',
       hasText: true,
       height: 40,
       padding: 2,
       rotate: 0,
       size: 20,
-      style: "normal",
-      text: "DIALEKT",
-      weight: "normal",
+      style: 'normal',
+      text: 'DIALEKT',
+      weight: 'normal',
       width: 128,
       x: 116,
       x0: -64,
@@ -46,16 +46,16 @@ export class MockSessionService implements SessionsService {
       yoff: 0,
     },
     {
-      fill: "#370cf7",
-      font: "Impact",
+      fill: '#370cf7',
+      font: 'Impact',
       hasText: true,
       height: 40,
       padding: 2,
       rotate: 0,
       size: 20,
-      style: "normal",
-      text: "TILHØRIGHET",
-      weight: "normal",
+      style: 'normal',
+      text: 'TILHØRIGHET',
+      weight: 'normal',
       width: 160,
       x: 95,
       x0: -80,
@@ -69,8 +69,8 @@ export class MockSessionService implements SessionsService {
   ];
 
   private wordCount: WordCount = [
-    { text: "hello", count: 2 },
-    { text: "world", count: 5 },
+    { text: 'hello', count: 2 },
+    { text: 'world', count: 5 },
   ];
 
   private wordsListener?: (totalEntries: number) => void;
@@ -114,5 +114,10 @@ export class MockSessionService implements SessionsService {
     this.cloudsListener = undefined;
     this.mockCounter();
     this.numberOfEntries = 0;
+  }
+
+  rejoinSession(id: string, callback: (totalEntries: number) => void): void {
+    this.startMockCounter();
+    this.wordsListener = callback;
   }
 }

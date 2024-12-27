@@ -1,6 +1,8 @@
-import { WordCount, Cloud } from "../../common/core/cloud.types";
+import { WordCount, Cloud } from '../../common/core/cloud.types';
 
 export interface SessionsService {
+  rejoinSession: (id: string, callback: (totalEntries: number) => void) => void;
+
   /**
    * Saves words to storage
    */
