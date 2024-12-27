@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import React from 'react';
+import { Link } from 'react-router';
+import styled from 'styled-components';
 
 const Title = styled.h1`
   font-size: 2rem;
@@ -25,7 +25,7 @@ const Header = styled.header`
   box-shadow: 2px 3px 3px 2px rgba(0, 0, 0, 0.4);
   padding: 1rem 2rem;
   text-align: center;
-  font-family: "Cormorant Garamond", serif;
+  font-family: 'Cormorant Garamond', serif;
   min-width: 100%;
 `;
 
@@ -51,7 +51,8 @@ const NavButton = styled(Link)`
   margin: 0 5px;
 
   ::hover {
-    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+    box-shadow:
+      0 12px 16px 0 rgba(0, 0, 0, 0.24),
       0 17px 50px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
     opacity: 1;

@@ -72,7 +72,7 @@ function WordsInput({
               onChange={({ target }) => onWordChange(key, target.value)}
               onKeyDown={addInputOnEnterKey}
               placeholder="Skriv inn et ord..."
-              ref={(input) => input && input.focus()} // This ends up focusing the last input, which is what we want :D
+              ref={(input) => (input && input.focus()) || undefined} // This ends up focusing the last input, which is what we want :D
             />
             <IconButton
               type="button"

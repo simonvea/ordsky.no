@@ -4,9 +4,10 @@ import React, {
   Reducer,
   useCallback,
   useMemo,
-} from "react";
-import { formsReducer } from "./wordsReducer";
-import { initialState, WordsState, WordsActions } from "./wordsReducer.types";
+  AnyActionArg,
+} from 'react';
+import { formsReducer } from './wordsReducer';
+import { initialState, WordsState, WordsActions } from './wordsReducer.types';
 
 export interface Context {
   state: WordsState;
@@ -26,18 +27,18 @@ type ProviderProps = {
 };
 
 export function WordsProvider({ children }: ProviderProps): React.ReactElement {
-  const [state, dispatch] = useReducer<Reducer<WordsState, WordsActions>>(
+  const [state, dispatch] = useReducer<WordsState, [WordsActions]>(
     formsReducer,
     initialState
   );
 
   const addInput = useCallback(
-    (): void => dispatch({ type: "WORDS_ADD_INPUT" }),
+    (): void => dispatch({ type: 'WORDS_ADD_INPUT' }),
     []
   );
 
   const removeInput = useCallback(
-    (key: string): void => dispatch({ type: "WORDS_REMOVE_INPUT", key }),
+    (key: string): void => dispatch({ type: 'WORDS_REMOVE_INPUT', key }),
     []
   );
 
@@ -45,7 +46,7 @@ export function WordsProvider({ children }: ProviderProps): React.ReactElement {
     (key: string, word: string): void => {
       const oldInput = state.inputs.find((input) => input.key === key);
       if (oldInput) {
-        dispatch({ type: "WORDS_UPDATE_INPUT", input: { ...oldInput, word } });
+        dispatch({ type: 'WORDS_UPDATE_INPUT', input: { ...oldInput, word } });
       }
     },
     [state.inputs]
@@ -55,14 +56,14 @@ export function WordsProvider({ children }: ProviderProps): React.ReactElement {
     const oldInput = state.inputs.find((input) => input.key === key);
     if (oldInput) {
       dispatch({
-        type: "WORDS_UPDATE_INPUT",
+        type: 'WORDS_UPDATE_INPUT',
         input: { ...oldInput, size },
       });
     }
   };
 
   const clearInputs = useCallback(
-    (): void => dispatch({ type: "WORDS_CLEAR_INPUTS" }),
+    (): void => dispatch({ type: 'WORDS_CLEAR_INPUTS' }),
     []
   );
 
