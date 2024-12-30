@@ -1,87 +1,73 @@
 import React from 'react';
-import { useMachine } from '@xstate/react';
 import { StartSession } from './components/StartSession';
 import { WaitScreen } from './components/WaitScreen';
-import { sessionMachine } from './state/SessionMachine';
 import { ErrorScreen } from '../common/molecules/ErrorScreen';
 import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { WordsInput } from '../common/molecules/WordsInput';
+import { useSession } from './state/useSession';
 
 export function CollaborativePage(): React.ReactElement {
-  const [snapshot, send] = useMachine(sessionMachine);
-  const { isAdmin, wordEntries, id, cloud, wordCount, errorMessage } =
-    snapshot.context;
+  const { state, actions } = useSession();
 
-  const onNewSession = (): void => {
-    send({ type: 'START_SESSION' });
-  };
+  const {
+    isAdmin,
+    wordEntries,
+    id,
+    cloud,
+    wordCount,
+    errorMessage,
+    isLoading,
+    ui,
+  } = state;
 
-  const onJoinSession = (idToJoin: string): void => {
-    send({ type: 'JOIN_SESSION', id: idToJoin });
-  };
-
-  const onCreateCloud = (): void => {
-    send({ type: 'CREATE_CLOUD' });
-  };
-
-  const restart = (): void => {
-    send({ type: 'RESTART' });
-  };
-
-  const onSubmitWords = (words: string[]): void => {
-    send({ type: 'ADD_WORDS', words });
-  };
+  const {
+    startSession,
+    createCloud,
+    joinSession,
+    addWordsToSession,
+    endSession,
+  } = actions;
 
   const wordsInputTitle = `Kode: ${id.toUpperCase()}`;
 
   const restartText = 'Bli med i en ny økt';
 
-  const isWaiting =
-    snapshot.matches('addWords') ||
-    snapshot.matches('creating') ||
-    snapshot.matches('waiting');
-
   return (
     <>
-      {snapshot.matches('idle') && (
-        <StartSession
-          onNewSession={onNewSession}
-          onJoinSession={onJoinSession}
-        />
+      {ui == 'idle' && (
+        <StartSession onNewSession={startSession} onJoinSession={joinSession} />
       )}
-      {snapshot.matches('wordsInput') && (
+
+      {ui == 'wordsInput' && (
         <WordsInput
           title={wordsInputTitle}
-          onSubmit={onSubmitWords}
-          onQuit={restart}
+          onSubmit={addWordsToSession}
+          onQuit={endSession}
         />
       )}
-      {isWaiting && (
+
+      {ui == 'waiting' && (
         <WaitScreen
           isAdmin={isAdmin}
-          onCreateWordCloud={onCreateCloud}
+          onCreateWordCloud={() => createCloud(id)}
           numberOfEntries={wordEntries}
-          onQuit={restart}
+          onQuit={endSession}
           id={id}
-          loading={snapshot.matches('creating')}
+          loading={isLoading}
         />
       )}
-      {snapshot.matches('created') && !!cloud && !!wordCount && (
+
+      {ui == 'cloudDisplay' && !!cloud && (
         <CloudDisplay
           cloud={cloud}
           wordCount={wordCount}
-          onRestart={restart}
+          onRestart={endSession}
           restartText={restartText}
         />
       )}
-      {snapshot.matches('created') && !cloud && (
-        <ErrorScreen
-          message="Oups! Noe gikk galt når jeg forsøkte å hente ordskyen."
-          onReset={restart}
-        />
-      )}
-      {snapshot.matches('error') && (
-        <ErrorScreen message={errorMessage} onReset={restart} />
+
+      {ui == 'error' && (
+        <ErrorScreen message={errorMessage} onReset={endSession} />
       )}
     </>
   );

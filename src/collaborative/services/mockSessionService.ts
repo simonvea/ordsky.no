@@ -1,7 +1,6 @@
-import { SessionsService } from './SessionsService';
 import { WordCount, Cloud } from '../../common/core/cloud.types';
 
-export class MockSessionService implements SessionsService {
+export class MockSessionService {
   private startMockCounter(): void {
     const id = setInterval(() => {
       this.numberOfEntries += 1;

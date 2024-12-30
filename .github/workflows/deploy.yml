@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    environment: Production
     name: Build
     runs-on: ubuntu-latest
 
@@ -22,27 +23,10 @@ jobs:
         run: npm run test
 
       - name: Build
+        env:
+          VITE_SESSION_WEBSOCKET_URL: ${{ env.SESSION_WEBSOCKET_URL}}
+          VITE_SESSION_API_URL: ${{ env.SESSION_API_URL }}
         run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: build
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: build
 
       - name: Deploy to Cloudflare
         uses: cloudflare/pages-action@v1

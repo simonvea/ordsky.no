@@ -8,6 +8,7 @@ import { Main } from './common/atoms/Main';
 import { WordsPage, WordsProvider } from './words';
 import { TextPage, TextProvider } from './text';
 import { About } from './about';
+import { SessionProvider } from './collaborative/state/SessionProvider';
 
 const CollaborativePage = lazy(() => import('./collaborative'));
 
@@ -24,28 +25,30 @@ const App: React.FC = function App() {
         <ErrorBoundary>
           <WordsProvider>
             <TextProvider>
-              <Suspense fallback={<Spinner message="Laster side..." />}>
-                <Routes>
-                  <Route
-                    path="/words"
-                    element={
-                      <WordsPage onClickToTextForm={navigateToTextPage} />
-                    }
-                  />
-                  <Route
-                    path="/text"
-                    element={
-                      <TextPage onClickToWordsForm={navigateToWordsPage} />
-                    }
-                  />
-                  <Route path="/collab" element={<CollaborativePage />} />
-                  <Route path="/about" element={<About />} />
-                  <Route
-                    path="/"
-                    element={<Home onClickCreate={navigateToWordsPage} />}
-                  />
-                </Routes>
-              </Suspense>
+              <SessionProvider>
+                <Suspense fallback={<Spinner message="Laster side..." />}>
+                  <Routes>
+                    <Route
+                      path="/words"
+                      element={
+                        <WordsPage onClickToTextForm={navigateToTextPage} />
+                      }
+                    />
+                    <Route
+                      path="/text"
+                      element={
+                        <TextPage onClickToWordsForm={navigateToWordsPage} />
+                      }
+                    />
+                    <Route path="/collab" element={<CollaborativePage />} />
+                    <Route path="/about" element={<About />} />
+                    <Route
+                      path="/"
+                      element={<Home onClickCreate={navigateToWordsPage} />}
+                    />
+                  </Routes>
+                </Suspense>
+              </SessionProvider>
             </TextProvider>
           </WordsProvider>
         </ErrorBoundary>

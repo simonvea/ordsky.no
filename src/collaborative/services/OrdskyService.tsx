@@ -1,123 +1,131 @@
 import { Cloud, WordCount } from '../../common/core/cloud.types';
 import { createCloud } from '../../common/core/createCloud';
 import { wordCountToCloudInput } from '../../common/core/wordCountToCloudInput';
-import { SessionsService } from './SessionsService';
+import { SessionService, SessionEvents } from './SessionsService';
 
-export class OrdskyService implements SessionsService {
-  private endpoint = 'wss://api.ordsky.no';
+export class OrdskyService implements SessionService {
+  private restApiUrl = '';
+  private socketUrl = '';
 
-  private socket!: WebSocket;
+  private static instance: OrdskyService;
+  private socket?: WebSocket;
 
-  constructor() {}
+  constructor(restUrl: string, socketUrl: string) {
+    this.restApiUrl = restUrl;
+    this.socketUrl = socketUrl;
+  }
 
-  public rejoinSession(
-    id: string,
-    callback: (totalEntries: number) => void
-  ): void {
-    this.socket = new WebSocket(this.endpoint);
+  public static getInstance(
+    restUrl?: string,
+    socketUrl?: string
+  ): OrdskyService {
+    if (!OrdskyService.instance && restUrl && socketUrl) {
+      OrdskyService.instance = new OrdskyService(restUrl, socketUrl);
+    }
+    return OrdskyService.instance;
+  }
 
-    this.socket.addEventListener('message', (event) => {
-      const data = JSON.parse(event.data);
+  socketIsOpen(): boolean {
+    return this.socket?.readyState === WebSocket.OPEN || false;
+  }
 
-      if (data.type === 'WORDS_ADDED') {
-        // Currently set to type = "rejoined" in the backend API..
-        callback(data.numberOfEntries);
-      }
-    });
+  openSocket(onOpen?: (service: OrdskyService) => void): void {
+    if (this.socketIsOpen()) {
+      console.log('Socket is already open');
+      onOpen?.(this);
+      return;
+    }
 
+    this.socket = new WebSocket(this.socketUrl);
     this.socket.addEventListener('open', () => {
-      this.socket.send(
-        JSON.stringify({
-          id: id.toUpperCase(),
-          action: 'rejoinsession',
-        })
-      );
+      onOpen?.(this);
     });
   }
 
-  public startSession(id: string): void {
-    this.socket = new WebSocket(this.endpoint);
-    this.socket.addEventListener('open', () => {
-      this.socket.send(
-        JSON.stringify({
-          id: id.toUpperCase(),
-          action: 'startsession',
-        })
-      );
+  closeSocket(): void {
+    this.socket?.close();
+  }
+
+  subscribe(callback: (event: SessionEvents) => void): void {
+    if (!this.socketIsOpen()) {
+      throw new Error('Socket is not open');
+    }
+
+    this.socket?.addEventListener('message', (message) => {
+      const event = JSON.parse(message.data);
+
+      callback(event);
     });
   }
 
-  private restApiUrl =
-    'https://s4wsje5xxj.execute-api.eu-north-1.amazonaws.com/prod';
+  startSession(id: string): void {
+    if (!this.socketIsOpen()) {
+      throw new Error('Socket is not open');
+    }
 
-  public async isLiveSession(id: string): Promise<void> {
+    this.socket?.send(
+      JSON.stringify({
+        id: id.toUpperCase(),
+        action: 'startsession',
+      })
+    );
+  }
+
+  joinSession(id: string): void {
+    if (!this.socketIsOpen()) {
+      throw new Error('Socket is not open');
+    }
+
+    this.socket?.send(
+      JSON.stringify({
+        id: id.toUpperCase(),
+        action: 'joinsession',
+      })
+    );
+  }
+
+  public async isLiveSession(id: string): Promise<boolean> {
     const response = await fetch(`${this.restApiUrl}/${id}`);
+
+    console.log('res', response);
 
     if (response.ok) {
       const data = await response.json();
+
+      console.log('res data', data);
+
       if (data.Item && !data.Item.cloud) {
-        return;
+        return true;
       }
-      throw new Error('Item does not exist');
+      return false;
     }
     throw new Error(response.status.toString());
   }
 
-  public endSession(): void {
-    if (this.socket) this.socket.close();
+  saveWords({ id, words }: { id: string; words: string[] }): void {
+    if (!this.socketIsOpen()) {
+      throw new Error('Socket is not open');
+    }
+
+    this.socket?.send(
+      JSON.stringify({
+        action: 'savewords',
+        id: id.toUpperCase(),
+        words,
+      })
+    );
   }
 
-  async saveWords(id: string, words: string[]): Promise<void> {
-    this.socket = new WebSocket(this.endpoint);
-
-    this.socket.addEventListener('open', () => {
-      this.socket.send(
-        JSON.stringify({
-          action: 'savewords',
-          id: id.toUpperCase(),
-          words,
-        })
-      );
+  getAllWords(id: string): Promise<string[]> {
+    // Should use rest api to get words
+    return new Promise((resolve, reject) => {
+      resolve([]);
     });
   }
 
-  onWordsAdded(id: string, callback: (totalEntries: number) => void): void {
-    if (!this.socket) throw new Error('Socket not initialized');
-
-    this.socket.addEventListener('message', (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.type === 'WORDS_ADDED') {
-        callback(data.numberOfEntries);
-      }
-    });
-  }
-
-  async createCloudFromStoredWordCounts(
-    id: string
+  async createCloud(
+    words: string[]
   ): Promise<{ cloud: Cloud[]; wordCount: WordCount }> {
-    const wordsPromise = new Promise<string[]>((resolve, reject) => {
-      const error = setTimeout(
-        () => reject(new Error('Did not get a response in time')),
-        8000
-      );
-      this.socket.addEventListener('message', (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === 'GET_WORDS') {
-          clearTimeout(error);
-          resolve(data.words);
-        }
-      });
-      this.socket.send(
-        JSON.stringify({
-          action: 'getwords',
-          id: id.toUpperCase(),
-        })
-      );
-    });
-
-    const words = await wordsPromise;
-
     const counted = new Set();
     let wordCount: WordCount = [];
 
@@ -144,11 +152,27 @@ export class OrdskyService implements SessionsService {
 
     const cloud = await createCloud(cloudInput);
 
+    return { cloud, wordCount };
+  }
+
+  shareCloudAndWordCount({
+    id,
+    cloud,
+    wordCount,
+  }: {
+    id: string;
+    cloud: Cloud[];
+    wordCount: WordCount;
+  }): void {
+    if (!this.socketIsOpen()) {
+      throw new Error('Socket is not open');
+    }
+
     // To save WriteCapacity we only send top 10 words.
+    const sortedWordCount = wordCount.sort((a, b) => b.count - a.count);
     const wordCountToSend = sortedWordCount.slice(0, 10);
 
-    // Send to backend
-    this.socket.send(
+    this.socket?.send(
       JSON.stringify({
         action: 'savecloud',
         id: id.toUpperCase(),
@@ -156,34 +180,5 @@ export class OrdskyService implements SessionsService {
         wordCount: wordCountToSend,
       })
     );
-
-    return { cloud, wordCount };
-  }
-
-  public onCloudAdded(
-    id: string,
-    callback: (params: { cloud: Cloud[]; wordCount: WordCount }) => void
-  ): void {
-    if (!this.socket) throw new Error('Socket not initialized');
-
-    this.socket.addEventListener('message', (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.type === 'CLOUD_CREATED') {
-        callback({ cloud: data.cloud, wordCount: data.wordCount });
-      }
-    });
-  }
-
-  public subscribe(
-    callback: (params: { cloud: Cloud[]; wordCount: WordCount }) => void
-  ): void {
-    if (!this.socket) throw new Error('Socket not initialized');
-
-    this.socket.addEventListener('message', (event) => {
-      const data = JSON.parse(event.data);
-
-      callback(data);
-    });
   }
 }

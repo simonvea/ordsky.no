@@ -1,40 +1,39 @@
 import { WordCount, Cloud } from '../../common/core/cloud.types';
 
-export interface SessionsService {
-  rejoinSession: (id: string, callback: (totalEntries: number) => void) => void;
+export type WordsAddedEvent = { type: 'WORDS_ADDED'; numberOfEntries: number };
+export type CloudCreatedEvent = {
+  type: 'CLOUD_CREATED';
+  cloud: Cloud[];
+  wordCount: WordCount;
+};
+export type ErrorEvent = { type: 'ERROR'; error: Error };
 
-  /**
-   * Saves words to storage
-   */
-  saveWords: (id: string, words: string[]) => Promise<void>;
+export type SessionEvents = WordsAddedEvent | CloudCreatedEvent | ErrorEvent;
 
-  /**
-   * Gets all word counts from storage and
-   * creates a word cloud, also saves it back to storage
-   */
-  createCloudFromStoredWordCounts: (
-    id: string
+export interface SessionService {
+  startSession: (id: string) => void;
+
+  joinSession: (id: string) => void;
+
+  isLiveSession: (id: string) => Promise<boolean>;
+
+  subscribe(callback: (event: SessionEvents) => void): void;
+
+  saveWords: ({}: { id: string; words: string[] }) => void;
+
+  getAllWords: (id: string) => Promise<string[]>;
+
+  createCloud: (
+    words: string[]
   ) => Promise<{ cloud: Cloud[]; wordCount: WordCount }>;
 
-  /**
-   * Runs callback whenever words are added
-   */
-  onWordsAdded: (id: string, callback: (totalEntries: number) => void) => void;
-
-  /**
-   * Runs callback when cloud is found in storage
-   *
-   * @param callback callback to run when cloud is found in storage
-   */
-  onCloudAdded: (
-    id: string,
-    callback: (params: { cloud: Cloud[]; wordCount: WordCount }) => void
-  ) => void;
-
-  /**
-   * Unsubscribes listeners
-   */
-  endSession: (id: string) => void;
-
-  // joinSession: (id: string) => Promise<void>;
+  shareCloudAndWordCount: ({
+    id,
+    cloud,
+    wordCount,
+  }: {
+    id: string;
+    cloud: Cloud[];
+    wordCount: WordCount;
+  }) => void;
 }
