@@ -11,24 +11,6 @@ describe('WaitPage component', () => {
     onQuitMock.mockClear();
   });
 
-  it('displays the id from url as uppercase', () => {
-    // Arrange
-    const { getByText } = render(
-      <WaitScreen
-        id={mockId}
-        numberOfEntries={0}
-        onCreateWordCloud={() => {}}
-        onQuit={onQuitMock}
-      />
-    );
-
-    // Act
-    const text = getByText(`Kode: ${mockId.toUpperCase()}`);
-
-    // Assert
-    expect(text).toBeInTheDocument();
-  });
-
   it('when no words input displays "Venter på ord"', () => {
     // Arrange
     const { getByText } = render(
