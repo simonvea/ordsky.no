@@ -66,7 +66,7 @@ export function WaitScreen({
           </p>
         </TextContainer>
       )}
-      <Title>Kode: {id.toUpperCase()}</Title>
+      <Title>Kode: {id}</Title>
       {hasEntries ? (
         <span>{`${numberOfEntries} har lagt inn ord.`}</span>
       ) : (

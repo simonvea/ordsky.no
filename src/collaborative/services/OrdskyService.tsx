@@ -65,7 +65,7 @@ export class OrdskyService implements SessionService {
 
     this.socket?.send(
       JSON.stringify({
-        id: id.toUpperCase(),
+        id,
         action: 'startsession',
       })
     );
@@ -87,12 +87,8 @@ export class OrdskyService implements SessionService {
   public async isLiveSession(id: string): Promise<boolean> {
     const response = await fetch(`${this.restApiUrl}/${id}`);
 
-    console.log('res', response);
-
     if (response.ok) {
       const data = await response.json();
-
-      console.log('res data', data);
 
       if (data.Item && !data.Item.cloud) {
         return true;
@@ -116,11 +112,19 @@ export class OrdskyService implements SessionService {
     );
   }
 
-  getAllWords(id: string): Promise<string[]> {
-    // Should use rest api to get words
-    return new Promise((resolve, reject) => {
-      resolve([]);
-    });
+  async getAllWords(id: string): Promise<string[]> {
+    const response = await fetch(`${this.restApiUrl}/${id}`);
+
+    if (response.ok) {
+      const { Item } = await response.json();
+
+      if (!Item) {
+        throw new Error('No session found');
+      }
+
+      return Item.words.L.map((word: { S: string }) => word.S);
+    }
+    throw new Error(response.status.toString());
   }
 
   async createCloud(
