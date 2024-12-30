@@ -9,6 +9,7 @@ import { WordsPage, WordsProvider } from './words';
 import { TextPage, TextProvider } from './text';
 import { About } from './about';
 import { SessionProvider } from './collaborative/state/SessionProvider';
+import { CallToActionProvider } from './common/state/CallToActionContext';
 
 const CollaborativePage = lazy(() => import('./collaborative'));
 
@@ -23,34 +24,36 @@ const App: React.FC = function App() {
       <OrdskyHeader />
       <Main>
         <ErrorBoundary>
-          <WordsProvider>
-            <TextProvider>
-              <SessionProvider>
-                <Suspense fallback={<Spinner message="Laster side..." />}>
-                  <Routes>
-                    <Route
-                      path="/words"
-                      element={
-                        <WordsPage onClickToTextForm={navigateToTextPage} />
-                      }
-                    />
-                    <Route
-                      path="/text"
-                      element={
-                        <TextPage onClickToWordsForm={navigateToWordsPage} />
-                      }
-                    />
-                    <Route path="/collab" element={<CollaborativePage />} />
-                    <Route path="/about" element={<About />} />
-                    <Route
-                      path="/"
-                      element={<Home onClickCreate={navigateToWordsPage} />}
-                    />
-                  </Routes>
-                </Suspense>
-              </SessionProvider>
-            </TextProvider>
-          </WordsProvider>
+          <CallToActionProvider>
+            <WordsProvider>
+              <TextProvider>
+                <SessionProvider>
+                  <Suspense fallback={<Spinner message="Laster side..." />}>
+                    <Routes>
+                      <Route
+                        path="/words"
+                        element={
+                          <WordsPage onClickToTextForm={navigateToTextPage} />
+                        }
+                      />
+                      <Route
+                        path="/text"
+                        element={
+                          <TextPage onClickToWordsForm={navigateToWordsPage} />
+                        }
+                      />
+                      <Route path="/collab" element={<CollaborativePage />} />
+                      <Route path="/about" element={<About />} />
+                      <Route
+                        path="/"
+                        element={<Home onClickCreate={navigateToWordsPage} />}
+                      />
+                    </Routes>
+                  </Suspense>
+                </SessionProvider>
+              </TextProvider>
+            </WordsProvider>
+          </CallToActionProvider>
         </ErrorBoundary>
       </Main>
     </>

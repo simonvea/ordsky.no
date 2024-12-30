@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { use } from 'react';
 import { useCloud } from '../common/hooks/useCloud';
 import { Spinner } from '../common/molecules/Spinner';
 import { ErrorScreen } from '../common/molecules/ErrorScreen';
 import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { TextForm } from './TextForm';
+import { useCallToAction } from '../common/hooks/useCallToAction';
 
 export type TextPageProps = {
   onClickToWordsForm: () => void;
@@ -16,6 +17,7 @@ export const TextPage: React.FC<TextPageProps> = function TextPage({
     state: { loading, error, cloud, wordCount },
     actions: { createCloudFromText, reset },
   } = useCloud();
+  const { shouldDisplayCallToAction } = useCallToAction();
 
   if (loading) {
     return <Spinner message="Lager ordsky..." />;
@@ -34,6 +36,7 @@ export const TextPage: React.FC<TextPageProps> = function TextPage({
         cloud={cloud}
         onRestart={reset}
         restartText="Lag en ny ordsky"
+        shouldDisplayCallToAction={shouldDisplayCallToAction}
       />
     );
   }

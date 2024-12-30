@@ -6,9 +6,14 @@ import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { WordsInput } from '../common/molecules/WordsInput';
 import { useSession } from './state/useSession';
 import { WarningModal } from '../common/molecules/WarningModal';
+import { useCallToAction } from '../common/hooks/useCallToAction';
 
 export function CollaborativePage(): React.ReactElement {
   const [showWarningModal, setShowWarningModal] = useState(false);
+  const { shouldDisplayCallToAction } = useCallToAction({
+    shouldShowOnFirstVisit: true,
+  });
+
   const { state, actions } = useSession();
 
   const {
@@ -82,6 +87,7 @@ export function CollaborativePage(): React.ReactElement {
           wordCount={wordCount}
           onRestart={endSession}
           restartText={restartText}
+          shouldDisplayCallToAction={isAdmin && shouldDisplayCallToAction}
         />
       )}
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { svgDataURL, downloadAsPng } from '../core/downloadAsPng';
 import { Button, SecondaryButton } from '../atoms/Button';
@@ -9,12 +9,15 @@ import { BarChart } from '../molecules/BarChart';
 import { WordCount, Cloud } from '../core/cloud.types';
 import { createCloudSvg } from '../core/createCloud';
 import { Column } from '../atoms/Column';
+import { SupportCallout } from '../molecules/SupportCallout';
+import { useCallToAction } from '../hooks/useCallToAction';
 
 export type CloudDisplayProps = {
   cloud: Cloud[];
   wordCount?: WordCount;
   onRestart: () => void;
   restartText: string;
+  shouldDisplayCallToAction: boolean;
 };
 
 const CloudContainer = styled.section`
@@ -39,7 +42,14 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
   wordCount,
   onRestart,
   restartText,
+  shouldDisplayCallToAction,
 }) {
+  const { incrementCloudCount } = useCallToAction();
+
+  useEffect(() => {
+    incrementCloudCount();
+  }, [cloud]);
+
   const svg = createCloudSvg(cloud); // This is probably what should be saved?
   const xml = svgDataURL(svg); // Or this?
   const download = (): void => {
@@ -61,6 +71,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
       <CloudContainer>
         <CloudImage src={xml} alt="ordsky" />
       </CloudContainer>
+      {shouldDisplayCallToAction && <SupportCallout />}
       <Row>
         <SecondaryButton type="button" onClick={download}>
           Last ned ordsky

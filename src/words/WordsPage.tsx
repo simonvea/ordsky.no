@@ -4,6 +4,7 @@ import { WordsForm } from './WordsForm';
 import { Spinner } from '../common/molecules/Spinner';
 import { ErrorScreen } from '../common/molecules/ErrorScreen';
 import { CloudDisplay } from '../common/organisms/CloudDisplay';
+import { useCallToAction } from '../common/hooks/useCallToAction';
 
 export type WordsPageProps = {
   onClickToTextForm: () => void;
@@ -16,6 +17,8 @@ export const WordsPage: React.FC<WordsPageProps> = function WordsPage({
     state: { loading, error, cloud },
     actions: { createCloudFromWords, reset },
   } = useCloud();
+
+  const { shouldDisplayCallToAction } = useCallToAction();
 
   if (loading) {
     return <Spinner message="Lager ordsky..." />;
@@ -33,6 +36,7 @@ export const WordsPage: React.FC<WordsPageProps> = function WordsPage({
         cloud={cloud}
         onRestart={reset}
         restartText="Lag en ny ordsky"
+        shouldDisplayCallToAction={shouldDisplayCallToAction}
       />
     );
   }
