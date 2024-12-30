@@ -155,7 +155,7 @@ export class OrdskyService implements SessionService {
     return { cloud, wordCount };
   }
 
-  shareCloudAndWordCount({
+  saveCloudAndWordCount({
     id,
     cloud,
     wordCount,

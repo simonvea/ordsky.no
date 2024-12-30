@@ -120,7 +120,7 @@ export const useSession = (): UseSessionContext => {
         const words = await serviceRef.current.getAllWords(id);
         const cloudData = await serviceRef.current.createCloud(words);
 
-        serviceRef.current.shareCloudAndWordCount({ id, ...cloudData });
+        serviceRef.current.saveCloudAndWordCount({ id, ...cloudData });
 
         dispatch({
           type: 'CLOUD_CREATED',
@@ -133,13 +133,13 @@ export const useSession = (): UseSessionContext => {
         setIsLoading(false);
       }
     },
-    [serviceRef, dispatch]
+    [serviceRef, setIsLoading, dispatch]
   );
 
   const endSession = useCallback(() => {
     serviceRef.current.closeSocket();
     dispatch({ type: 'SESSION_ENDED' });
-  }, [dispatch]);
+  }, [serviceRef, dispatch]);
 
   return {
     state: { ...state, isLoading },

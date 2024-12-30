@@ -27,7 +27,7 @@ export interface SessionService {
     words: string[]
   ) => Promise<{ cloud: Cloud[]; wordCount: WordCount }>;
 
-  shareCloudAndWordCount: ({
+  saveCloudAndWordCount: ({
     id,
     cloud,
     wordCount,
