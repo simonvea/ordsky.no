@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Button, SecondaryButton } from '../../common/atoms/Button';
 import { TextContainer } from '../../common/atoms/TextContainer';
@@ -19,6 +19,17 @@ const WaitScreenActionsContainer = styled.section`
   margin-top: 1.5rem;
 `;
 
+const preventClose = (e: BeforeUnloadEvent): string => {
+  e.preventDefault();
+
+  const message = 'Om du forlater siden så får du ikke laget ordskyen.';
+
+  // Support legacy browsers
+  e.returnValue = message;
+
+  return message;
+};
+
 export function WaitScreen({
   numberOfEntries,
   isAdmin,
@@ -28,6 +39,15 @@ export function WaitScreen({
   loading,
 }: WaitScreenProps): React.ReactElement {
   const hasEntries = numberOfEntries > 0;
+
+  // TODO: Also add warning on quit if there are entries
+  useEffect(() => {
+    if (isAdmin && hasEntries) {
+      window.addEventListener('beforeunload', preventClose);
+    }
+
+    return () => window.removeEventListener('beforeunload', preventClose);
+  }, [isAdmin, hasEntries]);
 
   return (
     <>
