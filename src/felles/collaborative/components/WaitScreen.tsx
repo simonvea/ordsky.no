@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Button, SecondaryButton } from '../../common/atoms/Button';
-import { TextContainer } from '../../common/atoms/TextContainer';
-import { Title } from '../../common/atoms/Title';
-import { Spinner } from '../../common/molecules/Spinner';
+import { Button, SecondaryButton } from '../../../common/atoms/Button';
+import { TextContainer } from '../../../common/atoms/TextContainer';
+import { Title } from '../../../common/atoms/Title';
+import { Spinner } from '../../../common/molecules/Spinner';
 
 export type WaitScreenProps = {
   isAdmin?: boolean;

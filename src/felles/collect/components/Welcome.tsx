@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from '../../common/atoms/Button';
-import { Form } from '../../common/atoms/Form';
-import { Title } from '../../common/atoms/Title';
+import { Button } from '../../../common/atoms/Button';
+import { Form } from '../../../common/atoms/Form';
+import { Title } from '../../../common/atoms/Title';
 
 const JoinSessionForm = styled(Form)`
   justify-content: space-around;

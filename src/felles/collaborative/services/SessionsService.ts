@@ -1,4 +1,4 @@
-import { WordCount, Cloud } from '../../common/core/cloud.types';
+import { WordCount, Cloud } from '../../../common/core/cloud.types';
 
 export type WordsAddedEvent = { type: 'WORDS_ADDED'; numberOfEntries: number };
 export type CloudCreatedEvent = {

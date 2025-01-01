@@ -1,6 +1,6 @@
-import { Cloud, WordCount } from '../../common/core/cloud.types';
-import { createCloud } from '../../common/core/createCloud';
-import { wordCountToCloudInput } from '../../common/core/wordCountToCloudInput';
+import { Cloud, WordCount } from '../../../common/core/cloud.types';
+import { createCloud } from '../../../common/core/createCloud';
+import { wordCountToCloudInput } from '../../../common/core/wordCountToCloudInput';
 import { SessionService, SessionEvents } from './SessionsService';
 
 export class OrdskyService implements SessionService {

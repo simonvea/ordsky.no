@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { Button } from "../../common/atoms/Button";
-import { Form } from "../../common/atoms/Form";
-import { Input } from "../../common/atoms/Input";
-import { Label } from "../../common/atoms/Label";
-import { Title } from "../../common/atoms/Title";
+import React from 'react';
+import styled from 'styled-components';
+import { Button } from '../../../common/atoms/Button';
+import { Form } from '../../../common/atoms/Form';
+import { Input } from '../../../common/atoms/Input';
+import { Label } from '../../../common/atoms/Label';
+import { Title } from '../../../common/atoms/Title';
 
 const JoinSessionForm = styled(Form)`
   justify-content: space-around;
@@ -45,7 +45,7 @@ export function StartSession({
   onNewSession,
   onJoinSession,
 }: StartSessionProps): React.ReactElement {
-  const [idToJoin, setIdToJoin] = React.useState("");
+  const [idToJoin, setIdToJoin] = React.useState('');
 
   const joinSession = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();

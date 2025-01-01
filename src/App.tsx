@@ -8,10 +8,12 @@ import { Main } from './common/atoms/Main';
 import { WordsPage, WordsProvider } from './words';
 import { TextPage, TextProvider } from './text';
 import { About } from './about';
-import { SessionProvider } from './collaborative/state/SessionProvider';
+import { SessionProvider } from './felles/collaborative/state/SessionProvider';
 import { CallToActionProvider } from './common/state/CallToActionContext';
+import { FellesPage } from './felles/FellesPage';
 
-const CollaborativePage = lazy(() => import('./collaborative'));
+const CollaborativePage = lazy(() => import('./felles/collaborative'));
+const CollectPage = lazy(() => import('./felles/collect'));
 
 const App: React.FC = function App() {
   return (
@@ -28,7 +30,16 @@ const App: React.FC = function App() {
                       <Route path="/" element={<Home />} />
                       <Route path="words" element={<WordsPage />} />
                       <Route path="text" element={<TextPage />} />
-                      <Route path="collab" element={<CollaborativePage />} />
+                      <Route path="felles">
+                        <Route index element={<FellesPage />} />
+                        <Route path="live" element={<CollaborativePage />} />
+                        <Route path=":id" element={<CollectPage />} />
+                      </Route>
+                      <Route
+                        // This is a legacy route and may be removed in the future
+                        path="collab"
+                        element={<Navigate to="/felles" />}
+                      />
                       <Route path="about" element={<About />} />
                       <Route path="*" element={<Navigate to="/" />} />
                     </Routes>

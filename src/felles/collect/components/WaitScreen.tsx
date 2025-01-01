@@ -1,7 +1,7 @@
 import React, { use, useEffect } from 'react';
 import styled from 'styled-components';
-import { Button, SecondaryButton } from '../../common/atoms/Button';
-import { TextContainer } from '../../common/atoms/TextContainer';
+import { Button, SecondaryButton } from '../../../common/atoms/Button';
+import { TextContainer } from '../../../common/atoms/TextContainer';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

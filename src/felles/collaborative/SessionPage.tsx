@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { StartSession } from './components/StartSession';
 import { WaitScreen } from './components/WaitScreen';
-import { ErrorScreen } from '../common/molecules/ErrorScreen';
-import { CloudDisplay } from '../common/organisms/CloudDisplay';
-import { WordsInput } from '../common/molecules/WordsInput';
+import { ErrorScreen } from '../../common/molecules/ErrorScreen';
+import { CloudDisplay } from '../../common/organisms/CloudDisplay';
+import { WordsInput } from '../../common/molecules/WordsInput';
 import { useSession } from './state/useSession';
-import { WarningModal } from '../common/molecules/WarningModal';
-import { useCallToAction } from '../common/hooks/useCallToAction';
+import { WarningModal } from '../../common/molecules/WarningModal';
+import { useCallToAction } from '../../common/hooks/useCallToAction';
 
 export function CollaborativePage(): React.ReactElement {
   const [showWarningModal, setShowWarningModal] = useState(false);

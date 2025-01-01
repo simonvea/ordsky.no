@@ -1,4 +1,4 @@
-import { WordCount, Cloud } from '../../common/core/cloud.types';
+import { WordCount, Cloud } from '../../../common/core/cloud.types';
 
 export class MockSessionService {
   private startMockCounter(): void {

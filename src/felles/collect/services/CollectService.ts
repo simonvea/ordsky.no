@@ -1,6 +1,6 @@
 import { Session } from 'react-router';
-import { Cloud, WordCount } from '../../common/core/cloud.types';
-import { generateId } from '../../common/core/session';
+import { Cloud, WordCount } from '../../../common/core/cloud.types';
+import { generateId } from '../../../common/core/session';
 
 export type SessionState = {
   id: string;

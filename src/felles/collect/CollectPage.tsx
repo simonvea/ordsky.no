@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
-import { Cloud, WordCount } from '../common/core/cloud.types';
+import { Cloud, WordCount } from '../../common/core/cloud.types';
 import { CollectService } from './services/CollectService';
-import { WordsInput } from '../common/molecules/WordsInput';
-import { CloudDisplay } from '../common/organisms/CloudDisplay';
-import { ErrorScreen } from '../common/molecules/ErrorScreen';
-import { Spinner } from '../common/molecules/Spinner';
+import { WordsInput } from '../../common/molecules/WordsInput';
+import { CloudDisplay } from '../../common/organisms/CloudDisplay';
+import { ErrorScreen } from '../../common/molecules/ErrorScreen';
+import { Spinner } from '../../common/molecules/Spinner';
 import { WaitScreen } from './components/WaitScreen';
-import { useCallToAction } from '../common/hooks/useCallToAction';
+import { useCallToAction } from '../../common/hooks/useCallToAction';
 import { Welcome } from './components/Welcome';
 
 type Props = {};
@@ -94,34 +94,6 @@ export function CollectPage(): React.ReactElement {
       });
   }, [id]);
 
-  const handleNewSession = async (): Promise<void> => {
-    setState((prev) => ({
-      ...prev,
-      isLoading: true,
-      loadingMessage: 'Starter økt..',
-    }));
-
-    const session = await service.startSession();
-
-    if (!session) {
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        loadingMessage: '',
-        errorMessage: 'Kunne ikke starte økt',
-      }));
-      return;
-    }
-
-    setState((prev) => ({
-      ...prev,
-      isLoading: false,
-      loadingMessage: '',
-    }));
-
-    navigate(`/collect/${session.id}?admin=true`);
-  };
-
   const handleSubmitWords = async (words: string[]): Promise<void> => {
     if (!id) return;
 
@@ -182,14 +154,10 @@ export function CollectPage(): React.ReactElement {
     return <Spinner message={loadingMessage} />;
   }
 
-  if (id && id.length !== 5) {
+  if (!id || id.length !== 5) {
     return (
       <ErrorScreen message="Ugyldig id" onReset={() => navigate('/collect')} />
     );
-  }
-
-  if (!id) {
-    return <Welcome onNewSession={handleNewSession} />;
   }
 
   const restartText = isAdmin ? 'Start en ny økt' : 'Lag din egen økt';
@@ -208,6 +176,7 @@ export function CollectPage(): React.ReactElement {
         <WordsInput onSubmit={handleSubmitWords} onQuit={handleQuit} />
       )}
       {!!cloud && (
+        // TODO: ADD SHARABLE LINK
         <CloudDisplay
           cloud={cloud}
           wordCount={wordCount}

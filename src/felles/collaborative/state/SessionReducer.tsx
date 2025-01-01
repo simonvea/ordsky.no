@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { Cloud, WordCount } from '../../common/core/cloud.types';
+import { Cloud, WordCount } from '../../../common/core/cloud.types';
 
 export interface SessionState {
   isAdmin: boolean;
