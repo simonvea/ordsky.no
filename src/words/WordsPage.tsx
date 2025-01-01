@@ -6,13 +6,9 @@ import { ErrorScreen } from '../common/molecules/ErrorScreen';
 import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { useCallToAction } from '../common/hooks/useCallToAction';
 
-export type WordsPageProps = {
-  onClickToTextForm: () => void;
-};
+export type WordsPageProps = {};
 
-export const WordsPage: React.FC<WordsPageProps> = function WordsPage({
-  onClickToTextForm,
-}) {
+export const WordsPage: React.FC<WordsPageProps> = function WordsPage() {
   const {
     state: { loading, error, cloud },
     actions: { createCloudFromWords, reset },
@@ -41,10 +37,5 @@ export const WordsPage: React.FC<WordsPageProps> = function WordsPage({
     );
   }
 
-  return (
-    <WordsForm
-      onSubmit={createCloudFromWords}
-      onClickText={onClickToTextForm}
-    />
-  );
+  return <WordsForm onSubmit={createCloudFromWords} />;
 };

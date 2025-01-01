@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components';
+import { NavButton } from '../atoms/NavButton';
 
 const Title = styled.h1`
   font-size: 2rem;
@@ -36,29 +37,6 @@ const Nav = styled.nav`
   padding: 5px;
 `;
 
-const NavButton = styled(Link)`
-  background-color: var(--secondary-color);
-  border: none;
-  border-radius: 4px;
-  color: white;
-  padding: 8px 16px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-  margin: 0 5px;
-
-  ::hover {
-    box-shadow:
-      0 12px 16px 0 rgba(0, 0, 0, 0.24),
-      0 17px 50px 0 rgba(0, 0, 0, 0.19);
-    cursor: pointer;
-    opacity: 1;
-  }
-`;
-
 const NavLink = styled(Link)`
   color: var(--text-color-primary);
   font-size: 1.2rem;
@@ -72,10 +50,10 @@ export function OrdskyHeader(): React.ReactElement {
         <Link to="/">Ordsky.no</Link>
       </Title>
       <Nav>
-        <NavButton to="/words" role="button">
+        <NavButton to="/words" $small>
           Ny Ordsky
         </NavButton>
-        <NavButton to="/collab" role="button">
+        <NavButton to="/collab" $small>
           Lag en felles ordsky
         </NavButton>
         <NavLink to="/about">Om Ordsky.no</NavLink>

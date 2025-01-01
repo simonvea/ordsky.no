@@ -1,13 +1,9 @@
 import React from 'react';
-import { Button } from '../common/atoms/Button';
 import { Container } from '../common/atoms/Container';
 import { TextContainer } from '../common/atoms/TextContainer';
+import { NavButton } from '../common/atoms/NavButton';
 
-export type HomeProps = {
-  onClickCreate: () => void;
-};
-
-export const Home: React.FC<HomeProps> = function Home({ onClickCreate }) {
+export const Home: React.FC = function Home() {
   return (
     <>
       <TextContainer>
@@ -23,7 +19,7 @@ export const Home: React.FC<HomeProps> = function Home({ onClickCreate }) {
         </article>
       </TextContainer>
       <Container>
-        <Button onClick={onClickCreate}>Lag en ordsky</Button>
+        <NavButton to="words">Lag en ordsky</NavButton>
       </Container>
     </>
   );

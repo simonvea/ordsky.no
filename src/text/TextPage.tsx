@@ -6,13 +6,9 @@ import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { TextForm } from './TextForm';
 import { useCallToAction } from '../common/hooks/useCallToAction';
 
-export type TextPageProps = {
-  onClickToWordsForm: () => void;
-};
+export type TextPageProps = {};
 
-export const TextPage: React.FC<TextPageProps> = function TextPage({
-  onClickToWordsForm,
-}) {
+export const TextPage: React.FC<TextPageProps> = function TextPage() {
   const {
     state: { loading, error, cloud, wordCount },
     actions: { createCloudFromText, reset },
@@ -41,11 +37,5 @@ export const TextPage: React.FC<TextPageProps> = function TextPage({
     );
   }
 
-  return (
-    <TextForm
-      onSubmit={createCloudFromText}
-      onClickWords={onClickToWordsForm}
-      loading={loading}
-    />
-  );
+  return <TextForm onSubmit={createCloudFromText} loading={loading} />;
 };

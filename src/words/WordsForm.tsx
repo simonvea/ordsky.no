@@ -6,10 +6,10 @@ import { Container } from '../common/atoms/Container';
 import { WordsInput } from '../common/organisms/WordsInput';
 import { WordCount } from '../common/core/cloud.types';
 import { useWords } from './services/useWords';
+import { NavButton } from '../common/atoms/NavButton';
 
 type WordsFormProps = {
   onSubmit: (wordCount: WordCount) => void;
-  onClickText: () => void;
 };
 
 const Titles = styled.section`
@@ -46,7 +46,6 @@ const TinyInputTitle = styled(InputTitle)`
 
 export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
   onSubmit,
-  onClickText,
 }) {
   const {
     state: { inputs },
@@ -87,9 +86,9 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
           <Button type="button" $outline onClick={addInput}>
             Legg til et ord
           </Button>
-          <Button type="button" $outline onClick={onClickText}>
+          <NavButton to="/text" $outline>
             ... eller lim inn en tekst
-          </Button>
+          </NavButton>
         </Container>
       </section>
       <Container>

@@ -6,16 +6,15 @@ import { useNotification } from '../common/hooks';
 import { useText } from './services/useText';
 import { Alert } from '../common/atoms/Alert';
 import { Textarea } from '../common/atoms/Textarea';
+import { NavButton } from '../common/atoms/NavButton';
 
 export type TextFormProps = {
   onSubmit: (text: string) => void;
-  onClickWords: () => void;
   loading: boolean;
 };
 
 export const TextForm: React.FC<TextFormProps> = function TextForm({
   onSubmit,
-  onClickWords,
   loading,
 }) {
   const [notification, notify] = useNotification(
@@ -60,9 +59,9 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
         </Button>
       </Container>
       <Container>
-        <Button type="button" $outline onClick={onClickWords}>
+        <NavButton to="/words" $outline>
           Tilbake til ordskjema
-        </Button>
+        </NavButton>
       </Container>
     </Form>
   );
