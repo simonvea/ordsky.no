@@ -5,6 +5,7 @@ import { Button } from '../common/atoms/Button';
 import { Title } from '../common/atoms/Title';
 import { NavButton } from '../common/atoms/NavButton';
 import { CollectService } from './collect/services/CollectService';
+import { generateId } from '../common/core/session';
 
 const Container = styled.section`
   min-height: 80vh;
@@ -26,7 +27,8 @@ const OptionsContainer = styled.div`
   max-width: 1000px;
 `;
 
-const Option = styled.section`
+const Option = styled.section<{ disabled?: boolean }>`
+  position: relative;
   flex: 1 1 400px;
   display: flex;
   flex-direction: column;
@@ -38,6 +40,8 @@ const Option = styled.section`
   transition:
     transform 0.2s,
     box-shadow 0.2s;
+  opacity: ${(props) => (props.disabled ? 0.7 : 1)};
+  filter: ${(props) => (props.disabled ? 'grayscale(20%)' : 'none')};
 
   p {
     font-size: 1.125rem;
@@ -61,6 +65,20 @@ const Option = styled.section`
   }
 `;
 
+const NyhetBadge = styled.span`
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #ff4646;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: rotate(5deg);
+`;
+
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -71,39 +89,18 @@ const service = new CollectService();
 
 export const FellesPage: React.FC = function FellesPage() {
   const navigate = useNavigate();
-  const [state, setState] = React.useState({
-    isLoading: false,
-    loadingMessage: '',
-    errorMessage: '',
-  });
+
+  const disabled = true;
 
   const createAsyncSession = async (): Promise<void> => {
-    setState((prev) => ({
-      ...prev,
-      isLoading: true,
-      loadingMessage: 'Starter økt..',
-    }));
+    if (disabled) return;
 
-    const session = await service.startSession();
+    const id = generateId();
 
-    if (!session) {
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        loadingMessage: '',
-        errorMessage: 'Kunne ikke starte økt',
-      }));
-      return;
-    }
-
-    setState((prev) => ({
-      ...prev,
-      isLoading: false,
-      loadingMessage: '',
-    }));
-
-    navigate(`/felles/${session.id}?admin=true`);
+    navigate(`/felles/${id}?admin=true`);
   };
+
+  // TODO: Add back buttons on the pages
 
   return (
     <Container>
@@ -122,7 +119,8 @@ export const FellesPage: React.FC = function FellesPage() {
             <NavButton to="live">Start live økt</NavButton>
           </ButtonWrapper>
         </Option>
-        {/* <Option>
+        <Option disabled={disabled}>
+          <NyhetBadge>Kommer snart!</NyhetBadge>
           <p>
             <strong>Tradisjonell økt:</strong> Deltakere kan sende inn ord når
             det passer dem.
@@ -132,9 +130,11 @@ export const FellesPage: React.FC = function FellesPage() {
             resultatet via en lenke.
           </p>
           <ButtonWrapper>
-            <Button onClick={createAsyncSession}>Start tradisjonell økt</Button>
+            <Button onClick={createAsyncSession} disabled={disabled}>
+              Start tradisjonell økt
+            </Button>
           </ButtonWrapper>
-        </Option> */}
+        </Option>
       </OptionsContainer>
     </Container>
   );
