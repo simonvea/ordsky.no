@@ -109,7 +109,7 @@ export const FellesPage: React.FC = function FellesPage() {
         <Option>
           <p>
             <strong>Live økt:</strong> Perfekt for skoleklasser og i andre
-            sammenhenger hvor man sitter sammen, slik som møter.
+            sammenhenger hvor man sitter sammen.
           </p>
           <p>
             Alle deltakere ser statusen i sanntid, og ordskyen vises samtidig
@@ -122,8 +122,8 @@ export const FellesPage: React.FC = function FellesPage() {
         <Option disabled={disabled}>
           <NyhetBadge>Kommer snart!</NyhetBadge>
           <p>
-            <strong>Tradisjonell økt:</strong> Deltakere kan sende inn ord når
-            det passer dem.
+            <strong>Innsamling:</strong> Deltakere kan sende inn ord når det
+            passer dem.
           </p>
           <p>
             Du kan senere lage en ordsky av de innsamlede ordene og dele
@@ -131,7 +131,7 @@ export const FellesPage: React.FC = function FellesPage() {
           </p>
           <ButtonWrapper>
             <Button onClick={createAsyncSession} disabled={disabled}>
-              Start tradisjonell økt
+              Start innsamling
             </Button>
           </ButtonWrapper>
         </Option>
