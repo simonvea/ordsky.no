@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router';
 import { Button } from '../common/atoms/Button';
 import { Title } from '../common/atoms/Title';
 import { NavButton } from '../common/atoms/NavButton';
-import { CollectService } from './collect/services/CollectService';
 import { generateId } from '../common/core/session';
 
 const Container = styled.section`
@@ -65,7 +64,7 @@ const Option = styled.section<{ disabled?: boolean }>`
   }
 `;
 
-const NyhetBadge = styled.span`
+const NewsBadge = styled.span`
   position: absolute;
   top: -10px;
   right: -10px;
@@ -84,8 +83,6 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   margin-top: auto;
 `;
-
-const service = new CollectService();
 
 export const FellesPage: React.FC = function FellesPage() {
   const navigate = useNavigate();
@@ -120,7 +117,7 @@ export const FellesPage: React.FC = function FellesPage() {
           </ButtonWrapper>
         </Option>
         <Option disabled={disabled}>
-          <NyhetBadge>Kommer snart!</NyhetBadge>
+          <NewsBadge>Kommer snart!</NewsBadge>
           <p>
             <strong>Innsamling:</strong> Deltakere kan sende inn ord når det
             passer dem.
