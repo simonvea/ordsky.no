@@ -5,6 +5,7 @@ import { Button } from '../common/atoms/Button';
 import { Title } from '../common/atoms/Title';
 import { NavButton } from '../common/atoms/NavButton';
 import { generateId } from '../common/core/session';
+import { getSession } from './collect/services/CollectService';
 
 const Container = styled.section`
   min-height: 80vh;
@@ -92,7 +93,13 @@ export const FellesPage: React.FC = function FellesPage() {
   const createAsyncSession = async (): Promise<void> => {
     if (disabled) return;
 
-    const id = generateId();
+    let id = generateId();
+
+    try {
+      const session = await getSession(id);
+      // If the session already exists, try again
+      id = generateId();
+    } catch {}
 
     navigate(`/felles/${id}?admin=true`);
   };
