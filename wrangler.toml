@@ -1,0 +1,11 @@
+name = "ordsky-no"
+pages_build_output_dir = "build"
+compatibility_date = "2024-12-27"
+
+[env]
+production = { }
+
+[[d1_databases]]
+binding = "DB"
+database_name = "prod-db-collect"
+database_id = "7824f460-0acf-4d5a-9c81-7240ddaeb0cd"
