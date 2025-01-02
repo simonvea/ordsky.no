@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { Cloud, WordCount } from '../../common/core/cloud.types';
-import { CollectService } from './services/CollectService';
+import {
+  getSession,
+  getWordsAndCreateCloud,
+  saveWords,
+} from './services/CollectService';
 import { WordsInput } from '../../common/molecules/WordsInput';
 import { CloudDisplay } from '../../common/organisms/CloudDisplay';
 import { ErrorScreen } from '../../common/molecules/ErrorScreen';
@@ -9,6 +13,7 @@ import { Spinner } from '../../common/molecules/Spinner';
 import { WaitScreen } from './components/WaitScreen';
 import { useCallToAction } from '../../common/hooks/useCallToAction';
 import { Welcome } from './components/Welcome';
+import { SubmittedWords } from './components/SubmittedWords';
 
 type Props = {};
 
@@ -30,8 +35,6 @@ const initialState: CollectState = {
   hasSubmittedWords: false,
 };
 
-const service = new CollectService();
-
 export function CollectPage(): React.ReactElement {
   const navigate = useNavigate();
 
@@ -51,6 +54,7 @@ export function CollectPage(): React.ReactElement {
       numberOfEntries,
       cloud,
       wordCount,
+      hasSubmittedWords,
     },
     setState,
   ] = React.useState<CollectState>(initialState);
@@ -64,8 +68,7 @@ export function CollectPage(): React.ReactElement {
       loadingMessage: 'Sjekkerer økt...',
     }));
 
-    service
-      .getSession(id)
+    getSession(id)
       .then((session) => {
         setState((prev) => ({
           ...prev,
@@ -75,22 +78,22 @@ export function CollectPage(): React.ReactElement {
         }));
       })
       .catch((error) => {
-        if (error.message === '404') {
+        if ((error as Error).message === '404') {
+          // A new session won't be created until the user submits words
           setState((prev) => ({
             ...prev,
             loading: false,
             loadingMessage: '',
-            errorMessage: 'Fant ikke økten',
-          }));
-        } else {
-          setState((prev) => ({
-            ...prev,
-            loading: false,
-            loadingMessage: '',
-            errorMessage:
-              'Noe gikk galt ved henting av øktdata: ' + error.message,
           }));
         }
+
+        setState((prev) => ({
+          ...prev,
+          loading: false,
+          loadingMessage: '',
+          errorMessage:
+            'Noe gikk galt ved henting av øktdata: ' + error.message,
+        }));
       });
   }, [id]);
 
@@ -104,11 +107,12 @@ export function CollectPage(): React.ReactElement {
         loadingMessage: 'Sender ord..',
       }));
 
-      const session = await service.saveWords({ id, words });
+      const session = await saveWords({ id, words });
 
       setState((prev) => ({
         ...prev,
         ...session,
+        hasSubmittedWords: true,
         loading: false,
         loadingMessage: '',
       }));
@@ -135,7 +139,7 @@ export function CollectPage(): React.ReactElement {
       loadingMessage: 'Lager ordsky...',
     }));
 
-    const session = await service.createCloud(id);
+    const session = await getWordsAndCreateCloud(id);
 
     setState((prev) => ({
       ...prev,
@@ -160,12 +164,24 @@ export function CollectPage(): React.ReactElement {
     );
   }
 
+  if (hasSubmittedWords) {
+    return (
+      <SubmittedWords
+        onAddMoreWords={() =>
+          setState((prev) => ({ ...prev, hasSubmittedWords: false }))
+        }
+        onQuit={handleQuit}
+      />
+    );
+  }
+
   const restartText = isAdmin ? 'Start en ny økt' : 'Lag din egen økt';
 
   return (
     <>
       {isAdmin && !cloud && (
         <WaitScreen
+          id={id}
           initialEntries={numberOfEntries}
           loading={loading}
           onQuit={handleQuit}

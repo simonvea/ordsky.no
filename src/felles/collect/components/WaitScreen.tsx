@@ -4,6 +4,7 @@ import { Button, SecondaryButton } from '../../../common/atoms/Button';
 import { TextContainer } from '../../../common/atoms/TextContainer';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getSession } from '../services/CollectService';
 
 const InfoBox = styled.aside`
   background-color: #333;
@@ -62,6 +63,7 @@ const Emphasis = styled.em`
 `;
 
 export type WaitScreenProps = {
+  id: string;
   initialEntries: number;
   onCreateWordCloud: () => void;
   onQuit: () => void;
@@ -74,6 +76,7 @@ const WaitScreenActionsContainer = styled.section`
 `;
 
 export function WaitScreen({
+  id,
   initialEntries,
   onCreateWordCloud,
   onQuit,
@@ -102,13 +105,17 @@ export function WaitScreen({
     const getNumberOfEntriesInterval = setInterval(async () => {
       setFetchingNumberOfEntries(true);
 
-      const entries: number = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(numberOfEntries + 1);
-        }, 1500);
-      });
+      try {
+        const session = await getSession(id);
 
-      setNumberOfEntries(entries);
+        const entries = session.numberOfEntries;
+
+        setNumberOfEntries(entries);
+      } catch (error) {
+        if ((error as Error).message !== '404') {
+          throw error;
+        }
+      }
 
       setFetchingNumberOfEntries(false);
 
