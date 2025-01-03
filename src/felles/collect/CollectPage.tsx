@@ -165,12 +165,7 @@ export function CollectPage(): React.ReactElement {
   }
 
   if (!id || id.length !== 5) {
-    return (
-      <ErrorScreen
-        message="Ugyldig id"
-        onReset={() => navigate('/felles/innsamling')}
-      />
-    );
+    return <ErrorScreen message="Ugyldig id" onReset={handleQuit} />;
   }
 
   if (hasSubmittedWords) {
