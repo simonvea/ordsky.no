@@ -17,7 +17,7 @@ const baseUrl = '/api/felles';
 export class ApiError extends Error {
   constructor(
     message: string,
-    public status: number
+    public response: Response
   ) {
     super(message);
     this.name = 'ApiError';
@@ -28,7 +28,7 @@ export const getSession = async (id: string): Promise<SessionState> => {
   const response = await fetch(`${baseUrl}/${id}`);
 
   if (!response.ok) {
-    throw new ApiError('Error fetching session', response.status);
+    throw new ApiError('Error fetching session', response);
   }
 
   return response.json();
@@ -50,7 +50,7 @@ export const saveWords = async ({
   });
 
   if (!response.ok) {
-    throw new ApiError('Error saving words', response.status);
+    throw new ApiError('Error saving words', response);
   }
 
   return response.json();
@@ -95,7 +95,7 @@ export const getWordsAndCreateCloud = async (
   });
 
   if (!response.ok) {
-    throw new ApiError('Error updating cloud', response.status);
+    throw new ApiError('Error updating cloud', response);
   }
 
   return response.json();

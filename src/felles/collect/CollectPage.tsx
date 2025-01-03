@@ -13,10 +13,7 @@ import { ErrorScreen } from '../../common/molecules/ErrorScreen';
 import { Spinner } from '../../common/molecules/Spinner';
 import { WaitScreen } from './components/WaitScreen';
 import { useCallToAction } from '../../common/hooks/useCallToAction';
-import { Welcome } from './components/Welcome';
 import { SubmittedWords } from './components/SubmittedWords';
-
-type Props = {};
 
 type CollectState = {
   loading: boolean;
@@ -80,7 +77,7 @@ export function CollectPage(): React.ReactElement {
           ...session,
         }));
       } catch (error) {
-        if ((error as ApiError).status === 404) {
+        if ((error as ApiError).response.status === 404) {
           // A new session won't be created until the user submits words
           setState((prev) => ({
             ...prev,
@@ -88,13 +85,19 @@ export function CollectPage(): React.ReactElement {
             loadingMessage: '',
           }));
         } else {
+          console.error(
+            (error as ApiError).message,
+            (error as ApiError).response.status,
+            (error as ApiError).response.statusText
+          );
+
           setState((prev) => ({
             ...prev,
             loading: false,
             loadingMessage: '',
             errorMessage:
               'Noe gikk galt ved henting av øktdata: ' +
-              (error as ApiError).message,
+              (error as ApiError).response.statusText,
           }));
         }
       }
@@ -123,7 +126,7 @@ export function CollectPage(): React.ReactElement {
         loadingMessage: '',
       }));
     } catch (error) {
-      console.error((error as Error).message);
+      console.error((error as ApiError).message);
 
       setState((prev) => ({
         ...prev,

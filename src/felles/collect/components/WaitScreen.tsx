@@ -99,7 +99,7 @@ export function WaitScreen({
 
         setNumberOfEntries(entries);
       } catch (error) {
-        if ((error as ApiError).status !== 404) {
+        if ((error as ApiError).response.status !== 404) {
           throw error;
         }
       }
