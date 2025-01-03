@@ -68,8 +68,7 @@ export function CollectPage(): React.ReactElement {
       loadingMessage: 'Sjekkerer økt...',
     }));
 
-    // getSession(id)
-    Promise.resolve({ id: '12345', numberOfEntries: 0 })
+    getSession(id)
       .then((session) => {
         setState((prev) => ({
           ...prev,
