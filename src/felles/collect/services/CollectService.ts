@@ -14,12 +14,21 @@ export type SessionState = {
 
 const baseUrl = '/api/felles';
 
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public status: number
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
 export const getSession = async (id: string): Promise<SessionState> => {
   const response = await fetch(`${baseUrl}/${id}`);
 
   if (!response.ok) {
-    console.error('Error fetching session', response);
-    throw new Error('404');
+    throw new ApiError('Error fetching session', response.status);
   }
 
   return response.json();
@@ -39,6 +48,11 @@ export const saveWords = async ({
     },
     body: JSON.stringify(words),
   });
+
+  if (!response.ok) {
+    throw new ApiError('Error saving words', response.status);
+  }
+
   return response.json();
 };
 
@@ -79,5 +93,10 @@ export const getWordsAndCreateCloud = async (
     method: 'PUT',
     body: JSON.stringify(svg),
   });
+
+  if (!response.ok) {
+    throw new ApiError('Error updating cloud', response.status);
+  }
+
   return response.json();
 };

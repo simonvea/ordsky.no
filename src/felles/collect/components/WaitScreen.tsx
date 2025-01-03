@@ -4,7 +4,7 @@ import { Button, SecondaryButton } from '../../../common/atoms/Button';
 import { TextContainer } from '../../../common/atoms/TextContainer';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getSession } from '../services/CollectService';
+import { ApiError, getSession } from '../services/CollectService';
 import { InfoBox } from '../../../common/atoms/InfoBox';
 
 const Container = styled.section`
@@ -99,7 +99,7 @@ export function WaitScreen({
 
         setNumberOfEntries(entries);
       } catch (error) {
-        if ((error as Error).message !== '404') {
+        if ((error as ApiError).status !== 404) {
           throw error;
         }
       }

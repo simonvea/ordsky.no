@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { Cloud, WordCount } from '../../common/core/cloud.types';
 import {
+  ApiError,
   getSession,
   getWordsAndCreateCloud,
   saveWords,
@@ -68,17 +69,18 @@ export function CollectPage(): React.ReactElement {
       loadingMessage: 'Sjekkerer økt...',
     }));
 
-    getSession(id)
-      .then((session) => {
+    const checkSession = async (): Promise<void> => {
+      try {
+        const session = await getSession(id);
+
         setState((prev) => ({
           ...prev,
           loading: false,
           loadingMessage: '',
           ...session,
         }));
-      })
-      .catch((error) => {
-        if ((error as Error).message === '404') {
+      } catch (error) {
+        if ((error as ApiError).status === 404) {
           // A new session won't be created until the user submits words
           setState((prev) => ({
             ...prev,
@@ -91,10 +93,14 @@ export function CollectPage(): React.ReactElement {
             loading: false,
             loadingMessage: '',
             errorMessage:
-              'Noe gikk galt ved henting av øktdata: ' + error.message,
+              'Noe gikk galt ved henting av øktdata: ' +
+              (error as ApiError).message,
           }));
         }
-      });
+      }
+    };
+
+    checkSession();
   }, [id]);
 
   const handleSubmitWords = async (words: string[]): Promise<void> => {
@@ -148,7 +154,7 @@ export function CollectPage(): React.ReactElement {
     }));
   };
 
-  const handleQuit = (): void | Promise<void> => navigate('../');
+  const handleQuit = (): void | Promise<void> => navigate('/felles');
 
   if (errorMessage) {
     return <ErrorScreen message={errorMessage} onReset={handleQuit} />;
@@ -160,7 +166,10 @@ export function CollectPage(): React.ReactElement {
 
   if (!id || id.length !== 5) {
     return (
-      <ErrorScreen message="Ugyldig id" onReset={() => navigate('/collect')} />
+      <ErrorScreen
+        message="Ugyldig id"
+        onReset={() => navigate('/felles/innsamling')}
+      />
     );
   }
 
