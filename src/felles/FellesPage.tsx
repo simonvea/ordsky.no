@@ -98,13 +98,11 @@ export const FellesPage: React.FC = function FellesPage() {
     try {
       const session = await getSession(id);
       // If the session already exists, try again
-      id = generateId();
+      if (!!session) id = generateId();
     } catch {}
 
-    navigate(`/felles/${id}?admin=true`);
+    navigate(`/felles/innsamling/${id}?admin=true`);
   };
-
-  // TODO: Add back buttons on the pages
 
   return (
     <Container>
