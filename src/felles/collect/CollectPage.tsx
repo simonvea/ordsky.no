@@ -68,7 +68,8 @@ export function CollectPage(): React.ReactElement {
       loadingMessage: 'Sjekkerer økt...',
     }));
 
-    getSession(id)
+    // getSession(id)
+    Promise.resolve({ id: '12345', numberOfEntries: 0 })
       .then((session) => {
         setState((prev) => ({
           ...prev,
@@ -85,15 +86,15 @@ export function CollectPage(): React.ReactElement {
             loading: false,
             loadingMessage: '',
           }));
+        } else {
+          setState((prev) => ({
+            ...prev,
+            loading: false,
+            loadingMessage: '',
+            errorMessage:
+              'Noe gikk galt ved henting av øktdata: ' + error.message,
+          }));
         }
-
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          loadingMessage: '',
-          errorMessage:
-            'Noe gikk galt ved henting av øktdata: ' + error.message,
-        }));
       });
   }, [id]);
 
