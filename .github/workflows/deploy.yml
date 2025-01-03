@@ -36,3 +36,4 @@ jobs:
           projectName: ordsky-no
           directory: build
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          wranglerVersion: 3
