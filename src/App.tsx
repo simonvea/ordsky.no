@@ -33,9 +33,10 @@ const App: React.FC = function App() {
                       <Route path="felles">
                         <Route index element={<FellesPage />} />
                         <Route path="live" element={<CollaborativePage />} />
-                        <Route path="innsamling">
-                          <Route path=":id" element={<CollectPage />} />
-                        </Route>
+                        <Route
+                          path="innsamling/:id"
+                          element={<CollectPage />}
+                        />
                       </Route>
                       <Route
                         // This is a legacy route and may be removed in the future
