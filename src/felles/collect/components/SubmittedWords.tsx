@@ -1,12 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Button, SecondaryButton } from '../../../common/atoms/Button';
 
-type Props = {
-  onAddMoreWords: () => void;
-  onQuit: () => void;
-};
-
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,24 +11,29 @@ const Container = styled.div`
   text-align: center;
 `;
 
+const ActionsContainer = styled.section`
+  display: flex;
+  margin-top: 1.5rem;
+`;
+
 const Message = styled.p`
   font-size: 18px;
   margin-bottom: 20px;
 `;
 
-const Button = styled.button`
-  padding: 10px 20px;
-  margin: 5px;
-  font-size: 16px;
-  cursor: pointer;
-`;
+export type Props = {
+  onAddMoreWords: () => void;
+  onQuit: () => void;
+};
 
 export const SubmittedWords: React.FC<Props> = ({ onAddMoreWords, onQuit }) => {
   return (
     <Container>
       <Message>Ordene er sendt inn!</Message>
-      <Button onClick={onAddMoreWords}>Legg til flere ord</Button>
-      <Button onClick={onQuit}>Avslutt</Button>
+      <ActionsContainer>
+        <Button onClick={onAddMoreWords}>Legg til flere ord</Button>
+        <SecondaryButton onClick={onQuit}>Avslutt</SecondaryButton>
+      </ActionsContainer>
     </Container>
   );
 };

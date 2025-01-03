@@ -1,23 +1,11 @@
-import React, { use, useEffect } from 'react';
+import React, { ReactElement, use, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, SecondaryButton } from '../../../common/atoms/Button';
 import { TextContainer } from '../../../common/atoms/TextContainer';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getSession } from '../services/CollectService';
-
-const InfoBox = styled.aside`
-  background-color: #333;
-  border: 1px solid #555;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-top: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  max-width: 600px;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #ccc;
-`;
+import { InfoBox } from '../../../common/atoms/InfoBox';
 
 const Container = styled.section`
   display: flex;
@@ -62,6 +50,11 @@ const Emphasis = styled.em`
   font-style: italic;
 `;
 
+const WaitScreenActionsContainer = styled.section`
+  display: flex;
+  margin-top: 1.5rem;
+`;
+
 export type WaitScreenProps = {
   id: string;
   initialEntries: number;
@@ -70,30 +63,24 @@ export type WaitScreenProps = {
   loading: boolean;
 };
 
-const WaitScreenActionsContainer = styled.section`
-  display: flex;
-  margin-top: 1.5rem;
-`;
-
 export function WaitScreen({
   id,
   initialEntries,
   onCreateWordCloud,
   onQuit,
   loading,
-}: WaitScreenProps): React.ReactElement {
-  const [countDownSeconds, setCountDownSeconds] = React.useState<number>(60);
+}: WaitScreenProps): ReactElement {
+  const [countDownSeconds, setCountDownSeconds] = useState<number>(60);
   const [showCopiedJoinUrlMessage, setShowCopiedJoinUrlMessage] =
-    React.useState(false);
+    useState(false);
   const [showCopiedAdminUrlMessage, setShowCopiedAdminUrlMessage] =
-    React.useState(false);
-  const [fetchingNumberOfEntries, setFetchingNumberOfEntries] =
-    React.useState(false);
+    useState(false);
+  const [fetchingNumberOfEntries, setFetchingNumberOfEntries] = useState(false);
 
   const [numberOfEntries, setNumberOfEntries] =
-    React.useState<number>(initialEntries);
+    useState<number>(initialEntries);
 
-  const [copyUrlButtonText, setCopyUrlButtonText] = React.useState(
+  const [copyUrlButtonText, setCopyUrlButtonText] = useState(
     'Invitér til å legge inn ord'
   );
 
