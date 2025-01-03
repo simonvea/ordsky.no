@@ -6,6 +6,7 @@ import { Title } from '../common/atoms/Title';
 import { NavButton } from '../common/atoms/NavButton';
 import { generateId } from '../common/core/session';
 import { getSession } from './collect/services/CollectService';
+import { NewsBadge } from '../common/atoms/NewsBadge';
 
 const Container = styled.section`
   min-height: 80vh;
@@ -63,20 +64,6 @@ const Option = styled.section<{ disabled?: boolean }>`
     padding: 0.5rem 0;
     border-bottom: 1px solid #3a3a3a;
   }
-`;
-
-const NewsBadge = styled.span`
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background-color: #ff4646;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transform: rotate(5deg);
 `;
 
 const ButtonWrapper = styled.div`
