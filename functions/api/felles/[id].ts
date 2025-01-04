@@ -4,10 +4,12 @@ export interface Env {
   DB: D1Database;
 }
 
-const dbSessionToSessionResponse = (dbSession: DbSession): SessionResponse => ({
+export const dbSessionToSessionResponse = (
+  dbSession: DbSession
+): SessionResponse => ({
   id: dbSession.id,
   words: JSON.parse(dbSession.words),
-  cloud: dbSession.cloud,
+  cloud: JSON.parse(dbSession.cloud),
   numberOfEntries: dbSession.entries_count,
   createdAt: dbSession.created_at,
   updatedAt: dbSession.updated_at,
