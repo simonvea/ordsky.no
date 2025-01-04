@@ -10,6 +10,7 @@ export const dbSessionToSessionResponse = (
   id: dbSession.id,
   words: JSON.parse(dbSession.words),
   cloud: JSON.parse(dbSession.cloud),
+  wordCount: JSON.parse(dbSession.word_count),
   numberOfEntries: dbSession.entries_count,
   createdAt: dbSession.created_at,
   updatedAt: dbSession.updated_at,
