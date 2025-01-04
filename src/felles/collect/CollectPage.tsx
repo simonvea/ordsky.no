@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useOptimistic, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { Cloud, WordCount } from '../../common/core/cloud.types';
 import {
   ApiError,
   getSession,
   getWordsAndCreateCloud,
+  saveCloudAndWordCount,
   saveWords,
 } from './services/CollectService';
 import { WordsInput } from '../../common/molecules/WordsInput';
@@ -45,18 +46,23 @@ export function CollectPage(): React.ReactElement {
 
   const isAdmin = searchParams.get('admin') === 'true';
 
-  const [
-    {
-      errorMessage,
-      loading,
-      loadingMessage,
-      numberOfEntries,
-      cloud,
-      wordCount,
-      hasSubmittedWords,
-    },
-    setState,
-  ] = React.useState<CollectState>(initialState);
+  const [state, setState] = useState<CollectState>(initialState);
+
+  const {
+    errorMessage,
+    loading,
+    loadingMessage,
+    numberOfEntries,
+    hasSubmittedWords,
+  } = state;
+
+  const [{ cloud, wordCount }, addOptimistic] = useOptimistic(
+    state,
+    (currentState, optimisticUpdate: Partial<CollectState>) => ({
+      ...currentState,
+      ...optimisticUpdate,
+    })
+  );
 
   useEffect(() => {
     if (!id || id.length !== 5) return;
@@ -70,19 +76,6 @@ export function CollectPage(): React.ReactElement {
     const checkSession = async (): Promise<void> => {
       try {
         const session = await getSession(id);
-
-        if (session.cloud) {
-          const wordCount = countWordsFromWords(session.words);
-
-          setState((prev) => ({
-            ...prev,
-            ...session,
-            wordCount,
-            loading: false,
-            loadingMessage: '',
-          }));
-          return;
-        }
 
         setState((prev) => ({
           ...prev,
@@ -126,7 +119,7 @@ export function CollectPage(): React.ReactElement {
     try {
       setState((prev) => ({
         ...prev,
-        isLoading: true,
+        loading: true,
         loadingMessage: 'Sender ord..',
       }));
 
@@ -163,16 +156,15 @@ export function CollectPage(): React.ReactElement {
     }));
 
     try {
-      // Should use optimistic here!
+      const { cloud, wordCount } = await getWordsAndCreateCloud(id);
 
-      const session = await getWordsAndCreateCloud(id);
+      addOptimistic({ cloud, wordCount });
 
-      const wordCount = countWordsFromWords(session.words);
+      const session = await saveCloudAndWordCount(id, cloud, wordCount);
 
       setState((prev) => ({
         ...prev,
         ...session,
-        wordCount,
         loading: false,
         loadingMessage: '',
       }));
@@ -215,6 +207,8 @@ export function CollectPage(): React.ReactElement {
 
   const restartText = isAdmin ? 'Start en ny økt' : 'Lag din egen økt';
 
+  const top10Words = wordCount?.slice(0, 10);
+
   return (
     <>
       {isAdmin && !cloud && (
@@ -233,7 +227,7 @@ export function CollectPage(): React.ReactElement {
         // TODO: ADD SHARABLE LINK
         <CloudDisplay
           cloud={cloud}
-          wordCount={wordCount}
+          wordCount={top10Words}
           onRestart={handleQuit}
           restartText={restartText}
           shouldDisplayCallToAction={isAdmin && shouldDisplayCallToAction}

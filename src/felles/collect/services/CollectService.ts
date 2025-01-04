@@ -1,4 +1,5 @@
 import { Cloud, WordCount } from '../../../common/core/cloud.types';
+import { countWordsFromWords } from '../../../common/core/countWords';
 import { createCloud, createCloudSvg } from '../../../common/core/createCloud';
 import { wordCountToCloudInput } from '../../../common/core/wordCountToCloudInput';
 
@@ -56,30 +57,48 @@ export const saveWords = async ({
   return response.json();
 };
 
+export const saveCloud = async (
+  id: string,
+  cloud: Cloud[]
+): Promise<SessionState> => {
+  const response = await fetch(`${baseUrl}/${id}/cloud`, {
+    method: 'PUT',
+    body: JSON.stringify(cloud),
+  });
+
+  if (!response.ok) {
+    throw new ApiError('Error saving cloud', response);
+  }
+
+  return response.json();
+};
+
+export const saveCloudAndWordCount = async (
+  id: string,
+  cloud: Cloud[],
+  wordCount: WordCount
+): Promise<SessionState> => {
+  const respose = await fetch(`${baseUrl}/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ cloud, wordCount }),
+  });
+
+  if (!respose.ok) {
+    throw new ApiError('Error saving cloud and wordCount', respose);
+  }
+
+  return respose.json();
+};
+
 export const getWordsAndCreateCloud = async (
   id: string
-): Promise<SessionState & { cloud: Cloud[]; wordCount: WordCount }> => {
+): Promise<{ cloud: Cloud[]; wordCount: WordCount }> => {
   const { words } = await getSession(id);
 
-  const counted = new Set();
-  let wordCount: WordCount = [];
-
-  words.forEach((w) => {
-    const word = w.toUpperCase();
-
-    if (counted.has(word)) {
-      wordCount = wordCount.map((count) => ({
-        text: count.text,
-        count: count.text === word ? count.count + 1 : count.count,
-      }));
-    } else {
-      wordCount.push({
-        text: word,
-        count: 1,
-      });
-      counted.add(word);
-    }
-  });
+  const wordCount = countWordsFromWords(words);
 
   const sortedWordCount = wordCount.sort((a, b) => b.count - a.count);
 
@@ -87,14 +106,5 @@ export const getWordsAndCreateCloud = async (
 
   const cloud = await createCloud(cloudInput);
 
-  const response = await fetch(`${baseUrl}/${id}/cloud`, {
-    method: 'PUT',
-    body: JSON.stringify(cloud),
-  });
-
-  if (!response.ok) {
-    throw new ApiError('Error updating cloud', response);
-  }
-
-  return response.json();
+  return { wordCount, cloud };
 };
