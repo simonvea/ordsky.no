@@ -10,7 +10,7 @@ export type SessionResponse = {
 export type DbSession = {
   id: string;
   words: string;
-  cloud_svg?: string;
+  cloud?: string;
   entries_count: number;
   created_at: string;
   updated_at: string;

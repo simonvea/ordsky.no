@@ -87,11 +87,9 @@ export const getWordsAndCreateCloud = async (
 
   const cloud = await createCloud(cloudInput);
 
-  const svg = createCloudSvg(cloud);
-
   const response = await fetch(`${baseUrl}/${id}/cloud`, {
     method: 'PUT',
-    body: JSON.stringify(svg),
+    body: JSON.stringify(cloud),
   });
 
   if (!response.ok) {

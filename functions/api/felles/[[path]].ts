@@ -6,7 +6,7 @@ export interface Env {
 const dbSessionToSessionResponse = (dbSession: DbSession): SessionResponse => ({
   id: dbSession.id,
   words: JSON.parse(dbSession.words),
-  cloud: dbSession.cloud_svg,
+  cloud: dbSession.cloud,
   numberOfEntries: dbSession.entries_count,
   createdAt: dbSession.created_at,
   updatedAt: dbSession.updated_at,
@@ -22,15 +22,14 @@ export const onRequestPut = async (
   const { DB } = context.env;
   const data = await context.request.json();
 
+  if (!Array.isArray(data)) {
+    return new Response('Invalid data, expected a list. Got ' + typeof data, {
+      status: 400,
+    });
+  }
+
   switch (attribute) {
     case 'words': {
-      if (!Array.isArray(data)) {
-        return new Response(
-          'Invalid data, expected a list. Got ' + typeof data,
-          { status: 400 }
-        );
-      }
-
       const session = await DB.prepare(
         'SELECT words FROM sessions WHERE id = ?'
       )
@@ -68,13 +67,6 @@ export const onRequestPut = async (
     }
 
     case 'cloud': {
-      if (typeof data !== 'string') {
-        return new Response(
-          'Invalid data, expected a string. Got ' + typeof data,
-          { status: 400 }
-        );
-      }
-
       const session = await DB.prepare('SELECT * FROM sessions WHERE id = ?')
         .bind(id)
         .first<DbSession>();
@@ -85,10 +77,12 @@ export const onRequestPut = async (
 
       let result: SessionResponse;
 
+      const json = JSON.stringify(data);
+
       const { results } = await DB.prepare(
         'UPDATE sessions SET cloud = ? WHERE id = ? RETURNING *'
       )
-        .bind(data, id)
+        .bind(json, id)
         .run<DbSession>();
 
       result = dbSessionToSessionResponse(results[0]);

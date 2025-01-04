@@ -1,7 +1,9 @@
+DROP TABLE IF EXISTS sessions;
+
 CREATE TABLE IF NOT EXISTS sessions (
   id TEXT PRIMARY KEY,
   words TEXT, -- JSON
-  cloud_svg TEXT,
+  cloud TEXT, -- JSON
   entries_count INTEGER,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT DEFAULT CURRENT_TIMESTAMP

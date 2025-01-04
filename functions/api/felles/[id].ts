@@ -7,7 +7,7 @@ export interface Env {
 const dbSessionToSessionResponse = (dbSession: DbSession): SessionResponse => ({
   id: dbSession.id,
   words: JSON.parse(dbSession.words),
-  cloud: dbSession.cloud_svg,
+  cloud: dbSession.cloud,
   numberOfEntries: dbSession.entries_count,
   createdAt: dbSession.created_at,
   updatedAt: dbSession.updated_at,
