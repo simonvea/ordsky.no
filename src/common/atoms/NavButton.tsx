@@ -11,7 +11,7 @@ export const NavButton = styled(NavLink).attrs<ButtonProps>((props) => ({
     props.$outline ? 'transparent' : 'var(--secondary-color)'};
   border: none;
   border-radius: 4px;
-  color: white;
+  color: ${(props) => props.color || 'white'};
   padding: ${(props) => (props.$small ? '8px 16px' : '15px 32px')};
   text-align: center;
   text-decoration: none;

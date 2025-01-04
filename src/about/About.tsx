@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, Link as RouterLink } from 'react-router';
 import styled from 'styled-components';
 import { Title } from '../common/atoms/Title';
 
@@ -29,6 +29,12 @@ const Link = styled.a`
   text-emphasis: underline;
 `;
 
+const BackContainer = styled.section`
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+`;
+
 export function About(): React.ReactElement {
   const { hash } = useLocation();
 
@@ -45,42 +51,36 @@ export function About(): React.ReactElement {
         <p>
           Ordsky.no er et lite hobbyprosjekt laget av{' '}
           <Link
-            href="https://www.simonsier.no/about/"
+            href="https://github.com/simonvea"
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
           >
             Simon Opheim
           </Link>
           .
         </p>
         <p>
-          Da jeg har mye å gjøre og{' '}
-          <Link
-            href="https://github.com/simonvea"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            flere andre hobbyprosjekter
-          </Link>
-          , blir denne nettsiden oppdatert sporadisk.
-        </p>
-        <p>
-          Om du er fornøyd med produktet, eller har lyst å støtte meg i
-          videreutviklingen, så er jeg veldig glad i en kopp kaffe. Spander
-          gjerne via Vipps til tlf 93254119 =)
-        </p>
-        <p>
           Om det er noe du mener bør fikses kjapt, eller du har andre
-          tilbakemeldinger. Send meg gjerne en{' '}
+          tilbakemeldinger. Send meg gjerne et{' '}
           <Link
             href="mailto:simon@ordsky.no?subject=Jeg liker ordsky.no, men"
             target="_blank"
             rel="noopener noreferrer"
           >
-            mail
+            elektronisk brev
           </Link>
           .
         </p>
+        <p>
+          Er du fornøyd med produktet, eller har lyst å støtte meg i
+          videreutviklingen, så er jeg veldig glad i en kopp kaffe. Spander
+          gjerne via Vipps til tlf 93254119 =)
+        </p>
+        <BackContainer>
+          <RouterLink to="/" color="rgba(0, 0, 0, 0.8)">
+            Til fremsiden
+          </RouterLink>
+        </BackContainer>
       </Article>
     </AboutContainer>
   );
