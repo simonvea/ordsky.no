@@ -33,3 +33,48 @@ export const onRequestGet = async (
 
   return new Response(JSON.stringify(dbSessionToSessionResponse(session)));
 };
+
+export const onRequestPatch = async (context: EventContext<Env, 'id', {}>) => {
+  const id = context.params.id;
+  const body = await context.request.json?.();
+
+  if (!body || typeof body !== 'object')
+    return new Response('Invalid body', { status: 400 });
+
+  const { DB } = context.env;
+
+  const updates: string[] = [];
+  const values: unknown[] = [];
+
+  if ('words' in body) {
+    updates.push('words = ?');
+    values.push(JSON.stringify(body.words));
+  }
+  if ('wordCount' in body) {
+    updates.push('word_count = ?');
+    values.push(JSON.stringify(body.wordCount));
+  }
+  if ('cloud' in body) {
+    updates.push('cloud = ?');
+    values.push(JSON.stringify(body.cloud));
+  }
+  if ('numberOfEntries' in body) {
+    updates.push('entries_count = ?');
+    values.push(body.numberOfEntries);
+  }
+
+  if (!updates.length)
+    return new Response('No valid fields to update', { status: 400 });
+
+  const sql = `UPDATE sessions SET ${updates.join(', ')} WHERE id = ? RETURNING *`;
+  values.push(id);
+
+  const { results } = await DB.prepare(sql)
+    .bind(...values)
+    .run<DbSession>();
+
+  if (!results || !results.length)
+    return new Response('Session not found', { status: 404 });
+
+  return new Response(JSON.stringify(dbSessionToSessionResponse(results[0])));
+};
