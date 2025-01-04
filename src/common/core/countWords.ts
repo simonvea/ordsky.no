@@ -39,3 +39,24 @@ export async function countWords(string: string): Promise<WordCount> {
   }));
   return countedArray.sort((a, b) => b.count - a.count);
 }
+
+export function countWordsFromWords(words: string[]): WordCount {
+  const count: { [k: string]: number } = {};
+
+  if (words) {
+    words.forEach((word) => {
+      if (count[word]) {
+        count[word] += 1;
+      } else {
+        count[word] = 1;
+      }
+    });
+  }
+
+  const countedWords = Object.keys(count);
+  const countedArray = countedWords.map((word) => ({
+    text: word,
+    count: count[word],
+  }));
+  return countedArray.sort((a, b) => b.count - a.count);
+}

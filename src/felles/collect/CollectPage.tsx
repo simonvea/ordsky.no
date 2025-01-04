@@ -14,6 +14,7 @@ import { Spinner } from '../../common/molecules/Spinner';
 import { WaitScreen } from './components/WaitScreen';
 import { useCallToAction } from '../../common/hooks/useCallToAction';
 import { SubmittedWords } from './components/SubmittedWords';
+import { countWordsFromWords } from '../../common/core/countWords';
 
 type CollectState = {
   loading: boolean;
@@ -70,11 +71,24 @@ export function CollectPage(): React.ReactElement {
       try {
         const session = await getSession(id);
 
+        if (session.cloud) {
+          const wordCount = countWordsFromWords(session.words);
+
+          setState((prev) => ({
+            ...prev,
+            ...session,
+            wordCount,
+            loading: false,
+            loadingMessage: '',
+          }));
+          return;
+        }
+
         setState((prev) => ({
           ...prev,
+          ...session,
           loading: false,
           loadingMessage: '',
-          ...session,
         }));
       } catch (error) {
         if ((error as ApiError).response.status === 404) {
@@ -149,11 +163,16 @@ export function CollectPage(): React.ReactElement {
     }));
 
     try {
+      // Should use optimistic here!
+
       const session = await getWordsAndCreateCloud(id);
+
+      const wordCount = countWordsFromWords(session.words);
 
       setState((prev) => ({
         ...prev,
         ...session,
+        wordCount,
         loading: false,
         loadingMessage: '',
       }));
