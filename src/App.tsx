@@ -37,6 +37,10 @@ const App: React.FC = function App() {
                           path="innsamling/:id"
                           element={<CollectPage />}
                         />
+                        <Route
+                          path="innsamling"
+                          element={<Navigate to="/felles" />}
+                        />
                       </Route>
                       <Route
                         // This is a legacy route and may be removed in the future
