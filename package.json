@@ -23,6 +23,7 @@
   },
   "scripts": {
     "start": "vite",
+    "functions": "wrangler pages dev",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "jest",
