@@ -75,11 +75,7 @@ const ButtonWrapper = styled.div`
 export const FellesPage: React.FC = function FellesPage() {
   const navigate = useNavigate();
 
-  const disabled = true;
-
   const createAsyncSession = async (): Promise<void> => {
-    if (disabled) return;
-
     let id = generateId();
 
     try {
@@ -108,8 +104,8 @@ export const FellesPage: React.FC = function FellesPage() {
             <NavButton to="live">Start live økt</NavButton>
           </ButtonWrapper>
         </Option>
-        <Option disabled={disabled}>
-          <NewsBadge>Kommer snart!</NewsBadge>
+        <Option>
+          <NewsBadge>Nyhet!</NewsBadge>
           <p>
             <strong>Innsamling:</strong> Deltakere kan sende inn ord når det
             passer dem.
@@ -119,9 +115,7 @@ export const FellesPage: React.FC = function FellesPage() {
             resultatet via en lenke.
           </p>
           <ButtonWrapper>
-            <Button onClick={createAsyncSession} disabled={disabled}>
-              Start innsamling
-            </Button>
+            <Button onClick={createAsyncSession}>Start innsamling</Button>
           </ButtonWrapper>
         </Option>
       </OptionsContainer>
