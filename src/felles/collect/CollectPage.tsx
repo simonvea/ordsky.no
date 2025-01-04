@@ -148,13 +148,25 @@ export function CollectPage(): React.ReactElement {
       loadingMessage: 'Lager ordsky...',
     }));
 
-    const session = await getWordsAndCreateCloud(id);
+    try {
+      const session = await getWordsAndCreateCloud(id);
 
-    setState((prev) => ({
-      ...prev,
-      ...session,
-      loading: false,
-    }));
+      setState((prev) => ({
+        ...prev,
+        ...session,
+        loading: false,
+        loadingMessage: '',
+      }));
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        loading: false,
+        loadingMessage: '',
+        errorMessage:
+          'Noe gikk galt i forsøket på å lage ordsky: ' +
+          (error as ApiError).response.statusText,
+      }));
+    }
   };
 
   const handleQuit = (): void | Promise<void> => navigate('/felles');
