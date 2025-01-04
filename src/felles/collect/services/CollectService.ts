@@ -96,9 +96,11 @@ export const saveCloudAndWordCount = async (
 export const getWordsAndCreateCloud = async (
   id: string
 ): Promise<{ cloud: Cloud[]; wordCount: WordCount }> => {
-  const { words } = await getSession(id);
+  const session = await getSession(id);
 
-  const wordCount = countWordsFromWords(words);
+  const upperCasedWords = session.words.map((word) => word.toUpperCase());
+
+  const wordCount = countWordsFromWords(upperCasedWords);
 
   const sortedWordCount = wordCount.sort((a, b) => b.count - a.count);
 

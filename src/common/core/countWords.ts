@@ -24,6 +24,7 @@ export async function countWords(string: string): Promise<WordCount> {
 
   if (words) {
     words.forEach((word) => {
+      // TODO: Uppercase words?
       if (count[word]) {
         count[word] += 1;
       } else {
