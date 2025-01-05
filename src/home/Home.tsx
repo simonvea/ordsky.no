@@ -1,9 +1,8 @@
 import React from 'react';
 import { Container } from '../common/atoms/Container';
 import { TextContainer } from '../common/atoms/TextContainer';
-import { NavButton } from '../common/atoms/NavButton';
 import styled, { keyframes } from 'styled-components';
-import { Button } from '../common/atoms/Button';
+import { Button, LinkButton } from '../common/atoms/Button';
 
 const fadeInUp = keyframes`
   from {
@@ -72,13 +71,13 @@ export const Home: React.FC = function Home() {
           {showOptions ? (
             <ActionContainer>
               <AnimatedNavWrapper $delay={0.1}>
-                <NavButton to="text">Lag en ordsky fra tekst</NavButton>
+                <LinkButton to="text">Lag en ordsky fra tekst</LinkButton>
               </AnimatedNavWrapper>
               <AnimatedNavWrapper $delay={0}>
-                <NavButton to="words">Lag en ordsky fra ord</NavButton>
+                <LinkButton to="words">Lag en ordsky fra ord</LinkButton>
               </AnimatedNavWrapper>
               <AnimatedNavWrapper $delay={0.2}>
-                <NavButton to="felles">Lag en ordsky sammen</NavButton>
+                <LinkButton to="felles">Lag en ordsky sammen</LinkButton>
               </AnimatedNavWrapper>
             </ActionContainer>
           ) : (
