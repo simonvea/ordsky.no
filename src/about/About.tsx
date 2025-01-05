@@ -4,76 +4,90 @@ import styled from 'styled-components';
 import { Title } from '../common/atoms/Title';
 
 const AboutContainer = styled.section`
-  background-color: var(--text-color-primary);
-  color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 24px 32px;
-  max-width: 900px;
+  color: var(--text-color-primary);
+  max-width: 1000px;
   margin: 0 auto;
+  padding: 32px 24px;
 `;
 
 const Article = styled.article`
   margin: 1.5rem 0;
-  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 
   h3 {
-    margin: 2rem 0 1rem;
-    font-size: 1.5rem;
-    color: rgba(0, 0, 0, 0.9);
+    margin: 3rem 0 1.5rem;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: var(--text-color-primary);
   }
 
   p {
     font-size: 1.125rem;
-    line-height: 1.75;
+    line-height: 1.8;
     width: 100%;
-    max-width: 720px;
+    max-width: 780px;
     margin: 1rem 0;
     text-rendering: optimizeLegibility;
-    color: rgba(0, 0, 0, 0.75);
+    color: var(--text-color-primary);
+    font-weight: 300;
   }
 `;
 
-const Link = styled(RouterLink)`
-  color: #000;
-  // text-decoration: underline;
-  border-bottom: 2px solid currentColor;
-  transition: opacity 0.2s ease;
+const Link = styled.a`
+  color: var(--primary-color);
+  text-decoration: none;
+  position: relative;
 
-  &:hover {
-    opacity: 0.7;
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--primary-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
   }
 `;
 
 const BackContainer = styled.section`
-  margin-top: 3rem;
+  margin-top: 4rem;
   display: flex;
   justify-content: center;
 
   a {
-    color: rgba(0, 0, 0, 0.8);
+    color: var(--primary-color);
     text-decoration: none;
     font-size: 1.1rem;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 4px;
     transition: background-color 0.2s ease;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: rgba(var(--primary-color-rgb), 0.08);
     }
   }
 `;
 
 const TableOfContents = styled.nav`
-  margin-bottom: 2rem;
-  padding: 1.25rem 1.5rem;
-  background: rgba(0, 0, 0, 0.04);
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  margin: 2.5rem 0 3.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 780px;
 
   ul {
     list-style: none;
@@ -82,22 +96,28 @@ const TableOfContents = styled.nav`
   }
 
   li {
-    margin: 0.75rem 0;
-    padding-left: 0.5rem;
-    border-left: 2px solid rgba(0, 0, 0, 0.1);
+    margin: 1rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    transition: border-left-color 0.2s ease;
+
+    &:hover {
+      border-left-color: var(--primary-color);
+    }
   }
 
   a {
-    color: rgba(0, 0, 0, 0.75);
+    color: var(--text-color-secondary);
     text-decoration: none;
     transition: all 0.2s ease;
     font-size: 1.1rem;
     padding: 0.25rem 0;
     display: block;
+    font-weight: 300;
 
     &:hover {
-      color: rgba(0, 0, 0, 0.95);
-      transform: translateX(4px);
+      color: var(--primary-color);
+      transform: translateX(8px);
     }
   }
 `;
@@ -175,13 +195,13 @@ export function About(): React.ReactElement {
           Ordsky.no bruker et JavaScript-bibliotek kalt d3-cloud for å generere
           ordskyer etter at teksten er analysert. Dette biblioteket er åpent og
           kan finnes på{' '}
-          <a
+          <Link
             href="https://github.com/jasondavies/d3-cloud"
             target="_blank"
             rel="noopener noreferrer"
           >
             GitHub.
-          </a>
+          </Link>
         </p>
 
         <h3 id="personvern">Personvern og data</h3>
@@ -203,13 +223,13 @@ export function About(): React.ReactElement {
         <p>
           Ordsky.no samler ikke inn personlig data om bruk eller brukere. Jeg
           bruker{' '}
-          <a
+          <Link
             href="https://www.cloudflare.com/web-analytics/"
             target="_blank"
             rel="noopener noreferrer"
           >
             Cloudflare web analytics
-          </a>{' '}
+          </Link>{' '}
           for anonymisert trafikkdata, som hjelper meg med å forbedre nettsiden.
           Trafikkdataen fra Cloudflare bruker ikke cookies. Nettsiden holdes
           reklamefri ut fra prinsipp.
@@ -220,9 +240,9 @@ export function About(): React.ReactElement {
           93254119. Et bidrag tilsvarende en kopp kaffe er ofte nok.
         </p>
         <BackContainer>
-          <Link to="/" color="rgba(0, 0, 0, 0.8)">
+          <RouterLink to="/" color="rgba(0, 0, 0, 0.8)">
             Til fremsiden
-          </Link>
+          </RouterLink>
         </BackContainer>
       </Article>
     </AboutContainer>
