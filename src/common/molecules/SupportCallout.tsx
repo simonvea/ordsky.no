@@ -61,7 +61,7 @@ export function SupportCallout(): React.ReactElement {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 4000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
