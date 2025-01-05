@@ -81,8 +81,8 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
         <Button type="button" onClick={onRestart}>
           {restartText}
         </Button>
-        {shareable && <ShareLink />}
       </Row>
+      {shareable && <ShareLink />}
       {data && (
         <>
           <Title> {title}</Title>
