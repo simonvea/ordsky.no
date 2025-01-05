@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { svgDataURL, downloadAsPng } from '../core/downloadAsPng';
 import { Button, SecondaryButton } from '../atoms/Button';
@@ -22,15 +22,28 @@ export type CloudDisplayProps = {
 };
 
 const CloudContainer = styled.section`
-  height: 510px;
-  width: 510px;
+  max-width: 510px;
+  width: 100%;
+  aspect-ratio: 5/3;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 auto;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    viewbox: 0 0 500 300;
+    preserveaspectratio: xMidYMid meet;
+  }
 `;
 
 const CloudImage = styled.img`
-  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 `;
 
 const Title = styled.h2`
@@ -48,14 +61,18 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
 }) {
   const { incrementCloudCount } = useCallToAction();
 
+  const svgElement = useRef<SVGSVGElement>(null);
+
   useEffect(() => {
     incrementCloudCount();
   }, [cloud]);
 
-  const svg = createCloudSvg(cloud); // This is probably what should be saved?
-  const xml = svgDataURL(svg); // Or this?
+  const SVG = createCloudSvg(cloud);
+  svgElement.current?.append(SVG);
+
   const download = (): void => {
     logger.logEvent('download_cloud');
+    const xml = svgDataURL(SVG);
     downloadAsPng(xml);
   };
 
@@ -68,10 +85,17 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
   const data = wordCount?.map((word) => word.count);
   const backgroundColors = cloud.map((word) => word.fill);
 
+  const imageTitle = 'Ordsky';
+  const imageDescription =
+    'En ordsky som viser de mest brukte ordene i teksten';
+
   return (
     <Column>
       <CloudContainer>
-        <CloudImage src={xml} alt="ordsky" />
+        <svg ref={svgElement} role="img" aria-label={imageDescription}>
+          <title>{imageTitle}</title>
+          <desc>{imageDescription}</desc>
+        </svg>
       </CloudContainer>
       {shouldDisplayCallToAction && <SupportCallout />}
       <Row>
