@@ -12,6 +12,7 @@ import { SessionProvider } from './felles/collaborative/state/SessionProvider';
 import { CallToActionProvider } from './common/state/CallToActionContext';
 import { FellesPage } from './felles/FellesPage';
 import { Contact } from './contact';
+import { CreatePage } from './create/CreatePage';
 
 const CollaborativePage = lazy(() => import('./felles/collaborative'));
 const CollectPage = lazy(() => import('./felles/collect'));
@@ -31,6 +32,7 @@ const App: React.FC = function App() {
                       <Route path="/" element={<Home />} />
                       <Route path="words" element={<WordsPage />} />
                       <Route path="text" element={<TextPage />} />
+                      <Route path="create" element={<CreatePage />} />
                       <Route path="felles">
                         <Route index element={<FellesPage />} />
                         <Route path="live" element={<CollaborativePage />} />
