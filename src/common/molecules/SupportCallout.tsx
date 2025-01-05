@@ -6,8 +6,8 @@ const fadeIn = keyframes`
   to { opacity: 1; }
 `;
 
-const Container = styled.div<{ isVisible: boolean }>`
-  display: ${(props) => (props.isVisible ? 'block' : 'none')};
+const Container = styled.div<{ $display: boolean }>`
+  display: ${(props) => (props.$display ? 'block' : 'none')};
   animation: ${fadeIn} 0.5s ease-in;
   position: relative;
   margin-top: 2rem;
@@ -67,7 +67,7 @@ export function SupportCallout(): React.ReactElement {
   }, []);
 
   return (
-    <Container isVisible={isVisible}>
+    <Container $display={isVisible}>
       <CloseButton onClick={() => setIsVisible(false)} aria-label="Lukk">
         ×
       </CloseButton>
