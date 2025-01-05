@@ -209,3 +209,7 @@ p {
     margin-bottom: 1.25rem;
   }
 }
+
+.no-scroll {
+  overflow: hidden;
+}

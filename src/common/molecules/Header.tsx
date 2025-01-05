@@ -203,6 +203,14 @@ export function OrdskyHeader(): React.ReactElement {
     if (isMenuOpen) setIsMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+  }, [isMenuOpen]);
+
   return (
     <Header>
       <Title>
