@@ -11,6 +11,7 @@ import { About } from './about';
 import { SessionProvider } from './felles/collaborative/state/SessionProvider';
 import { CallToActionProvider } from './common/state/CallToActionContext';
 import { FellesPage } from './felles/FellesPage';
+import { Contact } from './contact';
 
 const CollaborativePage = lazy(() => import('./felles/collaborative'));
 const CollectPage = lazy(() => import('./felles/collect'));
@@ -48,6 +49,7 @@ const App: React.FC = function App() {
                         element={<Navigate to="/felles" />}
                       />
                       <Route path="about" element={<About />} />
+                      <Route path="contact" element={<Contact />} />
                       <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
                   </Suspense>
