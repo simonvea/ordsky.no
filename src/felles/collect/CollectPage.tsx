@@ -233,6 +233,7 @@ export function CollectPage(): React.ReactElement {
           shareable={true}
         />
       )}
+      <BackButton />
     </>
   );
 }
