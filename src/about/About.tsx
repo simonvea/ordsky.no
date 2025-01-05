@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
-import { useLocation, Link as RouterLink } from 'react-router';
+import { useLocation } from 'react-router';
 import styled from 'styled-components';
 import { Title } from '../common/atoms/Title';
+import { StyledLink } from '../common/atoms/StyledLink';
+import { BackButton } from '../common/atoms/BackButton';
+import { ContentArticle } from '../common/atoms/ContentArticle';
 
 const AboutContainer = styled.section`
   color: var(--text-color-primary);
@@ -10,74 +13,11 @@ const AboutContainer = styled.section`
   padding: 32px 24px;
 `;
 
-const Article = styled.article`
-  margin: 1.5rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h3 {
-    margin: 3rem 0 1.5rem;
-    font-size: 1.75rem;
-    font-weight: 400;
-    color: var(--text-color-primary);
-  }
-
-  p {
-    font-size: 1.125rem;
-    line-height: 1.8;
-    width: 100%;
-    max-width: 780px;
-    margin: 1rem 0;
-    text-rendering: optimizeLegibility;
-    color: var(--text-color-primary);
-    font-weight: 300;
-  }
-`;
-
-const Link = styled.a`
-  color: var(--primary-color);
-  text-decoration: none;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: -2px;
-    left: 0;
-    background-color: var(--primary-color);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-  }
-
-  &:hover::after {
-    transform: scaleX(1);
-  }
-`;
-
-const BackContainer = styled.section`
-  margin-top: 4rem;
-  display: flex;
-  justify-content: center;
-
-  a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-size: 1.1rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-
-    &:hover {
-      background-color: rgba(var(--primary-color-rgb), 0.08);
-    }
-  }
+const SubTitle = styled.h2`
+  margin: 3rem 0 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--text-color-primary);
 `;
 
 const TableOfContents = styled.nav`
@@ -132,8 +72,20 @@ export function About(): React.ReactElement {
 
   return (
     <AboutContainer>
-      <Article>
+      <ContentArticle>
         <Title id="title">Om Ordsky</Title>
+
+        <p>
+          Ordsky.no er et lite hobbyprosjekt laget av{' '}
+          <StyledLink
+            href="https://github.com/simonvea"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Simon Opheim
+          </StyledLink>
+          .
+        </p>
 
         <TableOfContents>
           <ul>
@@ -149,14 +101,14 @@ export function About(): React.ReactElement {
           </ul>
         </TableOfContents>
 
-        <h3 id="bruk">Hva kan en ordsky brukes til?</h3>
+        <SubTitle id="bruk">Hva kan en ordsky brukes til?</SubTitle>
 
         <p>
-          Ordsky.no kan være svært nyttig på mange måter! Ordsky-generatoren
-          hjelper deg med å identifisere hvilke ord som er mest fremtredende i
-          en tekst, fordi de største ordene vises oftest. Du kan bruke ordskyer
-          i skoleprosjekter, presentasjoner eller for å analysere tekstdata på
-          en visuell og enkel måte.
+          En ordsky kan være svært nyttig på mange måter! Ordsky.no hjelper deg
+          med å identifisere hvilke ord som er mest fremtredende i en tekst,
+          fordi de største ordene vises oftest. Du kan bruke ordskyer i
+          skoleprosjekter, presentasjoner eller for å analysere tekstdata på en
+          visuell og enkel måte.
         </p>
 
         <p>
@@ -174,7 +126,7 @@ export function About(): React.ReactElement {
           for å få et dypere og klarere bilde av teksten eller dataen din.
         </p>
 
-        <h3 id="hvordan">Hvordan fungerer det?</h3>
+        <SubTitle id="hvordan">Hvordan fungerer det?</SubTitle>
 
         <p>
           Først telles alle ordene i teksten eller ordlisten som du har samlet
@@ -195,16 +147,16 @@ export function About(): React.ReactElement {
           Ordsky.no bruker et JavaScript-bibliotek kalt d3-cloud for å generere
           ordskyer etter at teksten er analysert. Dette biblioteket er åpent og
           kan finnes på{' '}
-          <Link
+          <StyledLink
             href="https://github.com/jasondavies/d3-cloud"
             target="_blank"
             rel="noopener noreferrer"
           >
             GitHub.
-          </Link>
+          </StyledLink>
         </p>
 
-        <h3 id="personvern">Personvern og data</h3>
+        <SubTitle id="personvern">Personvern og data</SubTitle>
 
         <p>
           Når du limer inn tekst eller ord på ordsky.no på vanlig måte, blir
@@ -223,13 +175,13 @@ export function About(): React.ReactElement {
         <p>
           Ordsky.no samler ikke inn personlig data om bruk eller brukere. Jeg
           bruker{' '}
-          <Link
+          <StyledLink
             href="https://www.cloudflare.com/web-analytics/"
             target="_blank"
             rel="noopener noreferrer"
           >
             Cloudflare web analytics
-          </Link>{' '}
+          </StyledLink>{' '}
           for anonymisert trafikkdata, som hjelper meg med å forbedre nettsiden.
           Trafikkdataen fra Cloudflare bruker ikke cookies. Nettsiden holdes
           reklamefri ut fra prinsipp.
@@ -239,12 +191,8 @@ export function About(): React.ReactElement {
           prosjektet, kan du gjerne sende en donasjon via Vipps til tlf
           93254119. Et bidrag tilsvarende en kopp kaffe er ofte nok.
         </p>
-        <BackContainer>
-          <RouterLink to="/" color="rgba(0, 0, 0, 0.8)">
-            Til fremsiden
-          </RouterLink>
-        </BackContainer>
-      </Article>
+        <BackButton />
+      </ContentArticle>
     </AboutContainer>
   );
 }
