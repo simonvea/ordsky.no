@@ -27,6 +27,7 @@ export const NavButton = styled(NavLink).attrs<ButtonProps>((props) => ({
       0 17px 50px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
     opacity: 1;
+    background-color: var(--button-hover-bg);
     ${(props) =>
       props.$outline ? 'background-color: var(--secondary-color-dark);' : ''}
   }
@@ -39,5 +40,6 @@ export const NavButton = styled(NavLink).attrs<ButtonProps>((props) => ({
   &:active,
   &:focus {
     border: none;
+    outline: var(--button-focus-outline);
   }
 `;

@@ -29,8 +29,13 @@ export const Button = styled.button<ButtonProps>`
       0 17px 50px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
     opacity: 1;
+    background-color: var(--button-hover-bg);
     ${(props) =>
       props.$outline ? 'background-color: var(--secondary-color-dark);' : ''}
+  }
+
+  &:focus {
+    outline: var(--button-focus-outline);
   }
 
   &:disabled {
@@ -38,8 +43,7 @@ export const Button = styled.button<ButtonProps>`
     opacity: 0.7;
   }
 
-  &:active,
-  &:focus {
+  &:active {
     border: none;
   }
 `;
@@ -81,8 +85,13 @@ export const LinkButton = styled(Link)<ButtonProps>`
       0 17px 50px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
     opacity: 1;
+    background-color: var(--button-hover-bg);
     ${(props) =>
       props.$outline ? 'background-color: var(--secondary-color-dark);' : ''}
+  }
+
+  &:focus {
+    outline: var(--button-focus-outline);
   }
 
   &:disabled {
@@ -90,8 +99,7 @@ export const LinkButton = styled(Link)<ButtonProps>`
     opacity: 0.7;
   }
 
-  &:active,
-  &:focus {
+  &:active {
     border: none;
   }
 `;

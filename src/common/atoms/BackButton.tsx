@@ -21,7 +21,11 @@ export const BackContainer = styled.section`
     letter-spacing: 0.5px;
 
     &:hover {
-      background-color: rgba(var(--primary-color-rgb), 0.08);
+      background-color: var(--button-hover-bg);
+    }
+
+    &:focus {
+      outline: var(--button-focus-outline);
     }
   }
 `;
