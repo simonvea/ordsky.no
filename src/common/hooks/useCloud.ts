@@ -10,7 +10,7 @@ export interface UseWordsContext {
   state: CloudState;
   actions: {
     createCloudFromWords: (words: WordCount) => void;
-    createCloudFromText: (text: string) => Promise<void>;
+    createCloudFromText: (text: string, filter: string[]) => Promise<void>;
     reset: () => void;
   };
 }
@@ -41,11 +41,11 @@ export const useCloud = (): UseWordsContext => {
   );
 
   const createCloudFromText = useCallback(
-    async (text: string): Promise<void> => {
+    async (text: string, filter: string[]): Promise<void> => {
       dispatch({ type: 'CLOUD_START_COUNT' });
 
       try {
-        const wordCount = await countWords(text);
+        const wordCount = await countWords(text, filter);
 
         dispatch({ type: 'CLOUD_FINISH_COUNT', data: wordCount });
 

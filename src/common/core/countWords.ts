@@ -7,7 +7,10 @@ const isNotNumber = (w: string): boolean =>
 const wordsFilter = (word: string): boolean =>
   word.length > 2 && isNotNumber(word) && !filter.includes(word);
 
-export async function countWords(string: string): Promise<WordCount> {
+export async function countWords(
+  string: string,
+  customFilter: string[]
+): Promise<WordCount> {
   const regExp = /\S+/gi;
   const wordsRaw = string.toUpperCase().match(regExp);
 
@@ -18,7 +21,7 @@ export async function countWords(string: string): Promise<WordCount> {
         .replaceAll(/^-/g, '')
         .replaceAll(/-$/g, '')
     )
-    .filter((w) => wordsFilter(w));
+    .filter((w) => wordsFilter(w) && !customFilter.includes(w));
 
   const count: { [k: string]: number } = {};
 
