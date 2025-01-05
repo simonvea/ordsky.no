@@ -1,4 +1,9 @@
-import React, { useEffect, useOptimistic, useState } from 'react';
+import React, {
+  useEffect,
+  useOptimistic,
+  useState,
+  startTransition,
+} from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { Cloud, WordCount } from '../../common/core/cloud.types';
 import {
@@ -15,7 +20,7 @@ import { Spinner } from '../../common/molecules/Spinner';
 import { WaitScreen } from './components/WaitScreen';
 import { useCallToAction } from '../../common/hooks/useCallToAction';
 import { SubmittedWords } from './components/SubmittedWords';
-import { countWordsFromWords } from '../../common/core/countWords';
+import { BackButton } from '../../common/atoms/BackButton';
 
 type CollectState = {
   loading: boolean;
@@ -158,7 +163,7 @@ export function CollectPage(): React.ReactElement {
     try {
       const { cloud, wordCount } = await getWordsAndCreateCloud(id);
 
-      addOptimistic({ cloud, wordCount });
+      startTransition(() => addOptimistic({ cloud, wordCount }));
 
       const session = await saveCloudAndWordCount(id, cloud, wordCount);
 
