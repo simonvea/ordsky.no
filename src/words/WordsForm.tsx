@@ -7,6 +7,9 @@ import { WordsInput } from '../common/organisms/WordsInput';
 import { WordCount } from '../common/core/cloud.types';
 import { useWords } from './services/useWords';
 import { NavButton } from '../common/atoms/NavButton';
+import { Details } from '../common/atoms/Details';
+import { Summary } from '../common/atoms/Summary';
+import { InfoText } from '../common/atoms/InfoText';
 
 type WordsFormProps = {
   onSubmit: (wordCount: WordCount) => void;
@@ -99,6 +102,20 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
           Lag ordsky
         </Button>
       </Container>
+      <Details>
+        <Summary>Hvordan fungerer ordsky genereringen?</Summary>
+        <InfoText>
+          Når du legger til ord manuelt, kan du justere frekvensen for hvert
+          ord. Størrelsen på hvert ord beregnes basert på frekvensen du angir
+          relativt til de andre ordene.
+        </InfoText>
+        <InfoText>
+          Ordskyen skapes ved å plassere det viktigste ordet midt på siden.
+          Deretter plasseres de neste viktigste ordene ett etter ett. Hvis et
+          ord overlapper med et annet, flyttes det forsiktig til en ledig plass.
+          Denne prosessen gjentas til alle ordene er plassert uten overlapping.
+        </InfoText>
+      </Details>
     </form>
   );
 };

@@ -6,6 +6,9 @@ import { useNotification } from '../common/hooks';
 import { useText } from './services/useText';
 import { Alert } from '../common/atoms/Alert';
 import { Textarea } from '../common/atoms/Textarea';
+import { Details } from '../common/atoms/Details';
+import { Summary } from '../common/atoms/Summary';
+import { InfoText } from '../common/atoms/InfoText';
 
 export type TextFormProps = {
   onSubmit: (text: string) => void;
@@ -57,6 +60,20 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
           Generer ordsky
         </Button>
       </Container>
+      <Details>
+        <Summary>Hvordan fungerer ordsky genereringen?</Summary>
+        <InfoText>
+          Når du limer inn tekst, telles alle ordene i teksten. Størrelsen på
+          hvert ord beregnes basert på hvor ofte det forekommer.
+        </InfoText>
+        <InfoText>
+          Ordskyen dannes ved å plassere det mest betydningsfulle ordet i
+          midten. Deretter plasseres de neste viktigste ordene rundt det. Hvis
+          et ord overlapper med et annet, flyttes det forsiktig til en ledig
+          plass. Denne prosessen fortsetter til alle ordene er plassert uten
+          overlapping.
+        </InfoText>
+      </Details>
     </Form>
   );
 };
