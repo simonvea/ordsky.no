@@ -7,6 +7,7 @@ import { WordsInput } from '../../common/molecules/WordsInput';
 import { useSession } from './state/useSession';
 import { WarningModal } from '../../common/molecules/WarningModal';
 import { useCallToAction } from '../../common/hooks/useCallToAction';
+import { BackButton } from '../../common/atoms/BackButton';
 
 export function CollaborativePage(): React.ReactElement {
   const [showWarningModal, setShowWarningModal] = useState(false);
@@ -94,6 +95,8 @@ export function CollaborativePage(): React.ReactElement {
       {ui == 'error' && (
         <ErrorScreen message={errorMessage} onReset={endSession} />
       )}
+
+      <BackButton />
 
       <WarningModal
         isOpen={showWarningModal}
