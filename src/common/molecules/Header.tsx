@@ -222,7 +222,7 @@ export function OrdskyHeader(): React.ReactElement {
           <NavLink to="/about">Om</NavLink>
         </NavRoutes>
         <ActionContainer>
-          <NavButton to="/create">Lag ordsky</NavButton>
+          <NavButton to="/create">Lag en ordsky</NavButton>
         </ActionContainer>
       </Nav>
     </Header>
