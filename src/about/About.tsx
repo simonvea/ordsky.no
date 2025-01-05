@@ -106,9 +106,14 @@ export function About(): React.ReactElement {
         <p>
           En ordsky kan være svært nyttig på mange måter! Ordsky.no hjelper deg
           med å identifisere hvilke ord som er mest fremtredende i en tekst,
-          fordi de største ordene vises oftest. Du kan bruke ordskyer i
-          skoleprosjekter, presentasjoner eller for å analysere tekstdata på en
-          visuell og enkel måte.
+          fordi de største ordene er de som forekommer oftest i teksten eller
+          ordlisten.
+        </p>
+
+        <p>
+          {' '}
+          Du kan bruke ordskyer i skoleprosjekter, presentasjoner eller for å
+          analysere tekstdata på en visuell og enkel måte.
         </p>
 
         <p>
