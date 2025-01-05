@@ -4,36 +4,57 @@ import { Button } from '../../../common/atoms/Button';
 import { Form } from '../../../common/atoms/Form';
 import { Input } from '../../../common/atoms/Input';
 import { Label } from '../../../common/atoms/Label';
-import { Title } from '../../../common/atoms/Title';
+import { Title as OriginalTitle } from '../../../common/atoms/Title';
 
 const JoinSessionForm = styled(Form)`
   justify-content: space-around;
   height: 160px;
+  width: 100%;
+  max-width: 300px;
 `;
 
 const StartSessionActionsContainer = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  width: 480px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 480px;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
 `;
 
 const SessionInfoContainer = styled.section`
+  width: 100%;
   max-width: 480px;
   margin-bottom: 3rem;
+  padding: 0 1rem;
 
   p {
     font-size: 1.125rem;
     line-height: 1.5625rem;
-    width: calc(100% - 40px);
-    max-width: 600px;
+    width: 100%;
     text-rendering: optimizeLegibility;
   }
 `;
 
 const StartSessionContainer = styled.section`
   min-height: 80vh;
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Title = styled(OriginalTitle)`
+  text-align: center;
 `;
 
 export type StartSessionProps = {
