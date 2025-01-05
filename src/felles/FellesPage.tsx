@@ -8,6 +8,7 @@ import { generateId } from '../common/core/session';
 import { getSession } from './collect/services/CollectService';
 import { NewsBadge } from '../common/atoms/NewsBadge';
 import { OptionsContainer, Option } from '../common/atoms/Option';
+import { BackButton } from '../common/atoms/BackButton';
 
 const Container = styled.section`
   min-height: 80vh;
@@ -72,6 +73,7 @@ export const FellesPage: React.FC = function FellesPage() {
           </ButtonWrapper>
         </Option>
       </OptionsContainer>
+      <BackButton />
     </Container>
   );
 };

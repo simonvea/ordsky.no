@@ -6,7 +6,6 @@ import { useNotification } from '../common/hooks';
 import { useText } from './services/useText';
 import { Alert } from '../common/atoms/Alert';
 import { Textarea } from '../common/atoms/Textarea';
-import { NavButton } from '../common/atoms/NavButton';
 
 export type TextFormProps = {
   onSubmit: (text: string) => void;
@@ -57,11 +56,6 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
         <Button type="submit" id="submit" disabled={loading}>
           Generer ordsky
         </Button>
-      </Container>
-      <Container>
-        <NavButton to="/words" $outline>
-          Tilbake til ordskjema
-        </NavButton>
       </Container>
     </Form>
   );

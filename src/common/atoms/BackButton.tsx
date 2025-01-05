@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Link } from 'react-router';
 import { ReactElement } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 export const BackContainer = styled.section`
   margin-top: 4rem;
@@ -26,6 +28,9 @@ export const BackContainer = styled.section`
 
 export const BackButton = (): ReactElement => (
   <BackContainer>
-    <Link to="/">Til fremsiden</Link>
+    <Link to="/">
+      <FontAwesomeIcon icon={faChevronLeft} style={{ marginRight: '0.6rem' }} />
+      Til fremsiden
+    </Link>
   </BackContainer>
 );

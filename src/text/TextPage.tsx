@@ -5,8 +5,19 @@ import { ErrorScreen } from '../common/molecules/ErrorScreen';
 import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { TextForm } from './TextForm';
 import { useCallToAction } from '../common/hooks/useCallToAction';
+import styled from 'styled-components';
+import { Main } from '../common/atoms/Main';
+import { BackButton } from '../common/atoms/BackButton';
 
 export type TextPageProps = {};
+
+const MainContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+`;
 
 export const TextPage: React.FC<TextPageProps> = function TextPage() {
   const {
@@ -25,17 +36,19 @@ export const TextPage: React.FC<TextPageProps> = function TextPage() {
     return <ErrorScreen message={errorMessage} onReset={reset} />;
   }
 
-  if (cloud) {
-    return (
-      <CloudDisplay
-        wordCount={wordCount}
-        cloud={cloud}
-        onRestart={reset}
-        restartText="Lag en ny ordsky"
-        shouldDisplayCallToAction={shouldDisplayCallToAction}
-      />
-    );
-  }
-
-  return <TextForm onSubmit={createCloudFromText} loading={loading} />;
+  return (
+    <MainContainer>
+      <BackButton />
+      {cloud ? (
+        <CloudDisplay
+          cloud={cloud}
+          onRestart={reset}
+          restartText="Lag en ny ordsky"
+          shouldDisplayCallToAction={shouldDisplayCallToAction}
+        />
+      ) : (
+        <TextForm onSubmit={createCloudFromText} loading={loading} />
+      )}
+    </MainContainer>
+  );
 };
