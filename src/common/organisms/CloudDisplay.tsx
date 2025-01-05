@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { svgDataURL, downloadAsPng } from '../core/downloadAsPng';
 import { Button, SecondaryButton } from '../atoms/Button';
 import { Row } from '../atoms/Row';
-
 import { logger } from '../core/analytics';
 import { BarChart } from '../molecules/BarChart';
 import { WordCount, Cloud } from '../core/cloud.types';
@@ -11,6 +10,7 @@ import { createCloudSvg } from '../core/createCloud';
 import { Column } from '../atoms/Column';
 import { SupportCallout } from '../molecules/SupportCallout';
 import { useCallToAction } from '../hooks/useCallToAction';
+import { ShareLink } from '../molecules/ShareLink';
 
 export type CloudDisplayProps = {
   cloud: Cloud[];
@@ -18,6 +18,7 @@ export type CloudDisplayProps = {
   onRestart: () => void;
   restartText: string;
   shouldDisplayCallToAction: boolean;
+  shareable?: boolean;
 };
 
 const CloudContainer = styled.section`
@@ -43,6 +44,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
   onRestart,
   restartText,
   shouldDisplayCallToAction,
+  shareable = false,
 }) {
   const { incrementCloudCount } = useCallToAction();
 
@@ -79,6 +81,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
         <Button type="button" onClick={onRestart}>
           {restartText}
         </Button>
+        {shareable && <ShareLink />}
       </Row>
       {data && (
         <>

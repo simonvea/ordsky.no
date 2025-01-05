@@ -224,13 +224,13 @@ export function CollectPage(): React.ReactElement {
         <WordsInput onSubmit={handleSubmitWords} onQuit={handleQuit} />
       )}
       {!!cloud && (
-        // TODO: ADD SHARABLE LINK
         <CloudDisplay
           cloud={cloud}
           wordCount={top10Words}
           onRestart={handleQuit}
           restartText={restartText}
           shouldDisplayCallToAction={isAdmin && shouldDisplayCallToAction}
+          shareable={true}
         />
       )}
     </>
