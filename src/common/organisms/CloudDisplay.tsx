@@ -11,6 +11,7 @@ import { Column } from '../atoms/Column';
 import { SupportCallout } from '../molecules/SupportCallout';
 import { useCallToAction } from '../hooks/useCallToAction';
 import { ShareLink } from '../molecules/ShareLink';
+import randomColor from 'randomcolor';
 
 export type CloudDisplayProps = {
   cloud: Cloud[];
@@ -52,6 +53,9 @@ const Title = styled.h2`
   margin: 1rem 0 2rem;
 `;
 
+const capitalize = (word: string): string =>
+  word[0].toUpperCase() + word.slice(1).toLowerCase();
+
 export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
   cloud,
   wordCount,
@@ -80,11 +84,15 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
   const NUMBER_OF_WORDS = 10;
   const title = `Top ${NUMBER_OF_WORDS} ord`;
 
-  const labels = cloud.map(
-    (word) => word.text[0] + word.text.slice(1).toLowerCase()
-  );
   const data = wordCount?.map((word) => word.count);
-  const backgroundColors = cloud.map((word) => word.fill);
+
+  const labels = wordCount?.map((word) => capitalize(word.text));
+
+  const fillByWord = getFillColorsByWord(cloud);
+
+  const backgroundColors = wordCount?.map(
+    (word) => fillByWord[word.text] || randomColor()
+  );
 
   const imageTitle = 'Ordsky';
   const imageDescription =
@@ -113,11 +121,20 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
           <Title> {title}</Title>
           <BarChart
             data={data}
-            labels={labels}
-            backgroundColors={backgroundColors}
+            labels={labels!}
+            backgroundColors={backgroundColors!}
           />
         </>
       )}
     </Column>
   );
 };
+
+function getFillColorsByWord(cloud: Cloud[]): Record<string, string> {
+  const fillByWord = {} as Record<string, string>;
+
+  for (const word of cloud) {
+    fillByWord[word.text] = word.fill;
+  }
+  return fillByWord;
+}
