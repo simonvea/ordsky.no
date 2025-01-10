@@ -23,21 +23,15 @@ export type CloudDisplayProps = {
 };
 
 const CloudContainer = styled.section`
-  max-width: 510px;
+  max-width: 80vw;
+  max-height: 80vw;
+  aspect-ration 5 / 3;
   width: 100%;
   height: 100%;
-  aspect-ratio: 5/3;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-
-  svg {
-    width: 100%;
-    height: 100%;
-    viewbox: 0 0 500 300;
-    preserveaspectratio: xMidYMid meet;
-  }
 `;
 
 const CloudImage = styled.img`
@@ -53,6 +47,14 @@ const Title = styled.h2`
   margin: 1rem 0 2rem;
 `;
 
+const MainContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 80vw;
+`;
+
 const capitalize = (word: string): string =>
   word[0].toUpperCase() + word.slice(1).toLowerCase();
 
@@ -66,19 +68,20 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
 }) {
   const { incrementCloudCount } = useCallToAction();
 
-  const svgElement = useRef<SVGSVGElement>(null);
+  const svgElement = useRef<HTMLElement>(null);
 
   useEffect(() => {
     incrementCloudCount();
-  }, [cloud]);
 
-  const SVG = createCloudSvg(cloud);
-  svgElement.current?.append(SVG);
+    if (svgElement.current) {
+      const SVG = createCloudSvg(cloud);
+      svgElement.current.innerHTML = SVG;
+    }
+  }, [cloud]);
 
   const download = (): void => {
     logger.logEvent('download_cloud');
-    const xml = svgDataURL(SVG);
-    downloadAsPng(xml);
+    downloadAsPng(svgElement.current?.firstChild as SVGElement, {});
   };
 
   const NUMBER_OF_WORDS = 10;
@@ -99,13 +102,8 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
     'En ordsky som viser de mest brukte ordene i teksten';
 
   return (
-    <Column>
-      <CloudContainer>
-        <svg ref={svgElement} role="img" aria-label={imageDescription}>
-          <title>{imageTitle}</title>
-          <desc>{imageDescription}</desc>
-        </svg>
-      </CloudContainer>
+    <MainContainer>
+      <CloudContainer ref={svgElement}></CloudContainer>
       {shouldDisplayCallToAction && <SupportCallout />}
       <Row>
         <SecondaryButton type="button" onClick={download}>
@@ -126,7 +124,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
           />
         </>
       )}
-    </Column>
+    </MainContainer>
   );
 };
 

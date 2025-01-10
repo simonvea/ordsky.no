@@ -10,7 +10,7 @@ export const createCloudFromWordCount = async (
   return createCloud(cloudInput);
 };
 
-const MAX_ARRAY_SIZE = 50;
+const MAX_ARRAY_SIZE = 200;
 
 export function wordCountToCloudInput(wordCount: WordCount): CloudInput[] {
   const wordsSorted = [...wordCount].sort((a, b) => b.count - a.count);
