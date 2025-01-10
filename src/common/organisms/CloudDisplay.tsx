@@ -24,6 +24,7 @@ export type CloudDisplayProps = {
 const CloudContainer = styled.section`
   max-width: 510px;
   width: 100%;
+  height: 100%;
   aspect-ratio: 5/3;
   display: flex;
   justify-content: center;
