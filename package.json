@@ -23,9 +23,10 @@
   },
   "scripts": {
     "start": "vite",
-    "functions": "wrangler pages dev",
-    "build": "tsc && vite build",
+    "functions": "wrangler dev",
+    "build": "tsc && vite build && wrangler pages functions build --outdir=./build/_worker.js/",
     "serve": "vite preview",
+    "deploy": "wrangler deploy",
     "test": "jest",
     "watch": "jest --watch",
     "lint": "eslint src/**",
@@ -83,6 +84,6 @@
     "ts-jest": "^29.2.5",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.6",
-    "wrangler": "^3.99.0"
+    "wrangler": "^4.25.0"
   }
 }
