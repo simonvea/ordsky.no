@@ -24,7 +24,7 @@
   "scripts": {
     "start": "vite",
     "functions": "wrangler dev",
-    "build": "tsc && vite build && wrangler pages functions build --outdir=./build/_worker.js/",
+    "build": "tsc && vite build && tsc --project ./src/workers/tsconfig.json",
     "serve": "vite preview",
     "deploy": "wrangler deploy",
     "test": "jest",
@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.11.0",
     "@cloudflare/workers-types": "^4.20241230.0",
     "@eslint/compat": "^1.2.4",
     "@eslint/eslintrc": "^3.2.0",
@@ -84,6 +85,6 @@
     "ts-jest": "^29.2.5",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.6",
-    "wrangler": "^4.25.0"
+    "wrangler": "^4.28.0"
   }
 }
