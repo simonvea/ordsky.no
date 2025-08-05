@@ -24,7 +24,7 @@
   "scripts": {
     "start": "vite",
     "functions": "wrangler dev",
-    "build": "tsc && vite build && tsc --project ./src/workers/tsconfig.json",
+    "build": "tsc && vite build",
     "serve": "vite preview",
     "deploy": "wrangler deploy",
     "test": "jest",

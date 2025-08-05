@@ -1,11 +1,11 @@
-import { Cloud, WordCount } from '../../../common/core/cloud.types';
-import { createCloud } from '../../../common/core/createCloud';
-import { wordCountToCloudInput } from '../../../common/core/wordCountToCloudInput';
-import { SessionService, SessionEvents } from './SessionsService';
+import { Cloud, WordCount } from "../../../common/core/cloud.types";
+import { createCloud } from "../../../common/core/createCloud";
+import { wordCountToCloudInput } from "../../../common/core/wordCountToCloudInput";
+import { SessionService, SessionEvents } from "./SessionsService";
 
 export class OrdskyService implements SessionService {
-  private restApiUrl = '';
-  private socketUrl = '';
+  private restApiUrl = "";
+  private socketUrl = "";
 
   private static instance: OrdskyService;
   private socket?: WebSocket;
@@ -17,7 +17,7 @@ export class OrdskyService implements SessionService {
 
   public static getInstance(
     restUrl?: string,
-    socketUrl?: string
+    socketUrl?: string,
   ): OrdskyService {
     if (!OrdskyService.instance && restUrl && socketUrl) {
       OrdskyService.instance = new OrdskyService(restUrl, socketUrl);
@@ -31,13 +31,13 @@ export class OrdskyService implements SessionService {
 
   openSocket(onOpen?: (service: OrdskyService) => void): void {
     if (this.socketIsOpen()) {
-      console.log('Socket is already open');
+      console.log("Socket is already open");
       onOpen?.(this);
       return;
     }
 
     this.socket = new WebSocket(this.socketUrl);
-    this.socket.addEventListener('open', () => {
+    this.socket.addEventListener("open", () => {
       onOpen?.(this);
     });
   }
@@ -48,10 +48,10 @@ export class OrdskyService implements SessionService {
 
   subscribe(callback: (event: SessionEvents) => void): void {
     if (!this.socketIsOpen()) {
-      throw new Error('Socket is not open');
+      throw new Error("Socket is not open");
     }
 
-    this.socket?.addEventListener('message', (message) => {
+    this.socket?.addEventListener("message", (message) => {
       const event = JSON.parse(message.data);
 
       callback(event);
@@ -60,27 +60,27 @@ export class OrdskyService implements SessionService {
 
   startSession(id: string): void {
     if (!this.socketIsOpen()) {
-      throw new Error('Socket is not open');
+      throw new Error("Socket is not open");
     }
 
     this.socket?.send(
       JSON.stringify({
         id,
-        action: 'startsession',
-      })
+        action: "startsession",
+      }),
     );
   }
 
   joinSession(id: string): void {
     if (!this.socketIsOpen()) {
-      throw new Error('Socket is not open');
+      throw new Error("Socket is not open");
     }
 
     this.socket?.send(
       JSON.stringify({
         id: id.toUpperCase(),
-        action: 'joinsession',
-      })
+        action: "joinsession",
+      }),
     );
   }
 
@@ -88,7 +88,7 @@ export class OrdskyService implements SessionService {
     const response = await fetch(`${this.restApiUrl}/${id}`);
 
     if (response.ok) {
-      const data = await response.json();
+      const data: { Item: { cloud?: Cloud } } = await response.json();
 
       if (data.Item && !data.Item.cloud) {
         return true;
@@ -100,15 +100,15 @@ export class OrdskyService implements SessionService {
 
   saveWords({ id, words }: { id: string; words: string[] }): void {
     if (!this.socketIsOpen()) {
-      throw new Error('Socket is not open');
+      throw new Error("Socket is not open");
     }
 
     this.socket?.send(
       JSON.stringify({
-        action: 'savewords',
+        action: "savewords",
         id: id.toUpperCase(),
         words,
-      })
+      }),
     );
   }
 
@@ -116,10 +116,11 @@ export class OrdskyService implements SessionService {
     const response = await fetch(`${this.restApiUrl}/${id}`);
 
     if (response.ok) {
-      const { Item } = await response.json();
+      const { Item }: { Item: { words: { L: Array<{ S: string }> } } } =
+        await response.json();
 
       if (!Item) {
-        throw new Error('No session found');
+        throw new Error("No session found");
       }
 
       return Item.words.L.map((word: { S: string }) => word.S);
@@ -128,7 +129,7 @@ export class OrdskyService implements SessionService {
   }
 
   async createCloud(
-    words: string[]
+    words: string[],
   ): Promise<{ cloud: Cloud[]; wordCount: WordCount }> {
     const counted = new Set();
     let wordCount: WordCount = [];
@@ -169,7 +170,7 @@ export class OrdskyService implements SessionService {
     wordCount: WordCount;
   }): void {
     if (!this.socketIsOpen()) {
-      throw new Error('Socket is not open');
+      throw new Error("Socket is not open");
     }
 
     // To save WriteCapacity we only send top 10 words.
@@ -178,11 +179,11 @@ export class OrdskyService implements SessionService {
 
     this.socket?.send(
       JSON.stringify({
-        action: 'savecloud',
+        action: "savecloud",
         id: id.toUpperCase(),
         cloud,
         wordCount: wordCountToSend,
-      })
+      }),
     );
   }
 }
