@@ -92,7 +92,7 @@ async function downloadFile(url: string, filename: string): Promise<void> {
   link.href = url;
   link.style.display = "none";
 
-  document.body.appendChild(link);
+  (document.body as ParentNode).append(link);
 
   try {
     link.click();
