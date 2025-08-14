@@ -113,11 +113,36 @@ export class WordCloudSession {
 
   private async handleWebSocketUpgrade(request: Request): Promise<Response> {
     try {
-      // For now, return a placeholder response
-      // Will implement proper WebSocket handling after basic structure is working
-      return new Response('WebSocket upgrade - implementation in progress', { 
-        status: 200,
-        headers: { 'Content-Type': 'text/plain' }
+      // Extract session ID from URL or query params
+      const url = new URL(request.url);
+      const sessionId = url.searchParams.get('sessionId') || 'default';
+      
+      // Creates two ends of a WebSocket connection
+      const webSocketPair = new WebSocketPair();
+      const [client, server] = Object.values(webSocketPair);
+
+      // Accept the server-side WebSocket connection
+      // This tells the runtime to begin terminating the request within the Durable Object
+      server.accept();
+
+      // Store the session ID and add connection to our tracking
+      this.sessionId = sessionId;
+      this.connections.add(server);
+
+      // Set up message handler
+      server.addEventListener('message', (event) => {
+        this.handleWebSocketMessage(event, server);
+      });
+
+      // Handle connection close
+      server.addEventListener('close', () => {
+        this.connections.delete(server);
+      });
+
+      // Return the client-side WebSocket to complete the upgrade
+      return new Response(null, {
+        status: 101,
+        webSocket: client,
       });
     } catch (error) {
       console.error('Error handling WebSocket upgrade:', error);
