@@ -3,6 +3,7 @@
 interface ImportMetaEnv {
   readonly VITE_SESSION_WEBSOCKET_URL: string;
   readonly VITE_SESSION_API_URL: string;
+  readonly VITE_COLLECT_BASE_URL: string;
 }
 
 interface ImportMeta {
