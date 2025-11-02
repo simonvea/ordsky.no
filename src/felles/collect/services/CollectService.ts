@@ -1,7 +1,7 @@
-import { Cloud, WordCount } from '../../../common/core/cloud.types';
-import { countWordsFromWords } from '../../../common/core/countWords';
-import { createCloud, createCloudSvg } from '../../../common/core/createCloud';
-import { wordCountToCloudInput } from '../../../common/core/wordCountToCloudInput';
+import { Cloud, WordCount } from "../../../common/core/cloud.types";
+import { countWordsFromWords } from "../../../common/core/countWords";
+import { createCloud } from "../../../common/core/createCloud";
+import { wordCountToCloudInput } from "../../../common/core/wordCountToCloudInput";
 
 export type SessionState = {
   id: string;
@@ -13,15 +13,15 @@ export type SessionState = {
   updatedAt: string;
 };
 
-const baseUrl = '/api/felles';
+const baseUrl = import.meta.env.VITE_COLLECT_BASE_URL;
 
 export class ApiError extends Error {
   constructor(
     message: string,
-    public response: Response
+    public response: Response,
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
@@ -29,7 +29,7 @@ export const getSession = async (id: string): Promise<SessionState> => {
   const response = await fetch(`${baseUrl}/${id}`);
 
   if (!response.ok) {
-    throw new ApiError('Error fetching session', response);
+    throw new ApiError("Error fetching session", response);
   }
 
   return response.json();
@@ -43,15 +43,15 @@ export const saveWords = async ({
   words: string[];
 }): Promise<SessionState> => {
   const response = await fetch(`${baseUrl}/${id}/words`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(words),
   });
 
   if (!response.ok) {
-    throw new ApiError('Error saving words', response);
+    throw new ApiError("Error saving words", response);
   }
 
   return response.json();
@@ -59,15 +59,15 @@ export const saveWords = async ({
 
 export const saveCloud = async (
   id: string,
-  cloud: Cloud[]
+  cloud: Cloud[],
 ): Promise<SessionState> => {
   const response = await fetch(`${baseUrl}/${id}/cloud`, {
-    method: 'PUT',
+    method: "PUT",
     body: JSON.stringify(cloud),
   });
 
   if (!response.ok) {
-    throw new ApiError('Error saving cloud', response);
+    throw new ApiError("Error saving cloud", response);
   }
 
   return response.json();
@@ -76,25 +76,25 @@ export const saveCloud = async (
 export const saveCloudAndWordCount = async (
   id: string,
   cloud: Cloud[],
-  wordCount: WordCount
+  wordCount: WordCount,
 ): Promise<SessionState> => {
   const respose = await fetch(`${baseUrl}/${id}`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ cloud, wordCount }),
   });
 
   if (!respose.ok) {
-    throw new ApiError('Error saving cloud and wordCount', respose);
+    throw new ApiError("Error saving cloud and wordCount", respose);
   }
 
   return respose.json();
 };
 
 export const getWordsAndCreateCloud = async (
-  id: string
+  id: string,
 ): Promise<{ cloud: Cloud[]; wordCount: WordCount }> => {
   const session = await getSession(id);
 
