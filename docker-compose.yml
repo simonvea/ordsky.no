@@ -17,7 +17,7 @@ services:
       - PORT=3000
       - ALLOWED_ORIGIN=*
       - CORS_POLICY=same-site
-      - COLLAB_DB_URL=/app/data/collab.db
+      - DB_URL=/app/data/ordsky.db
     volumes:
       - db_data:/app/data
     networks:
