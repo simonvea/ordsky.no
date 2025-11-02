@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useRef, useState } from "react";
+import { useContext, useCallback, useState } from "react";
 import { generateId } from "../helpers";
 import { SessionContext } from "./SessionProvider";
 import { SessionState } from "./SessionReducer";
@@ -31,7 +31,6 @@ export const useSession = (): UseSessionContext => {
 
   const socketHandler = useCallback(
     (event: SessionEvents): void => {
-      console.log("EVENT!", event);
       switch (event.type) {
         case "WORDS_ADDED": {
           dispatch({
@@ -57,6 +56,10 @@ export const useSession = (): UseSessionContext => {
     try {
       const id = generateId();
 
+      if (!serviceRef.current.isLive()) {
+        serviceRef.current.connect();
+      }
+
       serviceRef.current.subscribe(socketHandler);
 
       serviceRef.current.startSession(id);
@@ -74,6 +77,10 @@ export const useSession = (): UseSessionContext => {
 
         if (!exists) {
           throw new Error("Session does not exist");
+        }
+
+        if (!serviceRef.current.isLive()) {
+          serviceRef.current.connect();
         }
 
         serviceRef.current.subscribe(socketHandler);

@@ -33,19 +33,32 @@ export interface ClientToServerEvents {
 
 export class OrdskyService implements SessionService {
   private restApiUrl = "";
-  private socketUrl = "";
   private socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 
   private subscribers: ((event: SessionEvents) => void)[] = [];
 
   constructor(restUrl: string, socketUrl: string) {
     this.restApiUrl = restUrl;
-    this.socketUrl = socketUrl;
-    this.socket = io({ path: socketUrl, transports: ["websocket"] });
-    console.log("Starting socket on url", socketUrl);
+    this.socket = io({
+      path: socketUrl,
+      transports: ["websocket"],
+      autoConnect: false,
+    });
     this.socket.onAny((_eventName, data) => {
       this.subscribers.forEach((s) => s(data));
     });
+  }
+
+  connect(): void {
+    this.socket.connect();
+  }
+
+  isLive(): boolean {
+    return this.socket.connected;
+  }
+
+  disconnect(): void {
+    this.socket.disconnect();
   }
 
   subscribe(callback: (event: SessionEvents) => void): void {
@@ -59,7 +72,6 @@ export class OrdskyService implements SessionService {
   }
 
   joinSession(id: string): void {
-    console.log("HELLO FROM JOINSESSION");
     this.socket.emit("joinsession", {
       id: id.toUpperCase(),
     });
@@ -67,6 +79,7 @@ export class OrdskyService implements SessionService {
 
   public async isLiveSession(id: string): Promise<boolean> {
     const collaborativeApiUrl = this.restApiUrl;
+
     const response = await fetch(`${collaborativeApiUrl}/${id.toUpperCase()}`);
 
     if (response.ok) {

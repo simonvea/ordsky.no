@@ -41,6 +41,12 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
     ),
   );
 
+  useEffect(() => {
+    return () => {
+      if (serviceRef.current.isLive()) return serviceRef.current.disconnect();
+    };
+  }, []);
+
   return (
     <SessionContext.Provider
       value={{ state: { ...state, serviceRef }, dispatch }}
