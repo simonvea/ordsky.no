@@ -1,96 +1,78 @@
 import { Cloud, WordCount } from "../../../common/core/cloud.types";
 import { createCloud } from "../../../common/core/createCloud";
 import { wordCountToCloudInput } from "../../../common/core/wordCountToCloudInput";
-import { SessionService, SessionEvents } from "./SessionsService";
+import {
+  SessionService,
+  SessionEvents,
+  WordsAddedEvent,
+  CloudCreatedEvent,
+} from "./SessionsService";
+import { io } from "socket.io-client";
+import type { Socket } from "socket.io-client";
+
+export interface ServerToClientEvents {
+  WORDS_ADDED: (response: WordsAddedEvent) => void;
+  CLOUD_CREATED: (response: CloudCreatedEvent) => void;
+  ERROR: (response: ErrorEvent) => void;
+  // SESSION_STARTED: (response: SessionWordsResponse) => void;
+  // SESSION_JOINED: (response: SessionJoinedResponse) => void;
+  // USER_JOINED: (response: UserJoinedResponse) => void;
+}
+
+export interface ClientToServerEvents {
+  startsession: (message: { id: string }) => void;
+  savewords: (message: { id: string; words: string[] }) => void;
+  getwords: (message: { id: string }) => void;
+  savecloud: (message: {
+    id: string;
+    cloud: Cloud[];
+    wordCount: WordCount;
+  }) => void;
+  joinsession: (message: { id: string }) => void;
+}
 
 export class OrdskyService implements SessionService {
   private restApiUrl = "";
   private socketUrl = "";
+  private socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 
-  private static instance: OrdskyService;
-  private socket?: WebSocket;
+  private subscribers: ((event: SessionEvents) => void)[] = [];
 
   constructor(restUrl: string, socketUrl: string) {
     this.restApiUrl = restUrl;
     this.socketUrl = socketUrl;
-  }
-
-  public static getInstance(
-    restUrl?: string,
-    socketUrl?: string,
-  ): OrdskyService {
-    if (!OrdskyService.instance && restUrl && socketUrl) {
-      OrdskyService.instance = new OrdskyService(restUrl, socketUrl);
-    }
-    return OrdskyService.instance;
-  }
-
-  socketIsOpen(): boolean {
-    return this.socket?.readyState === WebSocket.OPEN || false;
-  }
-
-  openSocket(onOpen?: (service: OrdskyService) => void): void {
-    if (this.socketIsOpen()) {
-      console.log("Socket is already open");
-      onOpen?.(this);
-      return;
-    }
-
-    this.socket = new WebSocket(this.socketUrl);
-    this.socket.addEventListener("open", () => {
-      onOpen?.(this);
+    this.socket = io(socketUrl);
+    this.socket.onAny((_eventName, data) => {
+      console.debug("Got event", _eventName, data);
+      this.subscribers.forEach((s) => s(data));
     });
-  }
-
-  closeSocket(): void {
-    this.socket?.close();
   }
 
   subscribe(callback: (event: SessionEvents) => void): void {
-    if (!this.socketIsOpen()) {
-      throw new Error("Socket is not open");
-    }
-
-    this.socket?.addEventListener("message", (message) => {
-      const event = JSON.parse(message.data);
-
-      callback(event);
-    });
+    this.subscribers.push(callback);
   }
 
   startSession(id: string): void {
-    if (!this.socketIsOpen()) {
-      throw new Error("Socket is not open");
-    }
-
-    this.socket?.send(
-      JSON.stringify({
-        id,
-        action: "startsession",
-      }),
-    );
+    this.socket.emit("startsession", {
+      id: id.toUpperCase(),
+    });
   }
 
   joinSession(id: string): void {
-    if (!this.socketIsOpen()) {
-      throw new Error("Socket is not open");
-    }
-
-    this.socket?.send(
-      JSON.stringify({
-        id: id.toUpperCase(),
-        action: "joinsession",
-      }),
-    );
+    console.log("HELLO FROM JOINSESSION");
+    this.socket.emit("joinsession", {
+      id: id.toUpperCase(),
+    });
   }
 
   public async isLiveSession(id: string): Promise<boolean> {
-    const response = await fetch(`${this.restApiUrl}/${id}`);
+    const collaborativeApiUrl = this.restApiUrl;
+    const response = await fetch(`${collaborativeApiUrl}/${id.toUpperCase()}`);
 
     if (response.ok) {
-      const data: { Item: { cloud?: Cloud } } = await response.json();
+      const data: { cloud?: Cloud } = await response.json();
 
-      if (data.Item && !data.Item.cloud) {
+      if (data && !data.cloud) {
         return true;
       }
       return false;
@@ -99,31 +81,24 @@ export class OrdskyService implements SessionService {
   }
 
   saveWords({ id, words }: { id: string; words: string[] }): void {
-    if (!this.socketIsOpen()) {
-      throw new Error("Socket is not open");
-    }
-
-    this.socket?.send(
-      JSON.stringify({
-        action: "savewords",
-        id: id.toUpperCase(),
-        words,
-      }),
-    );
+    this.socket.emit("savewords", {
+      id: id.toUpperCase(),
+      words,
+    });
   }
 
   async getAllWords(id: string): Promise<string[]> {
-    const response = await fetch(`${this.restApiUrl}/${id}`);
+    const collaborativeApiUrl = this.restApiUrl;
+    const response = await fetch(`${collaborativeApiUrl}/${id.toUpperCase()}`);
 
     if (response.ok) {
-      const { Item }: { Item: { words: { L: Array<{ S: string }> } } } =
-        await response.json();
+      const data: { words: string[] } = await response.json();
 
-      if (!Item) {
+      if (!data) {
         throw new Error("No session found");
       }
 
-      return Item.words.L.map((word: { S: string }) => word.S);
+      return data.words || [];
     }
     throw new Error(response.status.toString());
   }
@@ -169,21 +144,12 @@ export class OrdskyService implements SessionService {
     cloud: Cloud[];
     wordCount: WordCount;
   }): void {
-    if (!this.socketIsOpen()) {
-      throw new Error("Socket is not open");
-    }
-
-    // To save WriteCapacity we only send top 10 words.
     const sortedWordCount = wordCount.sort((a, b) => b.count - a.count);
-    const wordCountToSend = sortedWordCount.slice(0, 10);
 
-    this.socket?.send(
-      JSON.stringify({
-        action: "savecloud",
-        id: id.toUpperCase(),
-        cloud,
-        wordCount: wordCountToSend,
-      }),
-    );
+    this.socket.emit("savecloud", {
+      id: id.toUpperCase(),
+      cloud,
+      wordCount: sortedWordCount,
+    });
   }
 }

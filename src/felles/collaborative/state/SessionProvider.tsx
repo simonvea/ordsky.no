@@ -7,14 +7,14 @@ import React, {
   useRef,
   RefObject,
   useEffect,
-} from 'react';
+} from "react";
 import {
   sessionReducer,
   SessionState,
   initialState,
   SessionEvent,
-} from './SessionReducer';
-import { OrdskyService } from '../services/OrdskyService';
+} from "./SessionReducer";
+import { OrdskyService } from "../services/OrdskyService";
 
 interface SessionProviderProps {
   children: ReactNode;
@@ -26,7 +26,7 @@ type SessionContext = {
 };
 
 export const SessionContext = createContext<SessionContext | undefined>(
-  undefined
+  undefined,
 );
 
 export const SessionProvider: React.FC<SessionProviderProps> = ({
@@ -36,16 +36,10 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
 
   const serviceRef = useRef<OrdskyService>(
     new OrdskyService(
-      import.meta.env.VITE_SESSION_API_URL,
-      import.meta.env.VITE_SESSION_WEBSOCKET_URL
-    )
+      import.meta.env.VITE_SESSION_API_URL || "",
+      import.meta.env.VITE_SESSION_WEBSOCKET_URL || "/ws",
+    ),
   );
-
-  useEffect(() => {
-    return () => {
-      serviceRef.current.closeSocket();
-    };
-  }, []);
 
   return (
     <SessionContext.Provider
@@ -59,7 +53,7 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
 export const useSession = (): SessionContext => {
   const context = useContext(SessionContext);
   if (!context) {
-    throw new Error('useSession must be used within a SessionProvider');
+    throw new Error("useSession must be used within a SessionProvider");
   }
   return context;
 };

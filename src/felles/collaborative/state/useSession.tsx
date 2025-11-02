@@ -1,8 +1,8 @@
-import { useContext, useCallback, useEffect, useRef, useState } from 'react';
-import { generateId } from '../helpers';
-import { SessionContext } from './SessionProvider';
-import { SessionState } from './SessionReducer';
-import { SessionEvents } from '../services/SessionsService';
+import { useContext, useCallback, useEffect, useRef, useState } from "react";
+import { generateId } from "../helpers";
+import { SessionContext } from "./SessionProvider";
+import { SessionState } from "./SessionReducer";
+import { SessionEvents } from "../services/SessionsService";
 
 export interface SessionActions {
   startSession: () => void;
@@ -21,7 +21,7 @@ export const useSession = (): UseSessionContext => {
   const context = useContext(SessionContext);
 
   if (!context) {
-    throw new Error('useSession must be used within a SessionProvider');
+    throw new Error("useSession must be used within a SessionProvider");
   }
 
   const [isLoading, setIsLoading] = useState(false);
@@ -31,17 +31,18 @@ export const useSession = (): UseSessionContext => {
 
   const socketHandler = useCallback(
     (event: SessionEvents): void => {
+      console.log("EVENT!", event);
       switch (event.type) {
-        case 'WORDS_ADDED': {
+        case "WORDS_ADDED": {
           dispatch({
-            type: 'WORDS_ADDED',
+            type: "WORDS_ADDED",
             totalEntries: event.numberOfEntries,
           });
           break;
         }
-        case 'CLOUD_CREATED': {
+        case "CLOUD_CREATED": {
           dispatch({
-            type: 'CLOUD_CREATED',
+            type: "CLOUD_CREATED",
             cloud: event.cloud,
             wordCount: event.wordCount,
           });
@@ -49,22 +50,20 @@ export const useSession = (): UseSessionContext => {
         }
       }
     },
-    [dispatch]
+    [dispatch],
   );
 
   const startSession = useCallback(async () => {
     try {
-      serviceRef.current.openSocket((service) => {
-        service.subscribe(socketHandler);
+      const id = generateId();
 
-        const id = generateId();
+      serviceRef.current.subscribe(socketHandler);
 
-        serviceRef.current.startSession(id);
+      serviceRef.current.startSession(id);
 
-        dispatch({ type: 'SESSION_STARTED', id });
-      });
+      dispatch({ type: "SESSION_STARTED", id });
     } catch (error) {
-      dispatch({ type: 'ERROR', error: error as Error });
+      dispatch({ type: "ERROR", error: error as Error });
     }
   }, [serviceRef, dispatch]);
 
@@ -74,47 +73,39 @@ export const useSession = (): UseSessionContext => {
         const exists = await serviceRef.current.isLiveSession(id);
 
         if (!exists) {
-          throw new Error('Session does not exist');
+          throw new Error("Session does not exist");
         }
 
-        serviceRef.current.openSocket((service) => {
-          service.subscribe(socketHandler);
-        });
+        serviceRef.current.subscribe(socketHandler);
 
-        dispatch({ type: 'SESSION_JOINED', id });
+        serviceRef.current.joinSession(id);
+
+        dispatch({ type: "SESSION_JOINED", id });
       } catch (error) {
-        dispatch({ type: 'ERROR', error: error as Error });
+        dispatch({ type: "ERROR", error: error as Error });
       }
     },
-    [serviceRef, dispatch]
+    [serviceRef, dispatch],
   );
 
   const addWordsToSession = useCallback(
     (words: string[]) => {
       try {
-        if (!serviceRef.current.socketIsOpen()) {
-          throw new Error('WebSocket not initialized');
-        }
-
         const id = state.id;
 
         serviceRef.current.saveWords({ id, words });
 
-        dispatch({ type: 'WORDS_SENT' });
+        dispatch({ type: "WORDS_SENT" });
       } catch (error) {
-        dispatch({ type: 'ERROR', error: error as Error });
+        dispatch({ type: "ERROR", error: error as Error });
       }
     },
-    [state.id, serviceRef, dispatch]
+    [state.id, serviceRef, dispatch],
   );
 
   const createCloud = useCallback(
     async (id: string) => {
       try {
-        if (!serviceRef.current.socketIsOpen()) {
-          throw new Error('WebSocket not initialized');
-        }
-
         setIsLoading(true);
 
         const words = await serviceRef.current.getAllWords(id);
@@ -123,22 +114,21 @@ export const useSession = (): UseSessionContext => {
         serviceRef.current.saveCloudAndWordCount({ id, ...cloudData });
 
         dispatch({
-          type: 'CLOUD_CREATED',
+          type: "CLOUD_CREATED",
           cloud: cloudData.cloud,
           wordCount: cloudData.wordCount,
         });
       } catch (error) {
-        dispatch({ type: 'ERROR', error: error as Error });
+        dispatch({ type: "ERROR", error: error as Error });
       } finally {
         setIsLoading(false);
       }
     },
-    [serviceRef, setIsLoading, dispatch]
+    [serviceRef, setIsLoading, dispatch],
   );
 
   const endSession = useCallback(() => {
-    serviceRef.current.closeSocket();
-    dispatch({ type: 'SESSION_ENDED' });
+    dispatch({ type: "SESSION_ENDED" });
   }, [serviceRef, dispatch]);
 
   return {
