@@ -3,12 +3,9 @@ services:
     image: ordsky-web
     ports:
       - 80:80
-    environment:
-      - VITE_SESSION_WEBSOCKET_URL=/ws
-      - VITE_SESSION_API_URL=/api/collaborative
-      - VITE_COLLECT_BASE_URL=/api/felles
     networks:
       - ordsky
+    restart: unless-stopped
 
   api:
     image: ordsky-api
@@ -22,6 +19,7 @@ services:
       - db_data:/app/data
     networks:
       - ordsky
+    restart: unless-stopped
 
 volumes:
   db_data:
