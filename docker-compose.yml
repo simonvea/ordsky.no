@@ -16,7 +16,7 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - ALLOWED_ORIGIN=*
-      - CORS_POLICY=cross-origin
+      - CORS_POLICY=same-site
       - COLLAB_DB_URL=/app/data/collab.db
     volumes:
       - db_data:/app/data

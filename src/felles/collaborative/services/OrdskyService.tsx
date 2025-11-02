@@ -41,7 +41,7 @@ export class OrdskyService implements SessionService {
   constructor(restUrl: string, socketUrl: string) {
     this.restApiUrl = restUrl;
     this.socketUrl = socketUrl;
-    this.socket = io(socketUrl, { path: socketUrl });
+    this.socket = io({ path: socketUrl, transports: ["websocket"] });
     console.log("Starting socket on url", socketUrl);
     this.socket.onAny((_eventName, data) => {
       this.subscribers.forEach((s) => s(data));

@@ -8,7 +8,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/ws": "http://localhost:3000",
+      "/ws": "ws://localhost:3000",
       "/api": "http://localhost:3000",
     },
   },
