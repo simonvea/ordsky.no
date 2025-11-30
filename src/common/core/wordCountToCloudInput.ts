@@ -1,9 +1,9 @@
-import getRandomColor from 'randomcolor';
-import { Cloud, CloudInput, WordCount } from './cloud.types';
-import { createCloud } from './createCloud';
+import getRandomColor from "randomcolor";
+import { Cloud, CloudInput, WordCount } from "./cloud.types";
+import { createCloud } from "./createCloud";
 
 export const createCloudFromWordCount = async (
-  wordCount: WordCount
+  wordCount: WordCount,
 ): Promise<Cloud[]> => {
   const cloudInput: CloudInput[] = wordCountToCloudInput(wordCount);
 
@@ -55,6 +55,10 @@ function normalizeSizes({
       ((size - currentMin) / (currentMax - currentMin)) * absoluteMax;
     return Math.max(normalized, absoluteMin);
   };
+  if (currentMax == currentMin) {
+    return words.map((w) => ({ ...w, size: 20 }));
+  }
+
   return words.map((word) => ({
     ...word,
     size: normalize(word.size),
@@ -64,7 +68,7 @@ function normalizeSizes({
 export function reduceTooBigWords(
   words: CloudInput[],
   maxPixels = 300,
-  minSize = 10
+  minSize = 10,
 ): CloudInput[] {
   let sizeReduction = 0;
 

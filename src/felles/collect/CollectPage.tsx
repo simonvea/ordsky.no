@@ -3,24 +3,24 @@ import React, {
   useOptimistic,
   useState,
   startTransition,
-} from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router';
-import { Cloud, WordCount } from '../../common/core/cloud.types';
+} from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router";
+import { Cloud, WordCount } from "../../common/core/cloud.types";
 import {
   ApiError,
   getSession,
   getWordsAndCreateCloud,
   saveCloudAndWordCount,
   saveWords,
-} from './services/CollectService';
-import { WordsInput } from '../../common/molecules/WordsInput';
-import { CloudDisplay } from '../../common/organisms/CloudDisplay';
-import { ErrorScreen } from '../../common/molecules/ErrorScreen';
-import { Spinner } from '../../common/molecules/Spinner';
-import { WaitScreen } from './components/WaitScreen';
-import { useCallToAction } from '../../common/hooks/useCallToAction';
-import { SubmittedWords } from './components/SubmittedWords';
-import { BackButton } from '../../common/atoms/BackButton';
+} from "./services/CollectService";
+import { WordsInput } from "../../common/molecules/WordsInput";
+import { CloudDisplay } from "../../common/organisms/CloudDisplay";
+import { ErrorScreen } from "../../common/molecules/ErrorScreen";
+import { Spinner } from "../../common/molecules/Spinner";
+import { WaitScreen } from "./components/WaitScreen";
+import { useCallToAction } from "../../common/hooks/useCallToAction";
+import { SubmittedWords } from "./components/SubmittedWords";
+import { BackButton } from "../../common/atoms/BackButton";
 
 type CollectState = {
   loading: boolean;
@@ -35,8 +35,8 @@ type CollectState = {
 const initialState: CollectState = {
   loading: false,
   numberOfEntries: 0,
-  loadingMessage: '',
-  errorMessage: '',
+  loadingMessage: "",
+  errorMessage: "",
   hasSubmittedWords: false,
 };
 
@@ -49,7 +49,7 @@ export function CollectPage(): React.ReactElement {
     shouldShowOnFirstVisit: true,
   });
 
-  const isAdmin = searchParams.get('admin') === 'true';
+  const isAdmin = searchParams.get("admin") === "true";
 
   const [state, setState] = useState<CollectState>(initialState);
 
@@ -66,7 +66,7 @@ export function CollectPage(): React.ReactElement {
     (currentState, optimisticUpdate: Partial<CollectState>) => ({
       ...currentState,
       ...optimisticUpdate,
-    })
+    }),
   );
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export function CollectPage(): React.ReactElement {
     setState((prev) => ({
       ...prev,
       loading: true,
-      loadingMessage: 'Sjekkerer økt...',
+      loadingMessage: "Sjekker økt...",
     }));
 
     const checkSession = async (): Promise<void> => {
@@ -86,7 +86,7 @@ export function CollectPage(): React.ReactElement {
           ...prev,
           ...session,
           loading: false,
-          loadingMessage: '',
+          loadingMessage: "",
         }));
       } catch (error) {
         if ((error as ApiError).response.status === 404) {
@@ -94,21 +94,21 @@ export function CollectPage(): React.ReactElement {
           setState((prev) => ({
             ...prev,
             loading: false,
-            loadingMessage: '',
+            loadingMessage: "",
           }));
         } else {
           console.error(
             (error as ApiError).message,
             (error as ApiError).response.status,
-            (error as ApiError).response.statusText
+            (error as ApiError).response.statusText,
           );
 
           setState((prev) => ({
             ...prev,
             loading: false,
-            loadingMessage: '',
+            loadingMessage: "",
             errorMessage:
-              'Noe gikk galt ved henting av øktdata: ' +
+              "Noe gikk galt ved henting av øktdata: " +
               (error as ApiError).response.statusText,
           }));
         }
@@ -125,7 +125,7 @@ export function CollectPage(): React.ReactElement {
       setState((prev) => ({
         ...prev,
         loading: true,
-        loadingMessage: 'Sender ord..',
+        loadingMessage: "Sender ord..",
       }));
 
       const session = await saveWords({ id, words });
@@ -135,7 +135,7 @@ export function CollectPage(): React.ReactElement {
         ...session,
         hasSubmittedWords: true,
         loading: false,
-        loadingMessage: '',
+        loadingMessage: "",
       }));
     } catch (error) {
       console.error((error as ApiError).message);
@@ -143,9 +143,9 @@ export function CollectPage(): React.ReactElement {
       setState((prev) => ({
         ...prev,
         loading: false,
-        loadingMessage: '',
+        loadingMessage: "",
         errorMessage:
-          'Noe gikk galt i forsøket på å lagre ordene: ' +
+          "Noe gikk galt i forsøket på å lagre ordene: " +
           (error as Error).message,
       }));
     }
@@ -157,7 +157,7 @@ export function CollectPage(): React.ReactElement {
     setState((prev) => ({
       ...prev,
       loading: true,
-      loadingMessage: 'Lager ordsky...',
+      loadingMessage: "Lager ordsky...",
     }));
 
     try {
@@ -171,21 +171,21 @@ export function CollectPage(): React.ReactElement {
         ...prev,
         ...session,
         loading: false,
-        loadingMessage: '',
+        loadingMessage: "",
       }));
     } catch (error) {
       setState((prev) => ({
         ...prev,
         loading: false,
-        loadingMessage: '',
+        loadingMessage: "",
         errorMessage:
-          'Noe gikk galt i forsøket på å lage ordsky: ' +
+          "Noe gikk galt i forsøket på å lage ordsky: " +
           (error as ApiError).response.statusText,
       }));
     }
   };
 
-  const handleQuit = (): void | Promise<void> => navigate('/felles');
+  const handleQuit = (): void | Promise<void> => navigate("/felles");
 
   if (errorMessage) {
     return <ErrorScreen message={errorMessage} onReset={handleQuit} />;
@@ -210,7 +210,7 @@ export function CollectPage(): React.ReactElement {
     );
   }
 
-  const restartText = isAdmin ? 'Start en ny økt' : 'Lag din egen økt';
+  const restartText = isAdmin ? "Start en ny økt" : "Lag din egen økt";
 
   const top10Words = wordCount?.slice(0, 10);
 
