@@ -1,14 +1,17 @@
 services:
   web:
-    image: ordsky-web
+    image: nginx:alpine
     ports:
       - 80:80
     networks:
       - ordsky
     restart: unless-stopped
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+      - ./build:/var/www/ordsky.no:ro
 
   api:
-    image: ordsky-api
+    image: registry.opheimutvikling.no/ordsky-api:latest
     environment:
       - NODE_ENV=production
       - PORT=3000
