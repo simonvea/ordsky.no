@@ -41,7 +41,7 @@ export async function countWords(
     text: word,
     count: count[word],
   }));
-  return countedArray.sort((a, b) => b.count - a.count);
+  return countedArray.toSorted((a, b) => b.count - a.count);
 }
 
 export function countWordsFromWords(words: string[]): WordCount {
@@ -62,5 +62,5 @@ export function countWordsFromWords(words: string[]): WordCount {
     text: word,
     count: count[word],
   }));
-  return countedArray.sort((a, b) => b.count - a.count);
+  return countedArray.toSorted((a, b) => b.count - a.count);
 }

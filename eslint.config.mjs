@@ -1,5 +1,5 @@
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import eslintComments from 'eslint-plugin-eslint-comments';
+import eslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import jest from 'eslint-plugin-jest';
 import promise from 'eslint-plugin-promise';
 import unicorn from 'eslint-plugin-unicorn';
@@ -27,21 +27,20 @@ export default [
     ignores: ['**/.eslintrc.js', '**/vite.config.ts'],
   },
   ...compat.extends(
-    'plugin:eslint-comments/recommended',
+    'plugin:@eslint-community/eslint-comments/recommended',
     'plugin:jest/recommended',
     'plugin:jest-dom/recommended',
-    'plugin:unicorn/recommended',
     'prettier'
   ),
+  unicorn.configs['flat/recommended'],
   {
     files: ['src/**/*.js', 'src/**/*.ts', 'src/**/*.jsx', 'src/**/*.tsx'],
 
     plugins: {
       '@typescript-eslint': typescriptEslint,
-      'eslint-comments': eslintComments,
+      '@eslint-community/eslint-comments': eslintComments,
       jest,
       promise,
-      unicorn,
       'jest-dom': jestDom,
       import: fixupPluginRules(_import),
       react,

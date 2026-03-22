@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.7.1",
     "@eslint/compat": "^2.0.3",
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.1",

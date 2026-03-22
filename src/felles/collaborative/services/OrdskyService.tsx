@@ -148,7 +148,7 @@ export class OrdskyService implements SessionService {
       }
     });
 
-    const sortedWordCount = wordCount.sort((a, b) => b.count - a.count);
+    const sortedWordCount = wordCount.toSorted((a, b) => b.count - a.count);
 
     const cloudInput = wordCountToCloudInput(sortedWordCount);
 
@@ -166,7 +166,7 @@ export class OrdskyService implements SessionService {
     cloud: Cloud[];
     wordCount: WordCount;
   }): void {
-    const sortedWordCount = wordCount.sort((a, b) => b.count - a.count);
+    const sortedWordCount = wordCount.toSorted((a, b) => b.count - a.count);
 
     this.socket.emit("savecloud", {
       id: id.toUpperCase(),

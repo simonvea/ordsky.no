@@ -204,11 +204,7 @@ export function OrdskyHeader(): React.ReactElement {
   }, [pathname]);
 
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.classList.add('no-scroll');
-    } else {
-      document.body.classList.remove('no-scroll');
-    }
+    document.body.classList.toggle('no-scroll', isMenuOpen);
   }, [isMenuOpen]);
 
   return (

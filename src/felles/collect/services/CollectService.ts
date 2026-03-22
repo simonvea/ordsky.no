@@ -102,7 +102,7 @@ export const getWordsAndCreateCloud = async (
 
   const wordCount = countWordsFromWords(upperCasedWords);
 
-  const sortedWordCount = wordCount.sort((a, b) => b.count - a.count);
+  const sortedWordCount = wordCount.toSorted((a, b) => b.count - a.count);
 
   const cloudInput = wordCountToCloudInput(sortedWordCount);
 

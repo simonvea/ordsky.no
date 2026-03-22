@@ -60,7 +60,7 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
     const wordCount: WordCount = inputs
       .filter((input) => input.word !== '')
       .map((input) => ({ text: input.word, count: Number(input.size) }))
-      .sort((a, b) => b.count - a.count);
+      .toSorted((a, b) => b.count - a.count);
 
     onSubmit(wordCount);
   };
