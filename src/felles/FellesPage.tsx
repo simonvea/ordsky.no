@@ -1,14 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router';
-import { Button } from '../common/atoms/Button';
-import { Title } from '../common/atoms/Title';
-import { NavButton } from '../common/atoms/NavButton';
-import { generateId } from '../common/core/session';
-import { getSession } from './collect/services/CollectService';
-import { NewsBadge } from '../common/atoms/NewsBadge';
-import { OptionsContainer, Option } from '../common/atoms/Option';
-import { BackButton } from '../common/atoms/BackButton';
+import React from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router";
+import { Button } from "../common/atoms/Button";
+import { Title } from "../common/atoms/Title";
+import { NavButton } from "../common/atoms/NavButton";
+import { generateId } from "../common/core/session";
+import { getSession } from "./collect/services/CollectService";
+import { NewsBadge } from "../common/atoms/NewsBadge";
+import { OptionsContainer, Option } from "../common/atoms/Option";
+import { BackButton } from "../common/atoms/BackButton";
 
 const Container = styled.section`
   min-height: 80vh;
@@ -59,7 +59,6 @@ export const FellesPage: React.FC = function FellesPage() {
           </ButtonWrapper>
         </Option>
         <Option>
-          <NewsBadge>Nyhet!</NewsBadge>
           <p>
             <strong>Innsamling:</strong> Deltakere kan sende inn ord når det
             passer dem.
