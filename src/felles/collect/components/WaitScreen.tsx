@@ -1,8 +1,8 @@
-import React, { ReactElement, use, useEffect, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, SecondaryButton } from '../../../common/atoms/Button';
 import { TextContainer } from '../../../common/atoms/TextContainer';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsRotate, faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ApiError, getSession } from '../services/CollectService';
 import { InfoBox } from '../../../common/atoms/InfoBox';
@@ -55,6 +55,25 @@ const WaitScreenActionsContainer = styled.section`
   margin-top: 1.5rem;
 `;
 
+const RefreshButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0.3rem;
+  color: inherit;
+  vertical-align: middle;
+  line-height: 1;
+
+  &:hover:not(:disabled) {
+    color: #1e90ff;
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+`;
+
 export type WaitScreenProps = {
   id: string;
   initialEntries: number;
@@ -84,36 +103,32 @@ export function WaitScreen({
     'Invitér til å legge inn ord'
   );
 
+  const checkEntries = useCallback(async (): Promise<void> => {
+    setFetchingNumberOfEntries(true);
+    try {
+      const session = await getSession(id);
+      setNumberOfEntries(session.numberOfEntries);
+    } catch (error) {
+      if ((error as ApiError).response.status !== 404) {
+        throw error;
+      }
+    }
+    setFetchingNumberOfEntries(false);
+    setCountDownSeconds(60);
+  }, [id]);
+
   useEffect(() => {
     const countDownInterval = setInterval(() => {
       setCountDownSeconds((prev) => prev - 1);
     }, 1000);
 
-    const getNumberOfEntriesInterval = setInterval(async () => {
-      setFetchingNumberOfEntries(true);
-
-      try {
-        const session = await getSession(id);
-
-        const entries = session.numberOfEntries;
-
-        setNumberOfEntries(entries);
-      } catch (error) {
-        if ((error as ApiError).response.status !== 404) {
-          throw error;
-        }
-      }
-
-      setFetchingNumberOfEntries(false);
-
-      setCountDownSeconds(60);
-    }, 60_000);
+    const getNumberOfEntriesInterval = setInterval(checkEntries, 60_000);
 
     return () => {
       clearInterval(getNumberOfEntriesInterval);
       clearInterval(countDownInterval);
     };
-  }, []);
+  }, [checkEntries]);
 
   const hasEntries = numberOfEntries > 0;
 
@@ -153,11 +168,20 @@ export function WaitScreen({
         <p>Venter på ord.</p>
       )}
 
-      {fetchingNumberOfEntries ? (
-        <p>Sjekker for nye ord...</p>
-      ) : (
-        <p>Sjekker igjen om {countDownSeconds} sekunder</p>
-      )}
+      <p>
+        {fetchingNumberOfEntries
+          ? 'Sjekker for nye ord...'
+          : `Sjekker igjen om ${countDownSeconds} sekunder`}
+        <RefreshButton
+          type="button"
+          onClick={checkEntries}
+          disabled={fetchingNumberOfEntries}
+          aria-label="Sjekk nå"
+          title="Sjekk nå"
+        >
+          <FontAwesomeIcon icon={faArrowsRotate} spin={fetchingNumberOfEntries} />
+        </RefreshButton>
+      </p>
 
       <TextContainer>
         <p>
