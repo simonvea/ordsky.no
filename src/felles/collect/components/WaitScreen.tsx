@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, SecondaryButton } from '../../../common/atoms/Button';
 import { TextContainer } from '../../../common/atoms/TextContainer';
@@ -103,7 +103,7 @@ export function WaitScreen({
     'Invitér til å legge inn ord'
   );
 
-  const checkEntries = useCallback(async (): Promise<void> => {
+  const checkEntries = async (): Promise<void> => {
     setFetchingNumberOfEntries(true);
     try {
       const session = await getSession(id);
@@ -115,7 +115,7 @@ export function WaitScreen({
     }
     setFetchingNumberOfEntries(false);
     setCountDownSeconds(60);
-  }, [id]);
+  };
 
   useEffect(() => {
     const countDownInterval = setInterval(() => {
@@ -128,7 +128,7 @@ export function WaitScreen({
       clearInterval(getNumberOfEntriesInterval);
       clearInterval(countDownInterval);
     };
-  }, [checkEntries]);
+  }, []);
 
   const hasEntries = numberOfEntries > 0;
 
