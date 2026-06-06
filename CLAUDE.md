@@ -85,11 +85,29 @@ src/
 - **Frontend**: Deployed as a static site (built via `npm run build`, served by nginx on VPS)
 - **Backend**: Runs in Docker/docker-compose on the same VPS (`../ordsky.no-api`), managed from this repo's `docker-compose.yml`
 - **Reverse proxy**: nginx routes `/api/*` and `/ws` to the backend container, serves static frontend files
+- **CI/CD**: GitHub Actions builds and deploys via `rsync` over SSH (no third-party actions) — see `.github/workflows/deploy.yml`
+
+### Environment Variables
+
+- `.env` — committed, contains relative path defaults for local dev (uses Vite proxy):
+  ```
+  VITE_SESSION_WEBSOCKET_URL=/ws
+  VITE_SESSION_API_URL=/api/collaborative
+  VITE_COLLECT_BASE_URL=/api/felles
+  ```
+- `.env.local` — gitignored, create locally to test against production backend:
+  ```
+  VITE_SESSION_WEBSOCKET_URL=https://www.ordsky.no/ws
+  VITE_SESSION_API_URL=https://www.ordsky.no/api/collaborative
+  VITE_COLLECT_BASE_URL=https://www.ordsky.no/api/felles
+  ```
+- Production build uses GitHub Actions vars (`SESSION_WEBSOCKET_URL`, `SESSION_API_URL`, `COLLECT_BASE_URL`) set to the relative paths above
 
 ### Development Notes
 
 - Vite dev server proxies `/api` and `/ws` to `localhost:3000` (the backend Node.js app)
 - Run the backend locally with `npm run dev` in `../ordsky.no-api` before starting the frontend
+- `npm ci` requires `.npmrc` with `legacy-peer-deps=true` — several ESLint plugins have stale peer dep declarations for ESLint v10
 - Jest configured with jsdom environment for React component testing
-- ESLint configured with TypeScript, React, and accessibility rules
+- ESLint uses flat config (`eslint.config.mjs`) with `eslint-plugin-unicorn` v56+ flat format and `@eslint-community/eslint-plugin-eslint-comments`
 
