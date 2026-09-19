@@ -44,7 +44,9 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
     .enter()
     .append('text')
     .style('font-size', (d) => `${d.size}px`)
-    .style('font-family', 'Impact')
+    // Fallbacks matter for the downloaded svg, which is opened on machines
+    // without Impact; d3-cloud measured the layout with Impact.
+    .style('font-family', "Impact, 'Arial Black', Haettenschweiler, sans-serif")
     .style('fill', (d) => d.fill)
     .attr('text-anchor', 'middle')
     .attr('transform', (d) => `translate(${[d.x, d.y]})rotate(${d.rotate})`)

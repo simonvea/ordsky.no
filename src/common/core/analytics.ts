@@ -7,6 +7,7 @@ export type ExceptionEventParams = {
 
 export type AnalyticEvents =
   | 'download_cloud'
+  | 'download_cloud_svg'
   | 'collab_joined'
   | 'collab_cloud_created'
   | 'words_cloud_created'

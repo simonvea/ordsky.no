@@ -1,3 +1,6 @@
+import { downloadFile, todayStamp } from "./downloadFile";
+import { serializeSvg } from "./serializeSvg";
+
 interface DownloadOptions {
   filename?: string;
   width?: number;
@@ -64,7 +67,7 @@ export const downloadAsPng = async (
     ctx.drawImage(img, x, y, renderWidth, renderHeight);
 
     // Generate filename with timestamp if needed
-    const timestamp = addTimestamp ? `-${new Date().toLocaleDateString()}` : "";
+    const timestamp = addTimestamp ? `-${todayStamp()}` : "";
     const finalFilename = `${filename}${timestamp}.${format}`;
 
     const url = canvas.toDataURL(`image/${format}`, quality);
@@ -86,33 +89,9 @@ function loadImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
-async function downloadFile(url: string, filename: string): Promise<void> {
-  const link = document.createElement("a");
-  link.download = filename;
-  link.href = url;
-  link.style.display = "none";
-
-  (document.body as ParentNode).append(link);
-
-  try {
-    link.click();
-  } finally {
-    // Cleanup
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-      link.remove();
-    }, 100);
-  }
-}
-
 export function svgDataURL(svg: SVGElement): string {
   try {
-    const clone = svg.cloneNode(true) as SVGElement;
-    // Ensure SVG has explicit dimensions
-    clone.setAttribute("width", clone.getAttribute("width") || "500");
-    clone.setAttribute("height", clone.getAttribute("height") || "500");
-
-    const svgAsXML = new XMLSerializer().serializeToString(clone);
+    const svgAsXML = serializeSvg(svg);
     return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgAsXML)))}`;
   } catch (error) {
     console.error("Failed to serialize SVG:", error);

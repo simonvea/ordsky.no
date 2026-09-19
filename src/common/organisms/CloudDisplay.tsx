@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { svgDataURL, downloadAsPng } from '../core/downloadAsPng';
-import { Button, SecondaryButton } from '../atoms/Button';
-import { Row } from '../atoms/Row';
+import { downloadAsPng } from '../core/downloadAsPng';
+import { downloadAsSvg } from '../core/downloadAsSvg';
+import { Button, IconButton } from '../atoms/Button';
 import { logger } from '../core/analytics';
 import { BarChart } from '../molecules/BarChart';
 import { WordCount, Cloud } from '../core/cloud.types';
@@ -42,6 +42,34 @@ const CloudImage = styled.img`
   object-fit: contain;
 `;
 
+const Actions = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+
+  & > button {
+    margin: 0;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    width: 100%;
+  }
+`;
+
+const TextButton = styled(IconButton)`
+  font-size: 14px;
+  text-decoration: underline;
+  opacity: 0.8;
+
+  &:hover {
+    box-shadow: none;
+    background: none;
+    opacity: 1;
+  }
+`;
+
 const Title = styled.h2`
   font-size: 24px;
   margin: 1rem 0 2rem;
@@ -54,6 +82,9 @@ const MainContainer = styled.div`
   flex-direction: column;
   width: 80vw;
 `;
+
+const logDownloadError = (error: unknown): void =>
+  logger.logError({ description: String(error), fatal: false });
 
 const capitalize = (word: string): string =>
   word[0].toUpperCase() + word.slice(1).toLowerCase();
@@ -79,9 +110,20 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
     }
   }, [cloud]);
 
-  const download = (): void => {
+  const downloadPng = (): void => {
+    const svg = svgElement.current?.querySelector('svg');
+    if (!svg) return;
+
     logger.logEvent('download_cloud');
-    downloadAsPng(svgElement.current?.firstChild as SVGElement, {});
+    downloadAsPng(svg, {}).catch(logDownloadError);
+  };
+
+  const downloadSvg = (): void => {
+    const svg = svgElement.current?.querySelector('svg');
+    if (!svg) return;
+
+    logger.logEvent('download_cloud_svg');
+    downloadAsSvg(svg).catch(logDownloadError);
   };
 
   const NUMBER_OF_WORDS = 10;
@@ -105,14 +147,17 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
     <MainContainer>
       <CloudContainer ref={svgElement}></CloudContainer>
       {shouldDisplayCallToAction && <SupportCallout />}
-      <Row>
-        <SecondaryButton type="button" onClick={download}>
+      <Actions>
+        <Button type="button" onClick={downloadPng}>
           Last ned ordsky
-        </SecondaryButton>
-        <Button type="button" onClick={onRestart}>
+        </Button>
+        <Button type="button" $outline onClick={onRestart}>
           {restartText}
         </Button>
-      </Row>
+      </Actions>
+      <TextButton type="button" onClick={downloadSvg}>
+        Last ned som SVG (for trykk)
+      </TextButton>
       {shareable && <ShareLink />}
       {data && (
         <>
