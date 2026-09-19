@@ -16,6 +16,7 @@ import { CreatePage } from './create/CreatePage';
 
 const CollaborativePage = lazy(() => import('./felles/collaborative'));
 const CollectPage = lazy(() => import('./felles/collect'));
+const LookupPage = lazy(() => import('./felles/lookup'));
 
 const App: React.FC = function App() {
   return (
@@ -44,6 +45,7 @@ const App: React.FC = function App() {
                           path="innsamling"
                           element={<Navigate to="/felles" />}
                         />
+                        <Route path="hent" element={<LookupPage />} />
                       </Route>
                       <Route
                         // This is a legacy route and may be removed in the future

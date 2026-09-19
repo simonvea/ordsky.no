@@ -93,12 +93,10 @@ export const saveCloudAndWordCount = async (
   return respose.json();
 };
 
-export const getWordsAndCreateCloud = async (
-  id: string,
+export const createCloudFromWords = async (
+  words: string[],
 ): Promise<{ cloud: Cloud[]; wordCount: WordCount }> => {
-  const session = await getSession(id);
-
-  const upperCasedWords = session.words.map((word) => word.toUpperCase());
+  const upperCasedWords = words.map((word) => word.toUpperCase());
 
   const wordCount = countWordsFromWords(upperCasedWords);
 
@@ -109,4 +107,12 @@ export const getWordsAndCreateCloud = async (
   const cloud = await createCloud(cloudInput);
 
   return { wordCount, cloud };
+};
+
+export const getWordsAndCreateCloud = async (
+  id: string,
+): Promise<{ cloud: Cloud[]; wordCount: WordCount }> => {
+  const session = await getSession(id);
+
+  return createCloudFromWords(session.words);
 };
