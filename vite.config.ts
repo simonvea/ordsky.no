@@ -12,5 +12,9 @@ export default defineConfig({
       "/api": "http://localhost:3000",
     },
   },
+  ssr: {
+    // Its CJS build loses the default export when Node imports it externally.
+    noExternal: ["styled-components"],
+  },
   plugins: [react()],
 });

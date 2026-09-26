@@ -24,7 +24,12 @@ export function CallToActionProvider({
   children: React.ReactNode;
 }): React.ReactElement {
   const [stats, setStats] = useState<VisitStats>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    // Pages are prerendered in Node, where there is no localStorage. Stats are
+    // only read inside effects, so the server default cannot cause a mismatch.
+    const stored =
+      globalThis.window === undefined
+        ? undefined
+        : localStorage.getItem(STORAGE_KEY);
     if (stored) return JSON.parse(stored);
 
     const now = Date.now();

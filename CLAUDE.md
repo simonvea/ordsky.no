@@ -23,6 +23,8 @@ Two separate collaboration backends exist:
 - **Frontend**: Deployed as a static site (built via `npm run build`, served by nginx on VPS)
 - **Backend**: Runs in Docker/docker-compose on the same VPS (`../ordsky.no-api`), managed from this repo's `docker-compose.yml`
 - **Reverse proxy**: nginx routes `/api/*` and `/ws` to the backend container, serves static frontend files
+- **Production nginx config lives in `../infra/proxy-server/conf.d/ordsky.conf`**, not here. CI only rsyncs `build/`, so nginx changes must be made in the infra repo and deployed from there. `nginx/web.conf` in this repo is only for local docker-compose — keep the two in sync
+- **Prerendering**: `npm run build` also renders the routes listed in `src/entry-server.tsx` (`prerenderRoutes`) to `build/<route>/index.html`, so crawlers (AdSense, search) see real text. Other routes get the empty `build/spa.html` shell via nginx `try_files $uri $uri/ /spa.html`. Code that runs during render must not touch `window`/`document`/`localStorage` — keep that in effects, or prerender breaks
 - **CI/CD**: GitHub Actions builds and deploys via `rsync` over SSH (no third-party actions) — see `.github/workflows/deploy.yml`
 
 ### Environment Variables
