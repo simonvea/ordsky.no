@@ -1,14 +1,15 @@
 const copyWithSelection = (text: string): boolean => {
-  const area = document.createElement('textarea');
+  const area = document.createElement("textarea");
   area.value = text;
-  area.setAttribute('readonly', '');
-  area.style.position = 'fixed';
-  area.style.opacity = '0';
+  area.style.position = "fixed";
+  area.style.opacity = "0";
+  // iOS Safari refuses to select readonly fields and zooms on fields under 16px.
+  area.style.fontSize = "16px";
   document.body.append(area);
   area.select();
   area.setSelectionRange(0, text.length);
   try {
-    return document.execCommand('copy');
+    return document.execCommand("copy");
   } catch {
     return false;
   } finally {
