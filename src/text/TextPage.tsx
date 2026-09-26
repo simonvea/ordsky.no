@@ -51,8 +51,8 @@ export const TextPage: React.FC<TextPageProps> = function TextPage() {
         <>
           <Title>Lag ordsky fra tekst</Title>
           <TextForm
-          onSubmit={(text, filter) => createCloudFromText(text, filter)}
-          loading={loading}
+            onSubmit={(text, filter) => createCloudFromText(text, filter)}
+            loading={loading}
           />
         </>
       )}

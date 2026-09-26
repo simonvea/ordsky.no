@@ -105,7 +105,9 @@ export function StartSession({
             Skriv inn en id:
             <Input
               value={idToJoin}
-              onChange={({ target }) => setIdToJoin(target.value.trim().toUpperCase())}
+              onChange={({ target }) =>
+                setIdToJoin(target.value.trim().toUpperCase())
+              }
               id="idInput"
               autoComplete="off"
               autoCapitalize="characters"

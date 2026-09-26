@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
@@ -38,6 +38,9 @@ export const CopyLinkField = ({
 }: CopyLinkFieldProps): React.ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState("");
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
 
   const copy = async (): Promise<void> => {
     inputRef.current?.select();
@@ -47,7 +50,8 @@ export const CopyLinkField = ({
         ? "Kopiert link!"
         : "Kunne ikke kopiere. Marker og kopier linken selv.",
     );
-    setTimeout(() => setStatus(""), 3000);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setStatus(""), 3000);
   };
 
   return (

@@ -9,13 +9,17 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
   const width = config?.svgWidth || 500;
   const height = config?.svgHeight || 300;
 
-  const { minX, maxX, minY, maxY } = cloudBounds(cloud);
+  // d3-cloud drops words that do not fit, so the layout can come back empty.
+  const { minX, maxX, minY, maxY } =
+    cloud.length > 0
+      ? cloudBounds(cloud)
+      : { minX: 0, maxX: 0, minY: 0, maxY: 0 };
 
-  // Calculate scale factor
   const cloudWidth = maxX - minX;
   const cloudHeight = maxY - minY;
   const fitScale = Math.min(width / cloudWidth, height / cloudHeight) * 0.85;
-  const scale = config?.upscale ? fitScale : Math.min(fitScale, 1);
+  const clampedScale = config?.upscale ? fitScale : Math.min(fitScale, 1);
+  const scale = Number.isFinite(fitScale) ? clampedScale : 1;
   // Center on the words' actual bounds; d3-cloud only roughly centers them.
   const offsetX = width / 2 - (scale * (minX + maxX)) / 2;
   const offsetY = height / 2 - (scale * (minY + maxY)) / 2;

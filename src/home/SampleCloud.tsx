@@ -32,10 +32,16 @@ export const SampleCloud: React.FC = function SampleCloud() {
   const [svg, setSvg] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
     createCloudFromWordCount(SAMPLE_WORDS)
-      .then((cloud) => setSvg(createCloudSvg(cloud, { upscale: true })))
+      .then((cloud) => {
+        if (!cancelled) setSvg(createCloudSvg(cloud, { upscale: true }));
+      })
       // The sample is decorative, so a failed layout just leaves it out.
       .catch(() => setSvg(''));
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return <Frame aria-hidden="true" dangerouslySetInnerHTML={{ __html: svg }} />;

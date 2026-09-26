@@ -108,13 +108,32 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
   useEffect(() => {
     if (!isModalOpen) return;
     closeRef.current?.focus();
-    const closeOnEscape = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape') setIsModalOpen(false);
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        setIsModalOpen(false);
+        return;
+      }
+      if (event.key !== 'Tab' || !modalRef.current) return;
+      // aria-modal does not stop Tab from reaching the page behind the modal.
+      const focusable = [
+        ...modalRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+        ),
+      ];
+      const first = focusable.at(0);
+      const last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
     };
-    document.addEventListener('keydown', closeOnEscape);
+    document.addEventListener('keydown', onKeyDown);
     const trigger = filterButtonRef.current;
     return () => {
-      document.removeEventListener('keydown', closeOnEscape);
+      document.removeEventListener('keydown', onKeyDown);
       trigger?.focus();
     };
   }, [isModalOpen]);
@@ -156,7 +175,11 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
           value={text}
           onChange={onChange}
         />
-        <FilterButton ref={filterButtonRef} type="button" onClick={() => setIsModalOpen(true)}>
+        <FilterButton
+          ref={filterButtonRef}
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+        >
           <FontAwesomeIcon icon={faFilter} />
           Ignorer ord
         </FilterButton>
