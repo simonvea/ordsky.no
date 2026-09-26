@@ -10,7 +10,7 @@ export const BackContainer = styled.section`
   justify-content: center;
 
   a {
-    color: var(--primary-color);
+    color: var(--primary-color-text);
     text-decoration: none;
     font-size: 1.1rem;
     padding: 0.75rem 1.5rem;

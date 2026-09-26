@@ -154,10 +154,12 @@ table {
   --secondary-color-dark: #429897; */
   --primary-color: #548687;
   --primary-color-light: #8fbc94;
+  /* Teal for text on the dark page; --primary-color is only 2.9:1 there. */
+  --primary-color-text: #7fb5b5;
   --primary-color-dark: #56445d;
-  --secondary-color: #6da34d;
+  --secondary-color: #4a7c32; /* white text 5.0:1 */
   --secondary-color-light: #c5e99b;
-  --secondary-color-dark: #429897;
+  --secondary-color-dark: #2f7d7c; /* white text 4.8:1 */
   --text-color-primary: #ffffffde;
   --field-bg: #2b2b2b;
   /* Light enough for 4.5:1 on the dark page background. */

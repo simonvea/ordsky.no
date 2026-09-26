@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledLink = styled.a`
-  color: var(--primary-color);
+  color: var(--primary-color-text);
   text-decoration: none;
   position: relative;
 

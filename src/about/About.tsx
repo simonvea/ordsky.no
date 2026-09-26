@@ -56,7 +56,7 @@ const TableOfContents = styled.nav`
     font-weight: 300;
 
     &:hover {
-      color: var(--primary-color);
+      color: var(--primary-color-text);
       transform: translateX(8px);
     }
   }
