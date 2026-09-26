@@ -21,6 +21,7 @@ export const NavButton = styled(NavLink).attrs<ButtonProps>((props) => ({
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
   margin: 5px;
+  min-height: 44px;
 
   &:hover {
     box-shadow:

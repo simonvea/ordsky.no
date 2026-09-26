@@ -23,7 +23,8 @@ export const Input = styled.input<InputProps>`
   &::placeholder {
     color: rgba(255, 255, 255, 0.5);
   }
-  font-size: 14px;
+  // 16px stops iOS Safari from zooming the page on focus.
+  font-size: 16px;
   width: ${(props) => (props.$small ? '70px' : '150px')};
   -webkit-transition-duration: 0.2s; /* Safari */
   transition-duration: 0.2s;

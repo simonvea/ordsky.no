@@ -23,6 +23,7 @@ export const Button = styled.button<ButtonProps>`
   -webkit-transition-duration: 0.4s;
   transition-duration: 0.4s;
   margin: 5px;
+  min-height: 44px;
 
   &:hover {
     box-shadow:
@@ -55,6 +56,7 @@ export const IconButton = styled(Button)`
   color: inherit;
   border: none;
   padding: 0;
+  min-width: 44px;
   font: inherit;
   cursor: pointer;
   outline: inherit;
@@ -77,6 +79,7 @@ export const LinkButton = styled(Link)<ButtonProps>`
   -webkit-transition-duration: 0.4s;
   transition-duration: 0.4s;
   margin: 5px;
+  min-height: 44px;
 
   &:hover {
     box-shadow:
