@@ -85,7 +85,7 @@ export function StartSession({
         </p>
         <p>
           For å bli med i en økt som noen andre har startet, skriv inn den
-          fem-sifrede koden i feltet under. Trykk så &quot;Bli med i en
+          koden på fem tegn i feltet under. Trykk så &quot;Bli med i en
           økt&quot;.
         </p>
       </SessionInfoContainer>
@@ -105,7 +105,7 @@ export function StartSession({
             Skriv inn en id:
             <Input
               value={idToJoin}
-              onChange={({ target }) => setIdToJoin(target.value)}
+              onChange={({ target }) => setIdToJoin(target.value.trim().toUpperCase())}
               id="idInput"
               autoComplete="off"
               autoCapitalize="characters"

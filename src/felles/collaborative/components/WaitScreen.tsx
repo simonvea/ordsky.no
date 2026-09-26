@@ -51,6 +51,7 @@ export function WaitScreen({
 
   return (
     <>
+      <Title>Kode: {id}</Title>
       {isAdmin && (
         <TextContainer>
           <p>Del denne koden med de du ønsker å lage en ordsky sammen med.</p>
@@ -66,7 +67,6 @@ export function WaitScreen({
           </p>
         </TextContainer>
       )}
-      <Title>Kode: {id}</Title>
       {hasEntries ? (
         <span>{`${numberOfEntries} har lagt inn ord.`}</span>
       ) : (
