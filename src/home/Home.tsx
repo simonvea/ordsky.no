@@ -1,5 +1,4 @@
 import React from 'react';
-import { TextContainer } from '../common/atoms/TextContainer';
 import styled, { keyframes } from 'styled-components';
 import { LinkButton } from '../common/atoms/Button';
 import { SampleCloud } from './SampleCloud';
@@ -19,60 +18,90 @@ const AnimatedNavWrapper = styled.div<{ $delay: number }>`
   opacity: 0;
   animation: ${fadeInUp} 0.3s ease forwards;
   animation-delay: ${(props) => props.$delay}s;
-  flex: 1;
   display: flex;
-  > a {
-    width: 100%;
+
+  @media (max-width: 600px) {
+    > a {
+      width: 100%;
+    }
   }
 `;
 
-const ActionContainer = styled.section`
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: stretch;
-  width: 100%;
+const UseCases = styled.p`
+  max-width: 34rem;
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--on-surface-variant);
+`;
 
-  @media (max-width: 768px) {
+const Hero = styled.section`
+  width: 100%;
+  max-width: 640px;
+  text-align: center;
+`;
+
+const Headline = styled.h1`
+  font-size: 2rem;
+  line-height: 1.2;
+  font-weight: 600;
+  margin: 0 0 1rem;
+
+  @media (min-width: 768px) {
+    font-size: 2.5rem;
+  }
+`;
+
+const Lead = styled.p`
+  font-size: 1.125rem;
+  color: var(--on-surface-variant);
+  max-width: 34rem;
+`;
+
+const ActionContainer = styled.nav`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 1.5rem;
+
+  @media (max-width: 600px) {
     flex-direction: column;
   }
-`;
-
-const GridWrapper = styled.div`
-  margin-top: 2rem;
-  width: 100%;
-  max-width: 800px;
 `;
 
 export const Home: React.FC = function Home() {
   return (
     <>
-      <TextContainer>
-        <article>
-          <p>
-            Ordsky.no er et verktøy for å lage en enkel ordsky fra tekst.
-            Ordskyen gir større vekt til ord som fremkommer oftere i teksten.
-          </p>
-          <p>
-            Ordskyen er perfekt å bruke til presentasjoner laget i for eksempel
-            word eller powerpoint.
-          </p>
-        </article>
-      </TextContainer>
-      <SampleCloud />
-      <GridWrapper>
-        <ActionContainer>
+      <Hero>
+        <Headline>Lag en ordsky på sekunder</Headline>
+        <Lead>
+          Lim inn en tekst, skriv inn egne ord eller samle inn ord fra kolleger,
+          venner eller en skoleklasse. Ordene som går igjen oftest blir størst.
+          Gratis, og uten innlogging.
+        </Lead>
+        <ActionContainer aria-label="Lag en ordsky">
           <AnimatedNavWrapper $delay={0}>
-            <LinkButton to="text">Lag en ordsky fra tekst</LinkButton>
+            <LinkButton to="text">Fra tekst</LinkButton>
           </AnimatedNavWrapper>
           <AnimatedNavWrapper $delay={0.1}>
-            <LinkButton to="words">Lag en ordsky fra ord</LinkButton>
+            <LinkButton to="words" $variant="tonal">
+              Fra egne ord
+            </LinkButton>
           </AnimatedNavWrapper>
           <AnimatedNavWrapper $delay={0.2}>
-            <LinkButton to="felles">Lag en ordsky sammen</LinkButton>
+            <LinkButton to="felles" $variant="tonal">
+              Sammen med andre
+            </LinkButton>
           </AnimatedNavWrapper>
         </ActionContainer>
-      </GridWrapper>
+      </Hero>
+      <SampleCloud />
+      <UseCases>
+        Passer som avskjedshilsen til en kollega, til bursdager, i
+        presentasjoner og i undervisning. Last ned som PNG til PowerPoint og
+        Word, eller som SVG for trykk.
+      </UseCases>
     </>
   );
 };
