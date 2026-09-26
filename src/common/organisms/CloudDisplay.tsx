@@ -94,7 +94,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
     incrementCloudCount();
 
     if (svgElement.current) {
-      const SVG = createCloudSvg(cloud);
+      const SVG = createCloudSvg(cloud, { upscale: true });
       svgElement.current.innerHTML = SVG;
     }
   }, [cloud]);
