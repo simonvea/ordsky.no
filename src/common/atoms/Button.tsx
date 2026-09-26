@@ -29,7 +29,7 @@ export const Button = styled.button<ButtonProps>`
       0 17px 50px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
     opacity: 1;
-    background-color: var(--button-hover-bg);
+    filter: brightness(1.12);
     ${(props) =>
       props.$outline ? 'background-color: var(--secondary-color-dark);' : ''}
   }
@@ -85,7 +85,7 @@ export const LinkButton = styled(Link)<ButtonProps>`
       0 17px 50px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
     opacity: 1;
-    background-color: var(--button-hover-bg);
+    filter: brightness(1.12);
     ${(props) =>
       props.$outline ? 'background-color: var(--secondary-color-dark);' : ''}
   }
