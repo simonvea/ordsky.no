@@ -154,14 +154,30 @@ table {
   --secondary-color-dark: #429897; */
   --primary-color: #548687;
   --primary-color-light: #8fbc94;
+  /* Teal for text on the dark page; --primary-color is only 2.9:1 there. */
+  --primary-color-text: #7fb5b5;
   --primary-color-dark: #56445d;
-  --secondary-color: #6da34d;
+  --secondary-color: #4a7c32; /* white text 5.0:1 */
   --secondary-color-light: #c5e99b;
-  --secondary-color-dark: #429897;
+  --secondary-color-dark: #2f7d7c; /* white text 4.8:1 */
   --text-color-primary: #ffffffde;
+  --field-bg: #2b2b2b;
+  /* Light enough for 4.5:1 on the dark page background. */
+  --error-color: #ff8a80;
   --primary-color-rgb: 84, 134, 135;
   --button-hover-bg: rgba(var(--primary-color-rgb), 0.15);
   --button-focus-outline: 2px solid var(--secondary-color-light);
+
+  /* Material 3 style roles for the dark scheme. */
+  --surface: #373737;
+  --surface-container: #2a2a2a;
+  --surface-container-high: #424242;
+  --on-surface-variant: rgba(255, 255, 255, 0.72);
+  --outline: rgba(255, 255, 255, 0.38);
+  --outline-variant: rgba(255, 255, 255, 0.12);
+  /* Tonal buttons: medium emphasis without competing with the green primary. */
+  --tonal-container: #3f5a4a;
+  --on-tonal-container: #dcefd9;
 }
 
 /* 
@@ -190,6 +206,14 @@ body {
   line-height: 1.5;
 }
 
+/* Form controls do not inherit the page font by default. */
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
 h1,
 h2,
 h3,
@@ -210,6 +234,25 @@ p {
   }
 }
 
+/* The reset above strips these, which makes inline emphasis invisible. */
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: 600;
+}
+
 .no-scroll {
   overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  :before,
+  :after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

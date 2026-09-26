@@ -27,7 +27,7 @@ const TableOfContents = styled.nav`
   border-radius: 12px;
   backdrop-filter: blur(10px);
   width: 100%;
-  max-width: 780px;
+  max-width: 40rem;
 
   ul {
     list-style: none;
@@ -47,16 +47,16 @@ const TableOfContents = styled.nav`
   }
 
   a {
-    color: var(--text-color-secondary);
+    color: var(--on-surface-variant);
     text-decoration: none;
     transition: all 0.2s ease;
     font-size: 1.1rem;
     padding: 0.25rem 0;
     display: block;
-    font-weight: 300;
+    font-weight: 400;
 
     &:hover {
-      color: var(--primary-color);
+      color: var(--primary-color-text);
       transform: translateX(8px);
     }
   }

@@ -21,6 +21,7 @@ import { WaitScreen } from "./components/WaitScreen";
 import { useCallToAction } from "../../common/hooks/useCallToAction";
 import { SubmittedWords } from "./components/SubmittedWords";
 import { BackButton } from "../../common/atoms/BackButton";
+import { Title } from "../../common/atoms/Title";
 
 type CollectState = {
   loading: boolean;
@@ -125,7 +126,7 @@ export function CollectPage(): React.ReactElement {
       setState((prev) => ({
         ...prev,
         loading: true,
-        loadingMessage: "Sender ord..",
+        loadingMessage: "Sender ord...",
       }));
 
       const session = await saveWords({ id, words });
@@ -196,7 +197,10 @@ export function CollectPage(): React.ReactElement {
   }
 
   if (!id || id.length !== 5) {
-    return <ErrorScreen message="Ugyldig id" onReset={handleQuit} />;
+    return <ErrorScreen
+        message="Lenken er ugyldig. Sjekk at du har fått med hele lenken."
+        onReset={handleQuit}
+      />;
   }
 
   if (hasSubmittedWords) {
@@ -226,17 +230,24 @@ export function CollectPage(): React.ReactElement {
         />
       )}
       {!isAdmin && !cloud && (
-        <WordsInput onSubmit={handleSubmitWords} onQuit={handleQuit} />
+        <WordsInput
+          title="Legg inn ord"
+          onSubmit={handleSubmitWords}
+          onQuit={handleQuit}
+        />
       )}
       {!!cloud && (
-        <CloudDisplay
-          cloud={cloud}
-          wordCount={top10Words}
-          onRestart={handleQuit}
-          restartText={restartText}
-          shouldDisplayCallToAction={isAdmin && shouldDisplayCallToAction}
-          shareable={true}
-        />
+        <>
+          <Title>Ordskyen</Title>
+          <CloudDisplay
+            cloud={cloud}
+            wordCount={top10Words}
+            onRestart={handleQuit}
+            restartText={restartText}
+            shouldDisplayCallToAction={isAdmin && shouldDisplayCallToAction}
+            shareable={true}
+          />
+        </>
       )}
       <BackButton />
     </>

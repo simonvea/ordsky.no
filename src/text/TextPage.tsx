@@ -7,6 +7,7 @@ import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { TextForm } from './components/TextForm';
 import { useCallToAction } from '../common/hooks/useCallToAction';
 import { BackButton } from '../common/atoms/BackButton';
+import { Title } from '../common/atoms/Title';
 
 export type TextPageProps = {};
 
@@ -16,6 +17,7 @@ const MainContainer = styled.section`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  width: 100%;
 `;
 
 export const TextPage: React.FC<TextPageProps> = function TextPage() {
@@ -37,21 +39,27 @@ export const TextPage: React.FC<TextPageProps> = function TextPage() {
 
   return (
     <MainContainer>
-      <BackButton />
       {cloud ? (
-        <CloudDisplay
-          cloud={cloud}
-          onRestart={reset}
-          wordCount={wordCount?.slice(0, 10)}
-          restartText="Lag en ny ordsky"
-          shouldDisplayCallToAction={shouldDisplayCallToAction}
-        />
+        <>
+          <Title>Ordskyen din</Title>
+          <CloudDisplay
+            cloud={cloud}
+            onRestart={reset}
+            wordCount={wordCount?.slice(0, 10)}
+            restartText="Lag en ny ordsky"
+            shouldDisplayCallToAction={shouldDisplayCallToAction}
+          />
+        </>
       ) : (
-        <TextForm
-          onSubmit={(text, filter) => createCloudFromText(text, filter)}
-          loading={loading}
-        />
+        <>
+          <Title>Lag ordsky fra tekst</Title>
+          <TextForm
+            onSubmit={(text, filter) => createCloudFromText(text, filter)}
+            loading={loading}
+          />
+        </>
       )}
+      <BackButton />
     </MainContainer>
   );
 };

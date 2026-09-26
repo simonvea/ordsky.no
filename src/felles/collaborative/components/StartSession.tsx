@@ -1,53 +1,46 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from '../../../common/atoms/Button';
-import { Form } from '../../../common/atoms/Form';
 import { Input } from '../../../common/atoms/Input';
-import { Label } from '../../../common/atoms/Label';
+import {
+  OptionsContainer,
+  Option,
+  OptionTitle,
+} from '../../../common/atoms/Option';
 import { Title as OriginalTitle } from '../../../common/atoms/Title';
 
-const JoinSessionForm = styled(Form)`
-  justify-content: space-around;
-  height: 160px;
-  width: 100%;
-  max-width: 300px;
-`;
-
-const StartSessionActionsContainer = styled.section`
+const JoinSessionForm = styled.form`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
   width: 100%;
-  max-width: 480px;
-  gap: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-  }
+  margin-top: auto;
 `;
 
-const SessionInfoContainer = styled.section`
-  width: 100%;
-  max-width: 480px;
-  margin-bottom: 3rem;
-  padding: 0 1rem;
+const CodeField = styled.label`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+`;
 
-  p {
-    font-size: 1.125rem;
-    line-height: 1.5625rem;
-    width: 100%;
-    text-rendering: optimizeLegibility;
+const CodeInput = styled(Input)`
+  margin: 0;
+  width: 9rem;
+  font-size: 1.25rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+
+  @media only screen and (min-width: 768px) {
+    width: 9rem;
   }
 `;
 
 const StartSessionContainer = styled.section`
-  min-height: 80vh;
   width: 100%;
-  padding: 0 1rem;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,50 +68,52 @@ export function StartSession({
 
   return (
     <StartSessionContainer>
-      <Title>Felles ordsky</Title>
-      <SessionInfoContainer>
-        <p>På denne siden kan du skape en felles ordsky.</p>
-        <p>
-          For å starte en ny felles økt, trykk på &quot;Start en ny økt.&quot;
-          Du vil da bli satt som administrator for denne økten. Det vil si at
-          det er du som er ansvarlig for å trykke &quot;Lag ordsky&quot; når
-          alle har sendt inn sine ord.
-        </p>
-        <p>
-          For å bli med i en økt som noen andre har startet, skriv inn den
-          fem-sifrede koden i feltet under. Trykk så &quot;Bli med i en
-          økt&quot;.
-        </p>
-      </SessionInfoContainer>
-      <StartSessionActionsContainer>
-        <div>
+      <Title>Live-økt</Title>
+      <OptionsContainer>
+        <Option>
+          <OptionTitle>Bli med i en økt</OptionTitle>
+          <p>Skriv inn koden på fem tegn som vises på skjermen til verten.</p>
+          <JoinSessionForm onSubmit={joinSession}>
+            <CodeField htmlFor="idInput">
+              Kode
+              <CodeInput
+                value={idToJoin}
+                onChange={({ target }) =>
+                  setIdToJoin(target.value.trim().toUpperCase())
+                }
+                id="idInput"
+                autoComplete="off"
+                autoCapitalize="characters"
+                spellCheck={false}
+                maxLength={5}
+              />
+            </CodeField>
+            <Button
+              type="submit"
+              disabled={idToJoin.length < 5}
+              data-testid="join-session-btn"
+            >
+              Bli med
+            </Button>
+          </JoinSessionForm>
+        </Option>
+        <Option>
+          <OptionTitle>Start en ny økt</OptionTitle>
+          <p>
+            Du får en kode som du deler med deltakerne. Når alle har sendt inn
+            ord, trykker du «Lag ordsky», og ordskyen vises for alle. Bare du
+            kan lage ordskyen, så ikke lukk siden underveis.
+          </p>
           <Button
             type="button"
+            $variant="tonal"
             onClick={onNewSession}
             data-testid="start-session-btn"
           >
             Start en ny økt
           </Button>
-        </div>
-
-        <JoinSessionForm onSubmit={joinSession}>
-          <Label htmlFor="idInput">
-            Skriv inn en id:
-            <Input
-              value={idToJoin}
-              onChange={({ target }) => setIdToJoin(target.value)}
-              id="idInput"
-            />
-          </Label>
-          <Button
-            type="submit"
-            disabled={idToJoin.length < 5}
-            data-testid="join-session-btn"
-          >
-            Bli med i en økt
-          </Button>
-        </JoinSessionForm>
-      </StartSessionActionsContainer>
+        </Option>
+      </OptionsContainer>
     </StartSessionContainer>
   );
 }

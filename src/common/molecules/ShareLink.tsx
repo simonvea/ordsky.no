@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
-import { SecondaryButton } from '../atoms/Button';
+import React, { useState } from "react";
+import styled, { keyframes } from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "../atoms/Button";
+import { copyText } from "../core/copyText";
 
-const ShareButton = styled(SecondaryButton)`
+const ShareButton = styled(Button).attrs({ $variant: "tonal" })`
   overflow: hidden;
   white-space: nowrap;
   display: flex;
@@ -27,17 +28,16 @@ const slideFromTop = keyframes`
 `;
 
 const ShareText = styled.span<{ $show: boolean }>`
-  width: 104px;
   opacity: ${(props) => (props.$show ? 1 : 0)};
   transform: ${(props) =>
-    props.$show ? 'translateY(0)' : 'translateY(-100%)'};
+    props.$show ? "translateY(0)" : "translateY(-100%)"};
   grid-column: 1;
   grid-row: 1;
-  animation: ${(props) => (props.$show ? slideFromTop : 'none')} 0.3s
+  animation: ${(props) => (props.$show ? slideFromTop : "none")} 0.3s
     ease-in-out;
 `;
 
-const shareText = 'Link til Ordsky';
+const shareText = "Kopier lenke til ordskyen";
 
 export const ShareLink = (): React.ReactElement => {
   const [showCopiedJoinUrlMessage, setShowCopiedJoinUrlMessage] =
@@ -46,9 +46,8 @@ export const ShareLink = (): React.ReactElement => {
   const shareableLink =
     globalThis.location.origin + globalThis.location.pathname;
 
-  const handleShare = (): void => {
-    navigator.clipboard.writeText(shareableLink);
-    // logger.logEvent('share_cloud');
+  const handleShare = async (): Promise<void> => {
+    if (!(await copyText(shareableLink))) return;
     setShowCopiedJoinUrlMessage(true);
     const timeout = setTimeout(() => {
       setShowCopiedJoinUrlMessage(false);
@@ -61,7 +60,7 @@ export const ShareLink = (): React.ReactElement => {
       <FontAwesomeIcon icon={faLink} />
       <ShareTextContainer>
         <ShareText $show={!showCopiedJoinUrlMessage}>{shareText}</ShareText>
-        <ShareText $show={showCopiedJoinUrlMessage}>Link kopiert!</ShareText>
+        <ShareText $show={showCopiedJoinUrlMessage}>Lenke kopiert!</ShareText>
       </ShareTextContainer>
     </ShareButton>
   );

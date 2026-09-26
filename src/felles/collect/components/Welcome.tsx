@@ -9,7 +9,8 @@ const StartSessionActionsContainer = styled.section`
   justify-content: center;
   align-items: center;
 
-  width: 480px;
+  width: 100%;
+  max-width: 480px;
 `;
 
 const SessionInfoContainer = styled.section`
@@ -26,7 +27,6 @@ const SessionInfoContainer = styled.section`
 `;
 
 const StartSessionContainer = styled.section`
-  min-height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

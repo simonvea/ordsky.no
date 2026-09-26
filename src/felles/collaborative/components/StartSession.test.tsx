@@ -72,7 +72,7 @@ describe('StartSession component', () => {
   });
 
   describe('given input with length equal to 5', () => {
-    it('when clicking join session, then onJoinSession prop is called', () => {
+    it('when clicking join session, then onJoinSession is called with the code in upper case', () => {
       // Arrange
       const onJoinSessionMock = jest.fn();
       const { getByTestId, getByLabelText } = render(
@@ -83,14 +83,14 @@ describe('StartSession component', () => {
       );
 
       const button = getByTestId('join-session-btn');
-      const input = getByLabelText(/skriv inn en id:/i);
+      const input = getByLabelText(/kode/i);
 
       // Act
       fireEvent.change(input, { target: { value: mockId } });
       fireEvent.click(button);
 
       // Assert
-      expect(onJoinSessionMock).toHaveBeenCalledWith(mockId);
+      expect(onJoinSessionMock).toHaveBeenCalledWith(mockId.toUpperCase());
     });
   });
 });

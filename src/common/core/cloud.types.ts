@@ -28,6 +28,8 @@ export interface CloudConfig {
   padding?: number;
   rotationDeg?: number;
   font?: string;
+  // Scale a small cloud up to fill the svg; downloads keep the default.
+  upscale?: boolean;
 }
 
 export type WordCount = Array<{

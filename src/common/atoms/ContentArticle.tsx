@@ -10,10 +10,10 @@ export const ContentArticle = styled.article`
     font-size: 1.125rem;
     line-height: 1.8;
     width: 100%;
-    max-width: 780px;
+    max-width: 40rem;
     margin: 1rem 0;
     text-rendering: optimizeLegibility;
     color: var(--text-color-primary);
-    font-weight: 300;
+    font-weight: 400;
   }
 `;

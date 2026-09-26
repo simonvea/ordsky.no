@@ -1,39 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Title } from '../common/atoms/Title';
-import { OptionsContainer, Option } from '../common/atoms/Option';
-import { NavButton } from '../common/atoms/NavButton';
+import { OptionsContainer, Option, OptionTitle } from '../common/atoms/Option';
+import { NavButton } from '../common/atoms/Button';
 import { BackButton } from '../common/atoms/BackButton';
 
 const Container = styled.section`
   color: var(--text-color-primary);
-  min-height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
-  @media (min-width: 768px) {
-    padding: 2rem;
-  }
-`;
-
-const StyledOption = styled(Option)`
-  padding: 1rem;
-  @media (min-width: 768px) {
-    padding: 1.5rem;
-  }
-`;
-
-const StyledNavButton = styled(NavButton)`
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  @media (min-width: 768px) {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    max-width: 16rem;
-    margin: 0 auto;
-  }
 `;
 
 export const CreatePage = (): React.ReactElement => {
@@ -41,38 +18,31 @@ export const CreatePage = (): React.ReactElement => {
     <Container>
       <Title>Lag en ny ordsky</Title>
       <OptionsContainer>
-        <StyledOption>
+        <Option>
+          <OptionTitle>Fra tekst</OptionTitle>
           <p>
-            <strong>Lim inn tekst:</strong> Kopier og lim inn tekst for å lage
-            ordskyen.
+            Lim inn tekst fra et dokument eller en nettside. Ordene telles, og
+            de som går igjen oftest blir størst.
           </p>
+          <NavButton to="/text">Lim inn tekst</NavButton>
+        </Option>
+        <Option>
+          <OptionTitle>Fra egne ord</OptionTitle>
           <p>
-            Denne metoden lar deg raskt lage en ordsky ved å kopiere og lime inn
-            tekst fra et dokument eller en nettside.
+            Skriv inn ordene selv og bestem hvor store de skal være i forhold
+            til hverandre.
           </p>
-          <StyledNavButton to="/text">Lim inn tekst</StyledNavButton>
-        </StyledOption>
-        <StyledOption>
+          <NavButton to="/words">Skriv inn ord</NavButton>
+        </Option>
+        <Option>
+          <OptionTitle>Sammen med andre</OptionTitle>
           <p>
-            <strong>Legg til ord:</strong> Fyll inn ordene manuelt.
+            Flere sender inn ord, enten samtidig i et klasserom eller møte,
+            eller over tid via en lenke, for eksempel til en avskjed eller
+            bursdag.
           </p>
-          <p>
-            Du kan manuelt legge til ord og justere deres frekvens for å skape
-            en mer tilpasset ordsky.
-          </p>
-          <StyledNavButton to="/words">Legg til ord</StyledNavButton>
-        </StyledOption>
-        <StyledOption>
-          <p>
-            <strong>Felles ordsky:</strong> Samarbeid med andre for å lage en
-            ordsky.
-          </p>
-          <p>
-            Perfekt for situasjoner hvor flere deltakere skal bidra med ord,
-            enten i sanntid eller over tid.
-          </p>
-          <StyledNavButton to="/felles">Lag en felles ordsky</StyledNavButton>
-        </StyledOption>
+          <NavButton to="/felles">Lag en felles ordsky</NavButton>
+        </Option>
       </OptionsContainer>
       <BackButton />
     </Container>

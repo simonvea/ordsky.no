@@ -1,6 +1,8 @@
 import { select } from 'd3-selection';
 import d3cloud from 'd3-cloud';
 import { Cloud, CloudInput, CloudConfig } from './cloud.types';
+import { cloudBounds } from './cloudBounds';
+import { CLOUD_FONT, CLOUD_FONT_STACK, loadCloudFont } from './cloudFont';
 
 export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
   const div = document.createElement('div');
@@ -8,29 +10,20 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
   const width = config?.svgWidth || 500;
   const height = config?.svgHeight || 300;
 
-  // Find bounds of word cloud
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minY = Infinity;
-  let maxY = -Infinity;
+  // d3-cloud drops words that do not fit, so the layout can come back empty.
+  const { minX, maxX, minY, maxY } =
+    cloud.length > 0
+      ? cloudBounds(cloud)
+      : { minX: 0, maxX: 0, minY: 0, maxY: 0 };
 
-  cloud.forEach((word) => {
-    const wordWidth = word.size * word.text.length * 0.6; // Approximate width
-    const wordHeight = word.size;
-
-    minX = Math.min(minX, word.x - wordWidth / 2);
-    maxX = Math.max(maxX, word.x + wordWidth / 2);
-    minY = Math.min(minY, word.y - wordHeight / 2);
-    maxY = Math.max(maxY, word.y + wordHeight / 2);
-  });
-
-  // Calculate scale factor
   const cloudWidth = maxX - minX;
   const cloudHeight = maxY - minY;
-  const scale = Math.min(
-    Math.min(width / cloudWidth, height / cloudHeight) * 0.85,
-    1
-  );
+  const fitScale = Math.min(width / cloudWidth, height / cloudHeight) * 0.85;
+  const clampedScale = config?.upscale ? fitScale : Math.min(fitScale, 1);
+  const scale = Number.isFinite(fitScale) ? clampedScale : 1;
+  // Center on the words' actual bounds; d3-cloud only roughly centers them.
+  const offsetX = width / 2 - (scale * (minX + maxX)) / 2;
+  const offsetY = height / 2 - (scale * (minY + maxY)) / 2;
 
   select(div)
     .append('svg')
@@ -38,15 +31,13 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
     .attr('role', 'img')
     .attr('aria-label', 'En ordsky som viser de mest brukte ordene i teksten')
     .append('g')
-    .attr('transform', `translate(${width / 2},${height / 2}) scale(${scale})`)
+    .attr('transform', `translate(${offsetX},${offsetY}) scale(${scale})`)
     .selectAll('text')
     .data(cloud)
     .enter()
     .append('text')
     .style('font-size', (d) => `${d.size}px`)
-    // Fallbacks matter for the downloaded svg, which is opened on machines
-    // without Impact; d3-cloud measured the layout with Impact.
-    .style('font-family', "Impact, 'Arial Black', Haettenschweiler, sans-serif")
+    .style('font-family', CLOUD_FONT_STACK)
     .style('fill', (d) => d.fill)
     .attr('text-anchor', 'middle')
     .attr('transform', (d) => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
@@ -55,17 +46,19 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
   return div.innerHTML;
 }
 
-export const createCloud = (
+export const createCloud = async (
   words: CloudInput[],
   config?: CloudConfig
-): Promise<Cloud[]> =>
-  new Promise((resolve) => {
+): Promise<Cloud[]> => {
+  await loadCloudFont();
+
+  return new Promise((resolve) => {
     const svgWidth = config?.svgWidth || 500;
     const svgHeight = config?.svgHeight || 300;
     const paddingBetweenWords = config?.padding || 2;
 
     const rotationDeg = config?.rotationDeg;
-    const font = config?.font || 'Impact';
+    const font = config?.font || CLOUD_FONT;
 
     d3cloud()
       .size([svgWidth, svgHeight])
@@ -77,3 +70,4 @@ export const createCloud = (
       .on('end', resolve)
       .start();
   });
+};

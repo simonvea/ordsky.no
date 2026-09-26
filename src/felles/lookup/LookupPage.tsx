@@ -132,7 +132,7 @@ function SessionHit({ hit, onReset }: HitProps): React.ReactElement {
         </InfoText>
       )}
       <WordsArea readOnly value={session.words.join('\n')} />
-      <Button type="button" $small $outline onClick={copyWords}>
+      <Button type="button" $small $variant="outlined" onClick={copyWords}>
         Kopier ord
       </Button>
       {cloud ? (
