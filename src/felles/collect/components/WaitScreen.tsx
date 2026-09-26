@@ -1,49 +1,69 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Button } from "../../../common/atoms/Button";
-import { TextContainer } from "../../../common/atoms/TextContainer";
+import { Button, IconButton } from "../../../common/atoms/Button";
+import { Title } from "../../../common/atoms/Title";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiError, getSession } from "../services/CollectService";
 import { CopyLinkField } from "../../../common/molecules/CopyLinkField";
-import { InfoBox } from "../../../common/atoms/InfoBox";
 
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 1rem;
+  width: 100%;
+  max-width: 560px;
 `;
 
-const Emphasis = styled.em`
-  font-style: italic;
+const CenteredTitle = styled(Title)`
+  text-align: center;
+`;
+
+const Card = styled.section<{ $emphasis?: boolean }>`
+  padding: 1.25rem 1.5rem;
+  background-color: ${(props) =>
+    props.$emphasis
+      ? "var(--surface-container-high)"
+      : "var(--surface-container)"};
+  border: 1px solid var(--outline-variant);
+  border-radius: 16px;
+
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    color: var(--on-surface-variant);
+    margin: 0 0 1rem;
+  }
+`;
+
+const Count = styled.p`
+  && {
+    font-size: 1.25rem;
+    color: var(--text-color-primary);
+    margin: 0 0 0.25rem;
+  }
+`;
+
+const RefreshLine = styled.p`
+  && {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    margin: 0;
+  }
 `;
 
 const WaitScreenActionsContainer = styled.section`
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 0.75rem;
-  margin-top: 1.5rem;
-`;
-
-const RefreshButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0 0.3rem;
-  color: inherit;
-  vertical-align: middle;
-  line-height: 1;
-
-  &:hover:not(:disabled) {
-    color: #1e90ff;
-  }
-
-  &:disabled {
-    cursor: default;
-    opacity: 0.5;
-  }
+  margin-top: 1rem;
 `;
 
 export type WaitScreenProps = {
@@ -100,66 +120,65 @@ export function WaitScreen({
 
   return (
     <Container>
-      <CopyLinkField link={linkToJoin} label="Kopier invitasjonslink" />
+      <CenteredTitle>Innsamling</CenteredTitle>
 
-      {hasEntries ? (
-        <span>{`${numberOfEntries} har lagt inn ord.`}</span>
-      ) : (
-        <p>Venter på ord.</p>
-      )}
+      <Card>
+        <h2>1. Del lenken med deltakerne</h2>
+        <p>De kan sende inn ord når det passer dem.</p>
+        <CopyLinkField link={linkToJoin} label="Kopier lenke" />
+      </Card>
 
-      <p>
-        {fetchingNumberOfEntries
-          ? "Sjekker for nye ord..."
-          : `Sjekker igjen om ${countDownSeconds} sekunder`}
-        <RefreshButton
-          type="button"
-          onClick={checkEntries}
-          disabled={fetchingNumberOfEntries}
-          aria-label="Sjekk nå"
-          title="Sjekk nå"
-        >
-          <FontAwesomeIcon
-            icon={faArrowsRotate}
-            spin={fetchingNumberOfEntries}
-          />
-        </RefreshButton>
-      </p>
-
-      <TextContainer>
+      <Card $emphasis>
+        <h2>2. Ta vare på admin-lenken</h2>
         <p>
-          Når de som skal legge inn ord har lagt inn ord, kan du trykke på
-          &quot;Lag ordsky&quot; for å lage en ordsky av alle ordene som er lagt
-          inn.
+          Bare du kan lage ordskyen. For å komme tilbake senere{" "}
+          <em>må</em> du ha denne lenken, så lagre den et trygt
+          sted.
         </p>
-      </TextContainer>
+        <CopyLinkField
+          link={linkToJoin + "?admin=true"}
+          label="Kopier admin-lenke"
+          variant="tonal"
+        />
+      </Card>
 
-      <WaitScreenActionsContainer>
-        <Button
-          type="button"
-          onClick={onCreateWordCloud}
-          disabled={!hasEntries || loading}
-        >
-          Lag ordsky
-        </Button>
-        <Button type="button" $variant="outlined" onClick={onQuit}>
-          Avslutt
-        </Button>
-      </WaitScreenActionsContainer>
-
-      <TextContainer>
-        <InfoBox>
-          <p>
-            Obs! Det er bare du som kan lage ordskyen. For å komme tilbake
-            senere for å lage ordsky, <Emphasis>må</Emphasis> du ta vare på
-            linken under.
-          </p>
-          <CopyLinkField
-            link={linkToJoin + "?admin=true"}
-            label="Kopier admin-link"
-          />
-        </InfoBox>
-      </TextContainer>
+      <Card>
+        <h2>3. Lag ordskyen når alle har svart</h2>
+        <Count role="status">
+          {hasEntries
+            ? `${numberOfEntries} har lagt inn ord.`
+            : "Ingen har lagt inn ord ennå."}
+        </Count>
+        <RefreshLine>
+          {fetchingNumberOfEntries
+            ? "Sjekker for nye ord..."
+            : `Sjekker igjen om ${countDownSeconds} sekunder`}
+          <IconButton
+            type="button"
+            onClick={checkEntries}
+            disabled={fetchingNumberOfEntries}
+            aria-label="Sjekk nå"
+            title="Sjekk nå"
+          >
+            <FontAwesomeIcon
+              icon={faArrowsRotate}
+              spin={fetchingNumberOfEntries}
+            />
+          </IconButton>
+        </RefreshLine>
+        <WaitScreenActionsContainer>
+          <Button type="button" $variant="text" onClick={onQuit}>
+            Avslutt
+          </Button>
+          <Button
+            type="button"
+            onClick={onCreateWordCloud}
+            disabled={!hasEntries || loading}
+          >
+            Lag ordsky
+          </Button>
+        </WaitScreenActionsContainer>
+      </Card>
     </Container>
   );
 }

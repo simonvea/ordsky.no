@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "../atoms/Button";
+import { Button, ButtonVariant } from "../atoms/Button";
 import { Input } from "../atoms/Input";
 import { copyText } from "../core/copyText";
 
 const Field = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   width: 100%;
@@ -16,25 +16,33 @@ const Field = styled.div`
 
 // Selectable so the link can still be copied by hand when the clipboard API fails.
 const LinkInput = styled(Input)`
-  width: 100%;
-  max-width: 420px;
+  flex: 1 1 14rem;
+  width: auto;
   margin: 0;
-  text-align: center;
   user-select: all;
+
+  @media only screen and (min-width: 768px) {
+    width: auto;
+  }
 `;
 
 const Status = styled.span`
+  flex-basis: 100%;
   min-height: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--on-surface-variant);
 `;
 
 export type CopyLinkFieldProps = {
   link: string;
   label: string;
+  variant?: ButtonVariant;
 };
 
 export const CopyLinkField = ({
   link,
   label,
+  variant = "filled",
 }: CopyLinkFieldProps): React.ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState("");
@@ -47,8 +55,8 @@ export const CopyLinkField = ({
     const copied = await copyText(link);
     setStatus(
       copied
-        ? "Kopiert link!"
-        : "Kunne ikke kopiere. Marker og kopier linken selv.",
+        ? "Lenken er kopiert."
+        : "Kunne ikke kopiere. Marker og kopier lenken selv.",
     );
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => setStatus(""), 3000);
@@ -63,8 +71,8 @@ export const CopyLinkField = ({
         aria-label={label}
         onFocus={(event) => event.target.select()}
       />
-      <Button $small type="button" onClick={copy}>
-        <FontAwesomeIcon icon={faLink} style={{ marginRight: "0.6rem" }} />
+      <Button $variant={variant} type="button" onClick={copy}>
+        <FontAwesomeIcon icon={faLink} />
         {label}
       </Button>
       <Status role="status">{status}</Status>
