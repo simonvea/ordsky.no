@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, use } from 'react';
 import { Link, useLocation } from 'react-router';
 import styled from 'styled-components';
-import { NavButton } from '../atoms/NavButton';
+import { NavButton } from '../atoms/Button';
 
 const Title = styled.h1`
   font-family: 'Cormorant Garamond', serif;

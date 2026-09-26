@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Button, SecondaryButton } from "../../../common/atoms/Button";
+import { Button } from "../../../common/atoms/Button";
 import { TextContainer } from "../../../common/atoms/TextContainer";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,6 +21,9 @@ const Emphasis = styled.em`
 
 const WaitScreenActionsContainer = styled.section`
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
   margin-top: 1.5rem;
 `;
 
@@ -139,9 +142,9 @@ export function WaitScreen({
         >
           Lag ordsky
         </Button>
-        <SecondaryButton type="button" onClick={onQuit}>
+        <Button type="button" $variant="outlined" onClick={onQuit}>
           Avslutt
-        </SecondaryButton>
+        </Button>
       </WaitScreenActionsContainer>
 
       <TextContainer>

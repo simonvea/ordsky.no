@@ -5,7 +5,7 @@ import React, {
   useState,
   useRef,
 } from 'react';
-import { Button, SecondaryButton } from '../../common/atoms/Button';
+import { Button } from '../../common/atoms/Button';
 import { Container } from '../../common/atoms/Container';
 import { Form as FormBase } from '../../common/atoms/Form';
 import { useNotification } from '../../common/hooks';
@@ -184,9 +184,9 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
           Ignorer ord
         </FilterButton>
         <Container>
-          <SecondaryButton type="button" onClick={clearText}>
+          <Button type="button" $variant="text" onClick={clearText}>
             Tøm
-          </SecondaryButton>
+          </Button>
           <Button type="submit" id="submit" disabled={loading}>
             Generer ordsky
           </Button>

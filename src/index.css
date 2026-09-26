@@ -167,6 +167,17 @@ table {
   --primary-color-rgb: 84, 134, 135;
   --button-hover-bg: rgba(var(--primary-color-rgb), 0.15);
   --button-focus-outline: 2px solid var(--secondary-color-light);
+
+  /* Material 3 style roles for the dark scheme. */
+  --surface: #373737;
+  --surface-container: #2a2a2a;
+  --surface-container-high: #424242;
+  --on-surface-variant: rgba(255, 255, 255, 0.72);
+  --outline: rgba(255, 255, 255, 0.38);
+  --outline-variant: rgba(255, 255, 255, 0.12);
+  /* Tonal buttons: medium emphasis without competing with the green primary. */
+  --tonal-container: #3f5a4a;
+  --on-tonal-container: #dcefd9;
 }
 
 /* 
@@ -221,6 +232,15 @@ p {
   @media (min-width: 768px) {
     margin-bottom: 1.25rem;
   }
+}
+
+/* The reset above strips these, which makes inline emphasis invisible. */
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: 600;
 }
 
 .no-scroll {

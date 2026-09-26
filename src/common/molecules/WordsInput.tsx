@@ -5,7 +5,7 @@ import { Input } from '../atoms/Input';
 import { Form } from '../atoms/Form';
 import { Row } from '../atoms/Row';
 import { Title } from '../atoms/Title';
-import { Button, SecondaryButton, IconButton } from '../atoms/Button';
+import { Button, IconButton } from '../atoms/Button';
 import { formsReducer, initialState } from './wordsInputReducer';
 
 type WordsInputProps = {
@@ -89,15 +89,15 @@ function WordsInput({
           </Row>
         ))}
         <Row>
-          <SecondaryButton type="button" onClick={addWordWorm}>
+          <Button type="button" $variant="tonal" onClick={addWordWorm}>
             Legg til et nytt ord
-          </SecondaryButton>
+          </Button>
           <Button type="button" onClick={handleSubmit}>
             Send inn ord
           </Button>
         </Row>
         <Row>
-          <Button type="button" $outline onClick={onQuit}>
+          <Button type="button" $variant="text" onClick={onQuit}>
             Avslutt
           </Button>
         </Row>

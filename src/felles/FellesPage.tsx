@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { Button } from "../common/atoms/Button";
 import { Title } from "../common/atoms/Title";
-import { NavButton } from "../common/atoms/NavButton";
+import { NavButton } from "../common/atoms/Button";
 import { generateId } from "../common/core/session";
 import { getSession } from "./collect/services/CollectService";
 import { NewsBadge } from "../common/atoms/NewsBadge";

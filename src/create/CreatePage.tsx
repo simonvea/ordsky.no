@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Title } from '../common/atoms/Title';
 import { OptionsContainer, Option } from '../common/atoms/Option';
-import { NavButton } from '../common/atoms/NavButton';
+import { NavButton } from '../common/atoms/Button';
 import { BackButton } from '../common/atoms/BackButton';
 
 const Container = styled.section`

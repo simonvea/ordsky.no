@@ -1,12 +1,12 @@
 /* eslint-disable unicorn/explicit-length-check */
 import React, { FormEvent } from 'react';
 import styled from 'styled-components';
-import { Button, SecondaryButton } from '../common/atoms/Button';
+import { Button } from '../common/atoms/Button';
 import { Container } from '../common/atoms/Container';
 import { WordsInput } from '../common/organisms/WordsInput';
 import { WordCount } from '../common/core/cloud.types';
 import { useWords } from './services/useWords';
-import { NavButton } from '../common/atoms/NavButton';
+import { NavButton } from '../common/atoms/Button';
 import { Details } from '../common/atoms/Details';
 import { Summary } from '../common/atoms/Summary';
 import { InfoText } from '../common/atoms/InfoText';
@@ -90,18 +90,18 @@ export const WordsForm: React.FC<WordsFormProps> = function WordsForm({
           />
         ))}
         <Container>
-          <Button type="button" $outline onClick={addInput}>
+          <Button type="button" $variant="outlined" onClick={addInput}>
             Legg til et ord
           </Button>
-          <NavButton to="/text" $outline>
+          <NavButton to="/text" $variant="outlined">
             ... eller lim inn en tekst
           </NavButton>
         </Container>
       </section>
       <Container>
-        <SecondaryButton type="button" onClick={clearInputs}>
+        <Button type="button" $variant="text" onClick={clearInputs}>
           Tøm liste
-        </SecondaryButton>
+        </Button>
         <Button type="submit" disabled={!inputs[0].word || !inputs[0].size}>
           Lag ordsky
         </Button>

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, SecondaryButton } from '../../../common/atoms/Button';
+import { Button } from '../../../common/atoms/Button';
 
 const Container = styled.section`
   display: flex;
@@ -13,6 +13,9 @@ const Container = styled.section`
 
 const ActionsContainer = styled.section`
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
   margin-top: 1.5rem;
 `;
 
@@ -32,7 +35,7 @@ export const SubmittedWords: React.FC<Props> = ({ onAddMoreWords, onQuit }) => {
       <Message>Ordene er sendt inn!</Message>
       <ActionsContainer>
         <Button onClick={onAddMoreWords}>Legg til flere ord</Button>
-        <SecondaryButton onClick={onQuit}>Avslutt</SecondaryButton>
+        <Button $variant="outlined" onClick={onQuit}>Avslutt</Button>
       </ActionsContainer>
     </Container>
   );

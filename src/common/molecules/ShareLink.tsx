@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { SecondaryButton } from "../atoms/Button";
+import { Button } from "../atoms/Button";
 import { copyText } from "../core/copyText";
 
-const ShareButton = styled(SecondaryButton)`
+const ShareButton = styled(Button).attrs({ $variant: "tonal" })`
   overflow: hidden;
   white-space: nowrap;
   display: flex;

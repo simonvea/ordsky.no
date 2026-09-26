@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { downloadAsPng } from '../core/downloadAsPng';
 import { downloadAsSvg } from '../core/downloadAsSvg';
-import { Button, SecondaryButton } from '../atoms/Button';
+import { Button } from '../atoms/Button';
 import { logger } from '../core/analytics';
 import { BarChart } from '../molecules/BarChart';
 import { WordCount, Cloud } from '../core/cloud.types';
@@ -140,10 +140,10 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
         <Button type="button" onClick={downloadPng}>
           Last ned som PNG
         </Button>
-        <SecondaryButton type="button" onClick={downloadSvg}>
+        <Button type="button" $variant="tonal" onClick={downloadSvg}>
           Last ned som SVG (for trykk)
-        </SecondaryButton>
-        <Button type="button" $outline onClick={onRestart}>
+        </Button>
+        <Button type="button" $variant="outlined" onClick={onRestart}>
           {restartText}
         </Button>
       </Actions>
