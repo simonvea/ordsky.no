@@ -26,7 +26,7 @@ const Validation = styled.span`
   padding: 0px;
   font-size: 0.8em;
   padding: 2px;
-  color: red;
+  color: var(--error-color);
 `;
 
 export type WordsInputProps = {

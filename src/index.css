@@ -160,6 +160,8 @@ table {
   --secondary-color-dark: #429897;
   --text-color-primary: #ffffffde;
   --field-bg: #2b2b2b;
+  /* Light enough for 4.5:1 on the dark page background. */
+  --error-color: #ff8a80;
   --primary-color-rgb: 84, 134, 135;
   --button-hover-bg: rgba(var(--primary-color-rgb), 0.15);
   --button-focus-outline: 2px solid var(--secondary-color-light);
@@ -221,4 +223,14 @@ p {
 
 .no-scroll {
   overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  :before,
+  :after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

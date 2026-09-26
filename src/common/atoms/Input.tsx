@@ -17,6 +17,7 @@ export const Input = styled.input<InputProps>`
     ${(props) => (props.$warning ? 'red' : 'var(--primary-color-light)')};
   border-radius: 4px;
   padding: 7px;
+  min-height: 44px;
   background-color: var(--field-bg);
   color: var(--text-color-primary);
 

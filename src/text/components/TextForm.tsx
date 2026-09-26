@@ -96,12 +96,28 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const filterButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleClickOutside = (event: MouseEvent | TouchEvent): void => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       setIsModalOpen(false);
     }
   };
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+    closeRef.current?.focus();
+    const closeOnEscape = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') setIsModalOpen(false);
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    const trigger = filterButtonRef.current;
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape);
+      trigger?.focus();
+    };
+  }, [isModalOpen]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -140,7 +156,7 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
           value={text}
           onChange={onChange}
         />
-        <FilterButton type="button" onClick={() => setIsModalOpen(true)}>
+        <FilterButton ref={filterButtonRef} type="button" onClick={() => setIsModalOpen(true)}>
           <FontAwesomeIcon icon={faFilter} />
           Ignorer ord
         </FilterButton>
@@ -169,8 +185,18 @@ export const TextForm: React.FC<TextFormProps> = function TextForm({
         </InfoText>
       </Details>
       <Modal $isOpen={isModalOpen}>
-        <ModalContent ref={modalRef}>
-          <CloseButton onClick={() => setIsModalOpen(false)}>
+        <ModalContent
+          ref={modalRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Ignorer ord"
+        >
+          <CloseButton
+            ref={closeRef}
+            type="button"
+            aria-label="Lukk"
+            onClick={() => setIsModalOpen(false)}
+          >
             &times;
           </CloseButton>
           <FilterManager filter={filter} setFilter={updateFilter} />

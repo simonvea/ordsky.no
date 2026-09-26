@@ -12,5 +12,5 @@ export const Alert = styled.div<AlertProps>`
   padding: ${(props) => (props.small ? 0 : 2)}px;
   margin: ${(props) => (props.small ? 0 : 5)}px;
   font-size: ${(props) => (props.small ? '0.8em' : 'inherit')};
-  color: red;
+  color: var(--error-color);
 `;
