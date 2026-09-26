@@ -226,7 +226,11 @@ export function CollectPage(): React.ReactElement {
         />
       )}
       {!isAdmin && !cloud && (
-        <WordsInput onSubmit={handleSubmitWords} onQuit={handleQuit} />
+        <WordsInput
+          title="Legg inn ord"
+          onSubmit={handleSubmitWords}
+          onQuit={handleQuit}
+        />
       )}
       {!!cloud && (
         <CloudDisplay
