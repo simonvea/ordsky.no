@@ -7,6 +7,7 @@ import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { useCallToAction } from '../common/hooks/useCallToAction';
 import styled from 'styled-components';
 import { BackButton } from '../common/atoms/BackButton';
+import { Title } from '../common/atoms/Title';
 
 export type WordsPageProps = {};
 
@@ -47,7 +48,10 @@ export const WordsPage: React.FC<WordsPageProps> = function WordsPage() {
           shouldDisplayCallToAction={shouldDisplayCallToAction}
         />
       ) : (
-        <WordsForm onSubmit={createCloudFromWords} />
+        <>
+          <Title>Lag ordsky fra ord</Title>
+          <WordsForm onSubmit={createCloudFromWords} />
+        </>
       )}
     </MainContainer>
   );

@@ -7,6 +7,7 @@ import { CloudDisplay } from '../common/organisms/CloudDisplay';
 import { TextForm } from './components/TextForm';
 import { useCallToAction } from '../common/hooks/useCallToAction';
 import { BackButton } from '../common/atoms/BackButton';
+import { Title } from '../common/atoms/Title';
 
 export type TextPageProps = {};
 
@@ -47,10 +48,13 @@ export const TextPage: React.FC<TextPageProps> = function TextPage() {
           shouldDisplayCallToAction={shouldDisplayCallToAction}
         />
       ) : (
-        <TextForm
+        <>
+          <Title>Lag ordsky fra tekst</Title>
+          <TextForm
           onSubmit={(text, filter) => createCloudFromText(text, filter)}
           loading={loading}
-        />
+          />
+        </>
       )}
     </MainContainer>
   );
