@@ -17,6 +17,12 @@ export const Input = styled.input<InputProps>`
     ${(props) => (props.$warning ? 'red' : 'var(--primary-color-light)')};
   border-radius: 4px;
   padding: 7px;
+  background-color: #2b2b2b;
+  color: var(--text-color-primary);
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
   font-size: 14px;
   width: ${(props) => (props.$small ? '70px' : '150px')};
   -webkit-transition-duration: 0.2s; /* Safari */

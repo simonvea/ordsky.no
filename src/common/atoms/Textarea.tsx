@@ -6,6 +6,12 @@ export const Textarea = styled.textarea`
   border: 2px solid var(--primary-color-light);
   border-radius: 4px;
   padding: 7px;
+  background-color: #2b2b2b;
+  color: var(--text-color-primary);
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
   font-size: 14px;
   -webkit-transition-duration: 0.2s; /* Safari */
   transition-duration: 0.2s;

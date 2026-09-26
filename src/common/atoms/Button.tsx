@@ -12,7 +12,8 @@ export const Button = styled.button<ButtonProps>`
   justify-content: center;
   background-color: ${(props) =>
     props.$outline ? 'transparent' : 'var(--secondary-color)'};
-  border: none;
+  border: 1px solid
+    ${(props) => (props.$outline ? 'var(--primary-color-light)' : 'transparent')};
   border-radius: 4px;
   color: white;
   padding: ${(props) => (props.$small ? '8px 16px' : '15px 32px')};
@@ -43,9 +44,6 @@ export const Button = styled.button<ButtonProps>`
     opacity: 0.7;
   }
 
-  &:active {
-    border: none;
-  }
 `;
 
 export const SecondaryButton = styled(Button)`
@@ -68,7 +66,8 @@ export const LinkButton = styled(Link)<ButtonProps>`
   justify-content: center;
   background-color: ${(props) =>
     props.$outline ? 'transparent' : 'var(--secondary-color)'};
-  border: none;
+  border: 1px solid
+    ${(props) => (props.$outline ? 'var(--primary-color-light)' : 'transparent')};
   border-radius: 4px;
   color: white;
   padding: ${(props) => (props.$small ? '8px 16px' : '15px 32px')};
@@ -99,7 +98,4 @@ export const LinkButton = styled(Link)<ButtonProps>`
     opacity: 0.7;
   }
 
-  &:active {
-    border: none;
-  }
 `;

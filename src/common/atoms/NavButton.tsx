@@ -9,7 +9,8 @@ export const NavButton = styled(NavLink).attrs<ButtonProps>((props) => ({
 }))`
   background-color: ${(props) =>
     props.$outline ? 'transparent' : 'var(--secondary-color)'};
-  border: none;
+  border: 1px solid
+    ${(props) => (props.$outline ? 'var(--primary-color-light)' : 'transparent')};
   border-radius: 4px;
   color: ${(props) => props.color || 'white'};
   padding: ${(props) => (props.$small ? '8px 16px' : '15px 32px')};
@@ -39,7 +40,6 @@ export const NavButton = styled(NavLink).attrs<ButtonProps>((props) => ({
 
   &:active,
   &:focus {
-    border: none;
     outline: var(--button-focus-outline);
   }
 `;
