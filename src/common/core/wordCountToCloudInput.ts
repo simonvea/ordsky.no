@@ -1,4 +1,4 @@
-import getRandomColor from "randomcolor";
+import { randomReadableColor } from "./contrast";
 import { Cloud, CloudInput, WordCount } from "./cloud.types";
 import { createCloud } from "./createCloud";
 
@@ -11,6 +11,8 @@ export const createCloudFromWordCount = async (
 };
 
 const MAX_ARRAY_SIZE = 200;
+// Page background (html in index.css) and the white paper the png is used on.
+const CLOUD_BACKGROUNDS = ["#373737", "#ffffff"];
 
 export function wordCountToCloudInput(wordCount: WordCount): CloudInput[] {
   const wordsSorted = [...wordCount].toSorted((a, b) => b.count - a.count);
@@ -23,7 +25,7 @@ export function wordCountToCloudInput(wordCount: WordCount): CloudInput[] {
   const cloudInput = count.map((word) => ({
     text: word.text.toUpperCase(),
     size: word.count,
-    fill: getRandomColor(),
+    fill: randomReadableColor(CLOUD_BACKGROUNDS),
   }));
 
   const normalizedSizes = normalizeSizes({
