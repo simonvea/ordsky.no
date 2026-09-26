@@ -32,9 +32,13 @@ type InputTitleProps = {
 const InputTitle = styled.h3<InputTitleProps>`
   font-size: 22px;
   text-align: center;
-  width: 184px;
+  width: 150px;
   margin: 0 15px;
   padding: 0 7px;
+
+  @media only screen and (min-width: 768px) {
+    width: 200px;
+  }
 `;
 
 const SmallInputTitle = styled(InputTitle)`
