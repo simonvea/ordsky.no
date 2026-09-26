@@ -71,6 +71,59 @@ describe("serializeSvg", () => {
     });
   });
 
+  describe("given a background colour", () => {
+    it("when serialized, then a rect of that colour covers the whole viewBox behind the words", () => {
+      // Arrange
+      const svg = createSvg('viewBox="0 0 500 300"');
+
+      // Act
+      const output = serializeSvg(svg, { background: "#ffffff" });
+
+      // Assert
+      expect(output).toMatch(
+        /<svg[^>]*><rect x="0" y="0" width="500" height="300" fill="#ffffff"\/>/,
+      );
+    });
+
+    it("when serialized, then the svg shown on the page gets no rect", () => {
+      // Arrange
+      const svg = createSvg('viewBox="0 0 500 300"');
+
+      // Act
+      serializeSvg(svg, { background: "#ffffff" });
+
+      // Assert
+      expect(svg.querySelector("rect")).toBeNull();
+    });
+  });
+
+  describe("given no background colour", () => {
+    it("when serialized, then the background stays transparent", () => {
+      // Arrange
+      const svg = createSvg('viewBox="0 0 500 300"');
+
+      // Act
+      const output = serializeSvg(svg);
+
+      // Assert
+      expect(output).not.toContain("<rect");
+    });
+  });
+
+  describe("given font face css", () => {
+    it("when serialized, then the css is embedded in a style element so viewers without the font still render it", () => {
+      // Arrange
+      const svg = createSvg('viewBox="0 0 500 300"');
+      const fontFaceCss = "@font-face{font-family:'Anton';src:url(data:x)}";
+
+      // Act
+      const output = serializeSvg(svg, { fontFaceCss });
+
+      // Assert
+      expect(output).toContain(`<style>${fontFaceCss}</style>`);
+    });
+  });
+
   describe("given an svg with neither viewBox nor size", () => {
     it("when serialized, then it falls back to 500 by 500", () => {
       // Arrange

@@ -2,6 +2,7 @@ import { select } from 'd3-selection';
 import d3cloud from 'd3-cloud';
 import { Cloud, CloudInput, CloudConfig } from './cloud.types';
 import { cloudBounds } from './cloudBounds';
+import { CLOUD_FONT, CLOUD_FONT_STACK, loadCloudFont } from './cloudFont';
 
 export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
   const div = document.createElement('div');
@@ -36,9 +37,7 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
     .enter()
     .append('text')
     .style('font-size', (d) => `${d.size}px`)
-    // Fallbacks matter for the downloaded svg, which is opened on machines
-    // without Impact; d3-cloud measured the layout with Impact.
-    .style('font-family', "Impact, 'Arial Black', Haettenschweiler, sans-serif")
+    .style('font-family', CLOUD_FONT_STACK)
     .style('fill', (d) => d.fill)
     .attr('text-anchor', 'middle')
     .attr('transform', (d) => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
@@ -47,17 +46,19 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
   return div.innerHTML;
 }
 
-export const createCloud = (
+export const createCloud = async (
   words: CloudInput[],
   config?: CloudConfig
-): Promise<Cloud[]> =>
-  new Promise((resolve) => {
+): Promise<Cloud[]> => {
+  await loadCloudFont();
+
+  return new Promise((resolve) => {
     const svgWidth = config?.svgWidth || 500;
     const svgHeight = config?.svgHeight || 300;
     const paddingBetweenWords = config?.padding || 2;
 
     const rotationDeg = config?.rotationDeg;
-    const font = config?.font || 'Impact';
+    const font = config?.font || CLOUD_FONT;
 
     d3cloud()
       .size([svgWidth, svgHeight])
@@ -69,3 +70,4 @@ export const createCloud = (
       .on('end', resolve)
       .start();
   });
+};

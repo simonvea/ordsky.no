@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { downloadAsPng } from '../core/downloadAsPng';
 import { downloadAsSvg } from '../core/downloadAsSvg';
@@ -12,6 +12,15 @@ import { SupportCallout } from '../molecules/SupportCallout';
 import { useCallToAction } from '../hooks/useCallToAction';
 import { ShareLink } from '../molecules/ShareLink';
 import randomColor from 'randomcolor';
+import { BackgroundChoice } from '../molecules/BackgroundChoice';
+import {
+  CloudBackground,
+  backgroundFill,
+  loadCloudBackground,
+  saveCloudBackground,
+} from '../core/cloudBackground';
+import { cloudFontFaceCss } from '../core/cloudFontFaceCss';
+import { SerializeOptions } from '../core/serializeSvg';
 
 export type CloudDisplayProps = {
   cloud: Cloud[];
@@ -22,7 +31,7 @@ export type CloudDisplayProps = {
   shareable?: boolean;
 };
 
-const CloudContainer = styled.figure`
+const CloudContainer = styled.figure<{ $background: CloudBackground }>`
   aspect-ratio: 5 / 3;
   width: 100%;
   /* Keeps the download buttons above the fold on short screens. */
@@ -33,8 +42,11 @@ const CloudContainer = styled.figure`
   align-items: center;
   margin: 0 auto;
   padding: 1rem;
-  background-color: var(--surface-container);
+  /* Previews the background the download will get. */
+  background-color: ${(props) =>
+    backgroundFill[props.$background] ?? 'var(--surface-container)'};
   border: 1px solid var(--outline-variant);
+  transition: background-color 0.15s;
   border-radius: 16px;
 
   svg {
@@ -56,7 +68,7 @@ const Actions = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.75rem;
-  margin: 1.5rem 0 0.75rem;
+  margin: 1rem 0 0.75rem;
 
   @media (max-width: 480px) {
     flex-direction: column;
@@ -96,6 +108,18 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
   const { incrementCloudCount } = useCallToAction();
 
   const svgElement = useRef<HTMLElement>(null);
+  const [background, setBackground] =
+    useState<CloudBackground>(loadCloudBackground);
+
+  const changeBackground = (next: CloudBackground): void => {
+    setBackground(next);
+    saveCloudBackground(next);
+  };
+
+  const downloadOptions = async (): Promise<SerializeOptions> => ({
+    background: backgroundFill[background],
+    fontFaceCss: await cloudFontFaceCss(),
+  });
 
   useEffect(() => {
     incrementCloudCount();
@@ -111,7 +135,9 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
     if (!svg) return;
 
     logger.logEvent('download_cloud');
-    downloadAsPng(svg, {}).catch(logDownloadError);
+    downloadOptions()
+      .then((options) => downloadAsPng(svg, options))
+      .catch(logDownloadError);
   };
 
   const downloadSvg = (): void => {
@@ -119,7 +145,9 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
     if (!svg) return;
 
     logger.logEvent('download_cloud_svg');
-    downloadAsSvg(svg).catch(logDownloadError);
+    downloadOptions()
+      .then((options) => downloadAsSvg(svg, options))
+      .catch(logDownloadError);
   };
 
   const title = 'Mest brukte ord';
@@ -144,7 +172,9 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
         ref={svgElement}
         role="img"
         aria-label={imageDescription}
+        $background={background}
       ></CloudContainer>
+      <BackgroundChoice value={background} onChange={changeBackground} />
       <Actions>
         <Button type="button" onClick={downloadPng}>
           Last ned som PNG
