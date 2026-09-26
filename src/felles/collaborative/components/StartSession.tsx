@@ -7,8 +7,8 @@ import { Label } from '../../../common/atoms/Label';
 import { Title as OriginalTitle } from '../../../common/atoms/Title';
 
 const JoinSessionForm = styled(Form)`
-  justify-content: space-around;
-  height: 160px;
+  gap: 0.5rem;
+  text-align: center;
   width: 100%;
   max-width: 300px;
 `;
@@ -108,6 +108,10 @@ export function StartSession({
               value={idToJoin}
               onChange={({ target }) => setIdToJoin(target.value)}
               id="idInput"
+              inputMode="numeric"
+              autoComplete="off"
+              maxLength={5}
+              placeholder="12345"
             />
           </Label>
           <Button
