@@ -1,6 +1,7 @@
 import { select } from 'd3-selection';
 import d3cloud from 'd3-cloud';
 import { Cloud, CloudInput, CloudConfig } from './cloud.types';
+import { cloudBounds } from './cloudBounds';
 
 export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
   const div = document.createElement('div');
@@ -8,27 +9,16 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
   const width = config?.svgWidth || 500;
   const height = config?.svgHeight || 300;
 
-  // Find bounds of word cloud
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minY = Infinity;
-  let maxY = -Infinity;
-
-  cloud.forEach((word) => {
-    const wordWidth = word.size * word.text.length * 0.6; // Approximate width
-    const wordHeight = word.size;
-
-    minX = Math.min(minX, word.x - wordWidth / 2);
-    maxX = Math.max(maxX, word.x + wordWidth / 2);
-    minY = Math.min(minY, word.y - wordHeight / 2);
-    maxY = Math.max(maxY, word.y + wordHeight / 2);
-  });
+  const { minX, maxX, minY, maxY } = cloudBounds(cloud);
 
   // Calculate scale factor
   const cloudWidth = maxX - minX;
   const cloudHeight = maxY - minY;
   const fitScale = Math.min(width / cloudWidth, height / cloudHeight) * 0.85;
   const scale = config?.upscale ? fitScale : Math.min(fitScale, 1);
+  // Center on the words' actual bounds; d3-cloud only roughly centers them.
+  const offsetX = width / 2 - (scale * (minX + maxX)) / 2;
+  const offsetY = height / 2 - (scale * (minY + maxY)) / 2;
 
   select(div)
     .append('svg')
@@ -36,7 +26,7 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
     .attr('role', 'img')
     .attr('aria-label', 'En ordsky som viser de mest brukte ordene i teksten')
     .append('g')
-    .attr('transform', `translate(${width / 2},${height / 2}) scale(${scale})`)
+    .attr('transform', `translate(${offsetX},${offsetY}) scale(${scale})`)
     .selectAll('text')
     .data(cloud)
     .enter()
