@@ -24,7 +24,7 @@ const SAMPLE_WORDS: WordCount = [
 const Frame = styled.div`
   width: 100%;
   max-width: 500px;
-  min-height: 300px;
+  aspect-ratio: 5 / 3;
   margin: 1rem auto 0;
 `;
 
