@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
-import { Button } from "../common/atoms/Button";
+import { Button, NavButton } from "../common/atoms/Button";
 import { Title } from "../common/atoms/Title";
-import { NavButton } from "../common/atoms/Button";
 import { generateId } from "../common/core/session";
 import { getSession } from "./collect/services/CollectService";
 import { NewsBadge } from "../common/atoms/NewsBadge";
-import { OptionsContainer, Option } from "../common/atoms/Option";
+import { OptionsContainer, Option, OptionTitle } from "../common/atoms/Option";
 import { BackButton } from "../common/atoms/BackButton";
 
 const Container = styled.section`
@@ -15,14 +14,6 @@ const Container = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
-  color: #ffffff;
-`;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: auto;
 `;
 
 export const FellesPage: React.FC = function FellesPage() {
@@ -45,30 +36,21 @@ export const FellesPage: React.FC = function FellesPage() {
       <Title>Lag ordsky i fellesskap</Title>
       <OptionsContainer>
         <Option>
+          <OptionTitle>Live-økt</OptionTitle>
           <p>
-            <strong>Live økt:</strong> Perfekt for skoleklasser og i andre
-            sammenhenger hvor man sitter sammen.
+            For klasserom og møter der alle er til stede. Deltakerne blir med
+            via en kode, og ordskyen vises for alle samtidig når du er klar.
           </p>
-          <p>
-            Alle deltakere ser statusen i sanntid, og ordskyen vises samtidig
-            for alle når den er ferdig.
-          </p>
-          <ButtonWrapper>
-            <NavButton to="live">Start live økt</NavButton>
-          </ButtonWrapper>
+          <NavButton to="live">Start live-økt</NavButton>
         </Option>
         <Option>
+          <OptionTitle>Innsamling</OptionTitle>
           <p>
-            <strong>Innsamling:</strong> Deltakere kan sende inn ord når det
-            passer dem.
+            Del en lenke, så sender deltakerne inn ord når det passer dem. Fint
+            til avskjed med en kollega, bursdager og andre anledninger. Du lager
+            ordskyen senere og kan dele resultatet via lenken.
           </p>
-          <p>
-            Du kan senere lage en ordsky av de innsamlede ordene og dele
-            resultatet via en lenke.
-          </p>
-          <ButtonWrapper>
-            <Button onClick={createAsyncSession}>Start innsamling</Button>
-          </ButtonWrapper>
+          <Button onClick={createAsyncSession}>Start innsamling</Button>
         </Option>
       </OptionsContainer>
       <BackButton />

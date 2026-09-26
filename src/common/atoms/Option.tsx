@@ -1,49 +1,37 @@
 import styled from 'styled-components';
 
 export const OptionsContainer = styled.div`
-  display: flex;
-  gap: 2rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
   width: 100%;
   max-width: 1000px;
 `;
 
-export const Option = styled.section<{ disabled?: boolean }>`
-  position: relative;
-  flex: 1 1 400px;
+export const Option = styled.section`
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  background: #2a2a2a;
-  padding: 2rem;
-  border-radius: 12px;
-  border: 1px solid #3a3a3a;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  opacity: ${(props) => (props.disabled ? 0.7 : 1)};
-  filter: ${(props) => (props.disabled ? 'grayscale(20%)' : 'none')};
+  align-items: flex-start;
+  background: var(--surface-container);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid var(--outline-variant);
 
   p {
-    font-size: 1.125rem;
-    line-height: 1.8;
-    margin-bottom: 2rem;
-    color: #e0e0e0;
-
-    &:last-of-type {
-      flex-grow: 1;
-    }
+    line-height: 1.6;
+    margin: 0 0 1rem;
+    color: var(--on-surface-variant);
   }
 
-  strong {
-    color: #ffffff;
-    font-size: 1.25rem;
-    display: block;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #3a3a3a;
+  /* Pushes the action to the bottom so buttons line up across cards. */
+  > :last-child {
+    margin-top: auto;
   }
+`;
+
+export const OptionTitle = styled.h2`
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
 `;
