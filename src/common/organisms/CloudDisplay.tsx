@@ -22,16 +22,25 @@ export type CloudDisplayProps = {
   shareable?: boolean;
 };
 
-const CloudContainer = styled.section`
-  max-width: 80vw;
-  max-height: 80vw;
+const CloudContainer = styled.figure`
   aspect-ratio: 5 / 3;
   width: 100%;
-  height: 100%;
+  /* Keeps the download buttons above the fold on short screens. */
+  max-width: calc(60vh * 5 / 3);
+  max-width: calc(60dvh * 5 / 3);
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+  padding: 1rem;
+  background-color: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: 16px;
+
+  svg {
+    max-width: 100%;
+    max-height: 100%;
+  }
 `;
 
 const CloudImage = styled.img`
@@ -46,12 +55,8 @@ const Actions = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem;
-  margin: 0.5rem 0;
-
-  & > button {
-    margin: 0;
-  }
+  gap: 0.75rem;
+  margin: 1.5rem 0 0.75rem;
 
   @media (max-width: 480px) {
     flex-direction: column;
@@ -60,8 +65,9 @@ const Actions = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 24px;
-  margin: 1rem 0 2rem;
+  font-size: 1.375rem;
+  font-weight: 500;
+  margin: 3rem 0 1rem;
 `;
 
 const MainContainer = styled.div`
@@ -69,7 +75,8 @@ const MainContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 80vw;
+  width: 100%;
+  max-width: 900px;
 `;
 
 const logDownloadError = (error: unknown): void =>
@@ -115,8 +122,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
     downloadAsSvg(svg).catch(logDownloadError);
   };
 
-  const NUMBER_OF_WORDS = 10;
-  const title = `Top ${NUMBER_OF_WORDS} ord`;
+  const title = 'Mest brukte ord';
 
   const data = wordCount?.map((word) => word.count);
 
@@ -125,7 +131,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
   const fillByWord = getFillColorsByWord(cloud);
 
   const backgroundColors = wordCount?.map(
-    (word) => fillByWord[word.text] || randomColor()
+    (word) => fillByWord[word.text] || randomColor(),
   );
 
   const imageTitle = 'Ordsky';
@@ -134,8 +140,11 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
 
   return (
     <MainContainer>
-      <CloudContainer ref={svgElement}></CloudContainer>
-      {shouldDisplayCallToAction && <SupportCallout />}
+      <CloudContainer
+        ref={svgElement}
+        role="img"
+        aria-label={imageDescription}
+      ></CloudContainer>
       <Actions>
         <Button type="button" onClick={downloadPng}>
           Last ned som PNG
@@ -148,9 +157,10 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
         </Button>
       </Actions>
       {shareable && <ShareLink />}
+      {shouldDisplayCallToAction && <SupportCallout />}
       {data && (
         <>
-          <Title> {title}</Title>
+          <Title>{title}</Title>
           <BarChart
             data={data}
             labels={labels!}

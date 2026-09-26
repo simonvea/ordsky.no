@@ -11,13 +11,13 @@ const Container = styled.div<{ $display: boolean }>`
   animation: ${fadeIn} 0.5s ease-in;
   position: relative;
   margin-top: 2rem;
-  padding: 1rem;
-  background-color: #eff6ff;
-  border-radius: 0.5rem;
+  padding: 1.25rem 3rem 1.25rem 1.5rem;
+  background-color: var(--surface-container-high);
+  border-radius: 16px;
   max-width: 42rem;
   margin-left: auto;
   margin-right: auto;
-  text-align: center;
+  text-align: left;
 `;
 
 const CloseButton = styled.button`
@@ -29,30 +29,31 @@ const CloseButton = styled.button`
   border: none;
   background: none;
   cursor: pointer;
-  color: #1e3a8a;
-  font-size: 1.2rem;
+  border-radius: 50%;
+  color: var(--on-surface-variant);
+  font-size: 1.5rem;
   line-height: 1;
 
   &:hover {
-    color: #1e40af;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-color-primary);
   }
 `;
 
 const Title = styled.h3`
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1e3a8a;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem;
 `;
 
 const Message = styled.p`
-  color: #1e40af;
-  margin-bottom: 1rem;
+  color: var(--on-surface-variant);
+  margin: 0 0 0.75rem;
 `;
 
 const VippsNumber = styled.div`
-  font-weight: 500;
-  color: #1e3a8a;
+  font-weight: 600;
+  color: var(--on-tonal-container);
 `;
 
 export function SupportCallout(): React.ReactElement {

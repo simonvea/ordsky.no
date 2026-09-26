@@ -28,7 +28,6 @@ const slideFromTop = keyframes`
 `;
 
 const ShareText = styled.span<{ $show: boolean }>`
-  width: 104px;
   opacity: ${(props) => (props.$show ? 1 : 0)};
   transform: ${(props) =>
     props.$show ? "translateY(0)" : "translateY(-100%)"};
@@ -38,7 +37,7 @@ const ShareText = styled.span<{ $show: boolean }>`
     ease-in-out;
 `;
 
-const shareText = "Link til Ordsky";
+const shareText = "Kopier lenke til ordskyen";
 
 export const ShareLink = (): React.ReactElement => {
   const [showCopiedJoinUrlMessage, setShowCopiedJoinUrlMessage] =
@@ -61,7 +60,7 @@ export const ShareLink = (): React.ReactElement => {
       <FontAwesomeIcon icon={faLink} />
       <ShareTextContainer>
         <ShareText $show={!showCopiedJoinUrlMessage}>{shareText}</ShareText>
-        <ShareText $show={showCopiedJoinUrlMessage}>Link kopiert!</ShareText>
+        <ShareText $show={showCopiedJoinUrlMessage}>Lenke kopiert!</ShareText>
       </ShareTextContainer>
     </ShareButton>
   );
