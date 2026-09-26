@@ -22,10 +22,10 @@ const Container = styled.div<{ $display: boolean }>`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 24px;
-  height: 24px;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
   border: none;
   background: none;
   cursor: pointer;

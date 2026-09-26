@@ -9,7 +9,8 @@ const StartSessionActionsContainer = styled.section`
   justify-content: center;
   align-items: center;
 
-  width: 480px;
+  width: 100%;
+  max-width: 480px;
 `;
 
 const SessionInfoContainer = styled.section`
