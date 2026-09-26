@@ -8,19 +8,20 @@ export interface SpinnerProps {
 
 const Loader = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 0;
+  color: var(--on-surface-variant);
 `;
 
-const Text = styled.span`
-  margin-left: 8px;
-`;
+
 
 export const Spinner: React.FC<SpinnerProps> = function Spinner({ message }) {
   return (
-    <Loader>
+    <Loader role="status">
       <LoaderSpinner />
-      <Text>{message && message}</Text>
+      {message && <span>{message}</span>}
     </Loader>
   );
 };

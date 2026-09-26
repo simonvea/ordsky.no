@@ -3,13 +3,16 @@ import styled from 'styled-components';
 import { Button } from '../atoms/Button';
 import { Form } from '../atoms/Form';
 
+// Material 3 basic dialog on the dark surface; the browser default is white.
 const Dialog = styled.dialog`
-  padding: 2rem;
-  border-radius: 8px;
+  padding: 1.5rem;
+  border-radius: 28px;
   border: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  width: 90%;
+  background-color: var(--surface-container-high);
+  color: var(--text-color-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  max-width: 440px;
+  width: calc(100% - 2rem);
 
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.5);
@@ -19,36 +22,24 @@ const Dialog = styled.dialog`
 const Title = styled.h2`
   margin: 0 0 1rem 0;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const Message = styled.p`
   margin: 0 0 1.5rem 0;
+  color: var(--on-surface-variant);
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: 0.5rem;
+  width: 100%;
 `;
 
-const CancelButton = styled(Button)`
-  background: none;
-  color: inherit;
-  border: 1px solid #e2e8f0;
-
-  &:hover {
-    background-color: #f7fafc;
-    box-shadow: none;
-  }
-`;
-
+// The destructive action is a text button in the error colour, per Material 3.
 const ConfirmButton = styled(Button)`
-  background-color: #e53e3e;
-
-  &:hover {
-    background-color: #c53030;
-  }
+  color: var(--error-color);
 `;
 
 interface WarningModalProps {
@@ -95,10 +86,10 @@ export function WarningModal({
         <Title>{title}</Title>
         <Message>{message}</Message>
         <ButtonContainer>
-          <CancelButton type="submit" value="cancel" $small autoFocus>
+          <Button type="submit" value="cancel" $variant="text" autoFocus>
             Avbryt
-          </CancelButton>
-          <ConfirmButton type="submit" value="confirm" $small>
+          </Button>
+          <ConfirmButton type="submit" value="confirm" $variant="text">
             Avslutt
           </ConfirmButton>
         </ButtonContainer>

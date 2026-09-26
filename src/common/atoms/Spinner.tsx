@@ -11,10 +11,11 @@ const spin = keyframes`
 
 export const Spinner = styled.span`
   display: inline-block;
-  border: 5px solid var(--primary-color);
-  border-top: 5px solid var(--primary-color-dark);
+  flex-shrink: 0;
+  border: 4px solid var(--outline-variant);
+  border-top-color: var(--primary-color-light);
   border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  animation: ${spin} 2s linear infinite;
+  width: 28px;
+  height: 28px;
+  animation: ${spin} 1s linear infinite;
 `;
