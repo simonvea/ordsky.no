@@ -27,10 +27,8 @@ export function createCloudSvg(cloud: Cloud[], config?: CloudConfig): string {
   // Calculate scale factor
   const cloudWidth = maxX - minX;
   const cloudHeight = maxY - minY;
-  const scale = Math.min(
-    Math.min(width / cloudWidth, height / cloudHeight) * 0.85,
-    1
-  );
+  const fitScale = Math.min(width / cloudWidth, height / cloudHeight) * 0.85;
+  const scale = config?.upscale ? fitScale : Math.min(fitScale, 1);
 
   select(div)
     .append('svg')

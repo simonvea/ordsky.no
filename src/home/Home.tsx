@@ -1,8 +1,8 @@
 import React from 'react';
-import { Container } from '../common/atoms/Container';
 import { TextContainer } from '../common/atoms/TextContainer';
 import styled, { keyframes } from 'styled-components';
-import { Button, LinkButton } from '../common/atoms/Button';
+import { LinkButton } from '../common/atoms/Button';
+import { SampleCloud } from './SampleCloud';
 
 const fadeInUp = keyframes`
   from {
@@ -38,20 +38,13 @@ const ActionContainer = styled.section`
   }
 `;
 
-const TransitionContainer = styled.div`
-  grid-row: 1;
-  grid-column: 1;
-`;
-
 const GridWrapper = styled.div`
   margin-top: 2rem;
-  display: grid;
-  min-height: 200px;
+  width: 100%;
+  max-width: 800px;
 `;
 
 export const Home: React.FC = function Home() {
-  const [showOptions, setShowOptions] = React.useState(false);
-
   return (
     <>
       <TextContainer>
@@ -66,28 +59,19 @@ export const Home: React.FC = function Home() {
           </p>
         </article>
       </TextContainer>
+      <SampleCloud />
       <GridWrapper>
-        <TransitionContainer>
-          {showOptions ? (
-            <ActionContainer>
-              <AnimatedNavWrapper $delay={0.1}>
-                <LinkButton to="text">Lag en ordsky fra tekst</LinkButton>
-              </AnimatedNavWrapper>
-              <AnimatedNavWrapper $delay={0}>
-                <LinkButton to="words">Lag en ordsky fra ord</LinkButton>
-              </AnimatedNavWrapper>
-              <AnimatedNavWrapper $delay={0.2}>
-                <LinkButton to="felles">Lag en ordsky sammen</LinkButton>
-              </AnimatedNavWrapper>
-            </ActionContainer>
-          ) : (
-            <Container>
-              <Button onClick={() => setShowOptions(true)}>
-                Lag en ordsky
-              </Button>
-            </Container>
-          )}
-        </TransitionContainer>
+        <ActionContainer>
+          <AnimatedNavWrapper $delay={0}>
+            <LinkButton to="text">Lag en ordsky fra tekst</LinkButton>
+          </AnimatedNavWrapper>
+          <AnimatedNavWrapper $delay={0.1}>
+            <LinkButton to="words">Lag en ordsky fra ord</LinkButton>
+          </AnimatedNavWrapper>
+          <AnimatedNavWrapper $delay={0.2}>
+            <LinkButton to="felles">Lag en ordsky sammen</LinkButton>
+          </AnimatedNavWrapper>
+        </ActionContainer>
       </GridWrapper>
     </>
   );
