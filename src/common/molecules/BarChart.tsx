@@ -61,6 +61,11 @@ export const BarChart: React.FC<BarChartProps> = function BarChart({
           scales: {
             y: {
               beginAtZero: true,
+              ticks: { precision: 0 },
+              grid: { color: 'rgba(255, 255, 255, 0.12)' },
+            },
+            x: {
+              grid: { display: false },
             },
           },
         },

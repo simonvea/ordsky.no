@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { downloadAsPng } from '../core/downloadAsPng';
 import { downloadAsSvg } from '../core/downloadAsSvg';
-import { Button, IconButton } from '../atoms/Button';
+import { Button, SecondaryButton } from '../atoms/Button';
 import { logger } from '../core/analytics';
 import { BarChart } from '../molecules/BarChart';
 import { WordCount, Cloud } from '../core/cloud.types';
@@ -25,7 +25,7 @@ export type CloudDisplayProps = {
 const CloudContainer = styled.section`
   max-width: 80vw;
   max-height: 80vw;
-  aspect-ration 5 / 3;
+  aspect-ratio: 5 / 3;
   width: 100%;
   height: 100%;
   display: flex;
@@ -44,6 +44,7 @@ const CloudImage = styled.img`
 
 const Actions = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 0.5rem;
   margin: 0.5rem 0;
@@ -55,18 +56,6 @@ const Actions = styled.div`
   @media (max-width: 480px) {
     flex-direction: column;
     width: 100%;
-  }
-`;
-
-const TextButton = styled(IconButton)`
-  font-size: 14px;
-  text-decoration: underline;
-  opacity: 0.8;
-
-  &:hover {
-    box-shadow: none;
-    background: none;
-    opacity: 1;
   }
 `;
 
@@ -149,15 +138,15 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
       {shouldDisplayCallToAction && <SupportCallout />}
       <Actions>
         <Button type="button" onClick={downloadPng}>
-          Last ned ordsky
+          Last ned som PNG
         </Button>
+        <SecondaryButton type="button" onClick={downloadSvg}>
+          Last ned som SVG (for trykk)
+        </SecondaryButton>
         <Button type="button" $outline onClick={onRestart}>
           {restartText}
         </Button>
       </Actions>
-      <TextButton type="button" onClick={downloadSvg}>
-        Last ned som SVG (for trykk)
-      </TextButton>
       {shareable && <ShareLink />}
       {data && (
         <>
