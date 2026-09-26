@@ -1,10 +1,5 @@
 import styled from 'styled-components';
 
-// export const Input = styled.input`
-//   display: block;
-//   margin-top: 0.2rem;
-// `;
-
 export type InputProps = {
   $warning?: boolean;
   $small?: boolean;
@@ -13,11 +8,11 @@ export type InputProps = {
 export const Input = styled.input<InputProps>`
   display: block;
   margin: 5px 15px;
-  border: 2px solid
-    ${(props) => (props.$warning ? 'red' : 'var(--primary-color-light)')};
+  border: 1px solid
+    ${(props) => (props.$warning ? 'var(--error-color)' : 'var(--outline)')};
   border-radius: 4px;
-  padding: 7px;
-  min-height: 44px;
+  padding: 8px 12px;
+  min-height: 48px;
   background-color: var(--field-bg);
   color: var(--text-color-primary);
 
@@ -31,8 +26,19 @@ export const Input = styled.input<InputProps>`
   transition-duration: 0.2s;
   font-family: 'Proza Libre', sans-serif;
 
+  &:hover {
+    border-color: ${(props) =>
+      props.$warning ? 'var(--error-color)' : 'var(--text-color-primary)'};
+  }
+
+  /* Material 3 outlined field: the border thickens instead of a separate ring. */
   &:focus {
-    outline: var(--button-focus-outline);
+    outline: none;
+    border-color: ${(props) =>
+      props.$warning ? 'var(--error-color)' : 'var(--primary-color-light)'};
+    box-shadow: inset 0 0 0 1px
+      ${(props) =>
+        props.$warning ? 'var(--error-color)' : 'var(--primary-color-light)'};
   }
 
   @media only screen and (min-width: 768px) {

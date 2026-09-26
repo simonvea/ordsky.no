@@ -1,40 +1,20 @@
 import styled from 'styled-components';
-import { Link } from 'react-router';
 import { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { LinkButton } from './Button';
 
-export const BackContainer = styled.section`
-  margin-top: 4rem;
+export const BackContainer = styled.nav`
+  margin-top: 3rem;
   display: flex;
   justify-content: center;
-
-  a {
-    color: var(--primary-color-text);
-    text-decoration: none;
-    font-size: 1.1rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-
-    &:hover {
-      background-color: var(--button-hover-bg);
-    }
-
-    &:focus {
-      outline: var(--button-focus-outline);
-    }
-  }
 `;
 
 export const BackButton = (): ReactElement => (
   <BackContainer>
-    <Link to="/">
-      <FontAwesomeIcon icon={faChevronLeft} style={{ marginRight: '0.6rem' }} />
-      Til fremsiden
-    </Link>
+    <LinkButton to="/" $variant="text">
+      <FontAwesomeIcon icon={faChevronLeft} />
+      Til forsiden
+    </LinkButton>
   </BackContainer>
 );

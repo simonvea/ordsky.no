@@ -39,20 +39,23 @@ export const WordsPage: React.FC<WordsPageProps> = function WordsPage() {
 
   return (
     <MainContainer>
-      <BackButton />
       {cloud ? (
-        <CloudDisplay
-          cloud={cloud}
-          onRestart={reset}
-          restartText="Lag en ny ordsky"
-          shouldDisplayCallToAction={shouldDisplayCallToAction}
-        />
+        <>
+          <Title>Ordskyen din</Title>
+          <CloudDisplay
+            cloud={cloud}
+            onRestart={reset}
+            restartText="Lag en ny ordsky"
+            shouldDisplayCallToAction={shouldDisplayCallToAction}
+          />
+        </>
       ) : (
         <>
           <Title>Lag ordsky fra ord</Title>
           <WordsForm onSubmit={createCloudFromWords} />
         </>
       )}
+      <BackButton />
     </MainContainer>
   );
 };

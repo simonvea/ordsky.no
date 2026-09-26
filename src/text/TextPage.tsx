@@ -17,6 +17,7 @@ const MainContainer = styled.section`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  width: 100%;
 `;
 
 export const TextPage: React.FC<TextPageProps> = function TextPage() {
@@ -38,15 +39,17 @@ export const TextPage: React.FC<TextPageProps> = function TextPage() {
 
   return (
     <MainContainer>
-      <BackButton />
       {cloud ? (
-        <CloudDisplay
-          cloud={cloud}
-          onRestart={reset}
-          wordCount={wordCount?.slice(0, 10)}
-          restartText="Lag en ny ordsky"
-          shouldDisplayCallToAction={shouldDisplayCallToAction}
-        />
+        <>
+          <Title>Ordskyen din</Title>
+          <CloudDisplay
+            cloud={cloud}
+            onRestart={reset}
+            wordCount={wordCount?.slice(0, 10)}
+            restartText="Lag en ny ordsky"
+            shouldDisplayCallToAction={shouldDisplayCallToAction}
+          />
+        </>
       ) : (
         <>
           <Title>Lag ordsky fra tekst</Title>
@@ -56,6 +59,7 @@ export const TextPage: React.FC<TextPageProps> = function TextPage() {
           />
         </>
       )}
+      <BackButton />
     </MainContainer>
   );
 };

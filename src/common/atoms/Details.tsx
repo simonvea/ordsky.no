@@ -7,7 +7,7 @@ export const Details = styled.details`
   padding: 1rem;
   margin-top: 1rem;
   color: var(--text-color-primary);
-  max-width: 422px;
+  max-width: 640px;
   width: 100%;
   margin: 1rem auto;
 `;
