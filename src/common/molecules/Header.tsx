@@ -1,104 +1,129 @@
 import React, { useState, useRef, useEffect, use } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, NavLink, useLocation } from 'react-router';
 import styled from 'styled-components';
 import { NavButton } from '../atoms/Button';
 
-const Title = styled.h1`
+const Logo = styled(Link)`
   font-family: 'Cormorant Garamond', serif;
   font-size: 2rem;
-  text-align: center;
-  height: 70px;
-  line-height: 70px;
+  line-height: 1;
   color: var(--text-color-primary);
   text-decoration: none;
-
-  a {
-    color: var(--text-color-primary);
-    text-decoration: none;
-  }
+  white-space: nowrap;
 `;
 
 const Header = styled.header`
-  height: 90px;
+  height: 72px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.24);
-  box-shadow: 2px 3px 3px 2px rgba(0, 0, 0, 0.4);
-  padding: 1rem 2rem;
-  text-align: center;
+  background-color: var(--surface-container);
+  border-bottom: 1px solid var(--outline-variant);
+  padding: 0 1rem 0 1.5rem;
   min-width: 100%;
   position: relative;
+
+  @media (min-width: 769px) {
+    padding: 0 2rem;
+  }
 `;
 
 const Nav = styled.nav<{ $isOpen: boolean }>`
   display: flex;
   align-items: center;
-  gap: 1rem;
-
-  @media (min-width: 769px) {
-    flex-direction: row-reverse;
-    justify-content: flex-start;
-  }
+  gap: 1.5rem;
 
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
-    right: ${({ $isOpen }) => ($isOpen ? '0' : '-100%')};
+    right: 0;
+    transform: translateX(${({ $isOpen }) => ($isOpen ? '0' : '100%')});
+    visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
     height: 100vh;
     height: 100dvh;
     flex-direction: column;
+    align-items: stretch;
     justify-content: flex-start;
-    gap: 1rem;
-    background-color: #121212;
-    width: 256px;
-    padding: 100px 0 56px 0;
-    transition: right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 0;
+    background-color: var(--surface-container);
+    width: min(320px, 85vw);
+    padding: 88px 12px 32px;
+    border-radius: 16px 0 0 16px;
+    transition:
+      transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0.25s;
     box-shadow: ${({ $isOpen }) =>
-      $isOpen
-        ? '0px 8px 10px -5px rgba(0,0,0,0.5), 0px 16px 24px 2px rgba(0,0,0,0.4), 0px 6px 30px 5px rgba(0,0,0,0.3)'
-        : 'none'};
+      $isOpen ? '0 8px 24px rgba(0, 0, 0, 0.5)' : 'none'};
     z-index: 1000;
   }
 `;
 
-const NavLink = styled(Link)`
-  color: var(--text-color-primary);
-  font-size: 1.2rem;
-  margin: 0 5px;
+const NavItem = styled(NavLink)`
+  color: var(--on-surface-variant);
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.5rem 0.25rem;
+  border-bottom: 2px solid transparent;
 
+  &:hover {
+    color: var(--text-color-primary);
+  }
+
+  &.active {
+    color: var(--text-color-primary);
+    border-bottom-color: var(--primary-color-text);
+  }
+
+  &:focus-visible {
+    outline: var(--button-focus-outline);
+    outline-offset: 2px;
+  }
+
+  /* Material 3 navigation drawer item with a pill active indicator. */
   @media (max-width: 768px) {
-    margin: 0;
-    width: 100%;
-    text-align: right;
-    padding: 0 2rem;
-    height: 48px;
-    line-height: 48px;
-    font-size: 2rem;
-    letter-spacing: 0.25px;
-    color: rgba(255, 255, 255, 0.87);
+    display: flex;
+    align-items: center;
+    height: 56px;
+    padding: 0 24px;
+    border: none;
+    border-radius: 28px;
+    font-size: 1.125rem;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.08);
     }
 
-    &:active {
-      background-color: rgba(255, 255, 255, 0.12);
+    &.active {
+      background-color: var(--tonal-container);
+      color: var(--on-tonal-container);
     }
   }
 `;
 
 const HamburgerButton = styled.button`
   display: none;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
+  border-radius: 50%;
   cursor: pointer;
-  padding: 10px;
+  z-index: 1001;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  &:focus-visible {
+    outline: var(--button-focus-outline);
+  }
 
   @media (max-width: 768px) {
-    display: block;
+    display: inline-flex;
   }
-  z-index: 1001;
 `;
 
 const HamburgerIcon = styled.div<{ $isOpen: boolean }>`
@@ -147,28 +172,26 @@ const Overlay = styled.div<{ $isOpen: boolean }>`
   }
 `;
 
-const ActionContainer = styled.section`
-  @media (min-width: 769px) {
-    margin-left: 1rem;
-  }
-
+const ActionContainer = styled.div`
   @media (max-width: 768px) {
     margin-top: auto;
+    padding: 0 12px;
+
+    > a {
+      width: 100%;
+    }
   }
 `;
 
-const NavRoutes = styled.section`
+const NavRoutes = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
-  justify-content: flex-end;
+  gap: 1.5rem;
 
   @media (max-width: 768px) {
-    width: 100%;
     flex-direction: column;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 1rem;
+    align-items: stretch;
+    gap: 0;
   }
 `;
 
@@ -206,13 +229,17 @@ export function OrdskyHeader(): React.ReactElement {
 
   useEffect(() => {
     document.body.classList.toggle('no-scroll', isMenuOpen);
+    if (!isMenuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') setIsMenuOpen(false);
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    return () => document.removeEventListener('keydown', closeOnEscape);
   }, [isMenuOpen]);
 
   return (
     <Header>
-      <Title>
-        <Link to="/">Ordsky.no</Link>
-      </Title>
+      <Logo to="/">Ordsky.no</Logo>
       <HamburgerButton
         ref={buttonRef}
         type="button"
@@ -225,9 +252,11 @@ export function OrdskyHeader(): React.ReactElement {
       <Overlay $isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
       <Nav ref={navRef} $isOpen={isMenuOpen}>
         <NavRoutes>
-          <NavLink to="/">Hjem</NavLink>
-          <NavLink to="/contact">Kontakt</NavLink>
-          <NavLink to="/about">Om</NavLink>
+          <NavItem to="/" end>
+            Hjem
+          </NavItem>
+          <NavItem to="/contact">Kontakt</NavItem>
+          <NavItem to="/about">Om</NavItem>
         </NavRoutes>
         <ActionContainer>
           <NavButton to="/create">Lag en ordsky</NavButton>
