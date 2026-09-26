@@ -83,7 +83,7 @@ describe('StartSession component', () => {
       );
 
       const button = getByTestId('join-session-btn');
-      const input = getByLabelText(/skriv inn en id:/i);
+      const input = getByLabelText(/kode/i);
 
       // Act
       fireEvent.change(input, { target: { value: mockId } });
