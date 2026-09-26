@@ -11,7 +11,6 @@ import { OptionsContainer, Option } from "../common/atoms/Option";
 import { BackButton } from "../common/atoms/BackButton";
 
 const Container = styled.section`
-  min-height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

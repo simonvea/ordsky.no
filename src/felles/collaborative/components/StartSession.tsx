@@ -44,7 +44,6 @@ const SessionInfoContainer = styled.section`
 `;
 
 const StartSessionContainer = styled.section`
-  min-height: 80vh;
   width: 100%;
   padding: 0 1rem;
   box-sizing: border-box;

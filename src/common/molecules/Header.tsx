@@ -46,6 +46,7 @@ const Nav = styled.nav<{ $isOpen: boolean }>`
     top: 0;
     right: ${({ $isOpen }) => ($isOpen ? '0' : '-100%')};
     height: 100vh;
+    height: 100dvh;
     flex-direction: column;
     justify-content: flex-start;
     gap: 1rem;

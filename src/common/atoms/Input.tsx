@@ -31,8 +31,8 @@ export const Input = styled.input<InputProps>`
   transition-duration: 0.2s;
   font-family: 'Proza Libre', sans-serif;
 
-  ::focus {
-    border: 2px solid var(--primary-color-dark);
+  &:focus {
+    outline: var(--button-focus-outline);
   }
 
   @media only screen and (min-width: 768px) {

@@ -7,7 +7,6 @@ import { BackButton } from '../common/atoms/BackButton';
 
 const Container = styled.section`
   color: var(--text-color-primary);
-  min-height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
