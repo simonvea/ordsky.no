@@ -78,7 +78,7 @@ function WordsInput({
               type="button"
               onClick={() => removeWordForm(key)}
               disabled={inputs.length < 2}
-              aria-label="Remove input row"
+              aria-label="Fjern rad"
             >
               <FontAwesomeIcon
                 icon={faMinusSquare}

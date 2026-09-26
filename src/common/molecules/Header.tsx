@@ -214,6 +214,9 @@ export function OrdskyHeader(): React.ReactElement {
       </Title>
       <HamburgerButton
         ref={buttonRef}
+        type="button"
+        aria-label={isMenuOpen ? 'Lukk meny' : 'Åpne meny'}
+        aria-expanded={isMenuOpen}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
       >
         <HamburgerIcon $isOpen={isMenuOpen} />

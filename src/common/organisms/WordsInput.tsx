@@ -93,7 +93,7 @@ export const WordsInput: React.FC<WordsInputProps> = function WordsInput({
         <IconButton
           type="button"
           onClick={onRemove}
-          aria-label="Remove input row"
+          aria-label="Fjern rad"
         >
           <FontAwesomeIcon
             icon={faMinusSquare}
