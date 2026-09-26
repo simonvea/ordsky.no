@@ -190,6 +190,14 @@ body {
   line-height: 1.5;
 }
 
+/* Form controls do not inherit the page font by default. */
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
 h1,
 h2,
 h3,

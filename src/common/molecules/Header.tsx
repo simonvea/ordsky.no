@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { NavButton } from '../atoms/NavButton';
 
 const Title = styled.h1`
+  font-family: 'Cormorant Garamond', serif;
   font-size: 2rem;
   text-align: center;
   height: 70px;
@@ -26,7 +27,6 @@ const Header = styled.header`
   box-shadow: 2px 3px 3px 2px rgba(0, 0, 0, 0.4);
   padding: 1rem 2rem;
   text-align: center;
-  font-family: 'Cormorant Garamond', serif;
   min-width: 100%;
   position: relative;
 `;
