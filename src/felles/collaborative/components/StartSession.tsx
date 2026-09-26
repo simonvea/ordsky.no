@@ -107,10 +107,11 @@ export function StartSession({
               value={idToJoin}
               onChange={({ target }) => setIdToJoin(target.value)}
               id="idInput"
-              inputMode="numeric"
               autoComplete="off"
+              autoCapitalize="characters"
+              spellCheck={false}
               maxLength={5}
-              placeholder="12345"
+              placeholder="J9PWE"
             />
           </Label>
           <Button

@@ -1,49 +1,18 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Button, SecondaryButton } from '../../../common/atoms/Button';
-import { TextContainer } from '../../../common/atoms/TextContainer';
-import { faArrowsRotate, faLink } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ApiError, getSession } from '../services/CollectService';
-import { InfoBox } from '../../../common/atoms/InfoBox';
+import React, { ReactElement, useEffect, useState } from "react";
+import styled from "styled-components";
+import { Button, SecondaryButton } from "../../../common/atoms/Button";
+import { TextContainer } from "../../../common/atoms/TextContainer";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ApiError, getSession } from "../services/CollectService";
+import { CopyLinkField } from "../../../common/molecules/CopyLinkField";
+import { InfoBox } from "../../../common/atoms/InfoBox";
 
 const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-`;
-
-const CopyLinkButton = styled.button`
-  display: inline;
-  font-size: 1rem;
-  padding: 0;
-  background-color: transparent;
-  color: #1e90ff;
-  border: none;
-  text-decoration: underline;
-  cursor: pointer;
-
-  &:hover {
-    color: #63a4ff;
-  }
-
-  &.active {
-    color: #87cefa;
-  }
-`;
-
-const CopyLinkContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-`;
-
-const CopiedNotification = styled.div`
-  margin: 1rem;
-  height: 1rem;
 `;
 
 const Emphasis = styled.em`
@@ -90,18 +59,10 @@ export function WaitScreen({
   loading,
 }: WaitScreenProps): ReactElement {
   const [countDownSeconds, setCountDownSeconds] = useState<number>(60);
-  const [showCopiedJoinUrlMessage, setShowCopiedJoinUrlMessage] =
-    useState(false);
-  const [showCopiedAdminUrlMessage, setShowCopiedAdminUrlMessage] =
-    useState(false);
   const [fetchingNumberOfEntries, setFetchingNumberOfEntries] = useState(false);
 
   const [numberOfEntries, setNumberOfEntries] =
     useState<number>(initialEntries);
-
-  const [copyUrlButtonText, setCopyUrlButtonText] = useState(
-    'Invitér til å legge inn ord'
-  );
 
   const checkEntries = async (): Promise<void> => {
     setFetchingNumberOfEntries(true);
@@ -136,31 +97,7 @@ export function WaitScreen({
 
   return (
     <Container>
-      <CopyLinkContainer>
-        <CopiedNotification>
-          {showCopiedJoinUrlMessage && <span>Kopiert link!</span>}
-        </CopiedNotification>
-        <Button
-          $small
-          onMouseEnter={() => {
-            setCopyUrlButtonText(linkToJoin);
-          }}
-          onMouseLeave={() => {
-            setCopyUrlButtonText('Invitér til å legge inn ord');
-          }}
-          onClick={() => {
-            navigator.clipboard.writeText(linkToJoin);
-            setShowCopiedJoinUrlMessage(true);
-            const timeout = setTimeout(() => {
-              setShowCopiedJoinUrlMessage(false);
-              clearTimeout(timeout);
-            }, 3000);
-          }}
-        >
-          <FontAwesomeIcon icon={faLink} style={{ marginRight: '0.6rem' }} />
-          {copyUrlButtonText}
-        </Button>
-      </CopyLinkContainer>
+      <CopyLinkField link={linkToJoin} label="Kopier invitasjonslink" />
 
       {hasEntries ? (
         <span>{`${numberOfEntries} har lagt inn ord.`}</span>
@@ -170,7 +107,7 @@ export function WaitScreen({
 
       <p>
         {fetchingNumberOfEntries
-          ? 'Sjekker for nye ord...'
+          ? "Sjekker for nye ord..."
           : `Sjekker igjen om ${countDownSeconds} sekunder`}
         <RefreshButton
           type="button"
@@ -179,7 +116,10 @@ export function WaitScreen({
           aria-label="Sjekk nå"
           title="Sjekk nå"
         >
-          <FontAwesomeIcon icon={faArrowsRotate} spin={fetchingNumberOfEntries} />
+          <FontAwesomeIcon
+            icon={faArrowsRotate}
+            spin={fetchingNumberOfEntries}
+          />
         </RefreshButton>
       </p>
 
@@ -209,27 +149,12 @@ export function WaitScreen({
           <p>
             Obs! Det er bare du som kan lage ordskyen. For å komme tilbake
             senere for å lage ordsky, <Emphasis>må</Emphasis> du ta vare på
-            linken til hvor du er nå. Det kan du ved å kopiere nettaddressen fra
-            nettleseren eller kopiere den ved å trykke{' '}
-            {showCopiedAdminUrlMessage ? (
-              'Kopiert link!'
-            ) : (
-              <CopyLinkButton
-                className={showCopiedAdminUrlMessage ? 'active' : ''}
-                onClick={() => {
-                  const url = linkToJoin + '?admin=true';
-                  navigator.clipboard.writeText(url);
-                  setShowCopiedAdminUrlMessage(true);
-                  const timeout = setTimeout(() => {
-                    setShowCopiedAdminUrlMessage(false);
-                    clearTimeout(timeout);
-                  }, 3000);
-                }}
-              >
-                her.
-              </CopyLinkButton>
-            )}
+            linken under.
           </p>
+          <CopyLinkField
+            link={linkToJoin + "?admin=true"}
+            label="Kopier admin-link"
+          />
         </InfoBox>
       </TextContainer>
     </Container>
