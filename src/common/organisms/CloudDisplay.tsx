@@ -150,7 +150,7 @@ export const CloudDisplay: React.FC<CloudDisplayProps> = function WordCloud({
           Last ned som PNG
         </Button>
         <Button type="button" $variant="tonal" onClick={downloadSvg}>
-          Last ned som SVG (for trykk)
+          Last ned som SVG
         </Button>
         <Button type="button" $variant="outlined" onClick={onRestart}>
           {restartText}

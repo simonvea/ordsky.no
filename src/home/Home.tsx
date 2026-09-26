@@ -99,8 +99,7 @@ export const Home: React.FC = function Home() {
       <SampleCloud />
       <UseCases>
         Passer som avskjedshilsen til en kollega, til bursdager, i
-        presentasjoner og i undervisning. Last ned som PNG til PowerPoint og
-        Word, eller som SVG for trykk.
+        presentasjoner og i undervisning. Last ned som PNG eller SVG.
       </UseCases>
     </>
   );

@@ -103,11 +103,11 @@ export function WaitScreen({
         <>
           <Title>Live-økt</Title>
           <CodeCard>
-            <CodeLabel>
-              Del koden med deltakerne. De går til <strong>{joinPage}</strong>{' '}
-              og skriver den inn.
-            </CodeLabel>
+            <CodeLabel>Del denne koden med deltakerne</CodeLabel>
             <Code>{id.toUpperCase()}</Code>
+            <CodeLabel>
+              De blir med på <strong>{joinPage}</strong>
+            </CodeLabel>
           </CodeCard>
         </>
       ) : (

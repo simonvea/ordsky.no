@@ -100,7 +100,7 @@ export function StartSession({
         <Option>
           <OptionTitle>Start en ny økt</OptionTitle>
           <p>
-            Du får en kode som deltakerne skriver inn. Når alle har sendt inn
+            Du får en kode som du deler med deltakerne. Når alle har sendt inn
             ord, trykker du «Lag ordsky», og ordskyen vises for alle. Bare du
             kan lage ordskyen, så ikke lukk siden underveis.
           </p>
