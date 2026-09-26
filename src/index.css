@@ -159,6 +159,7 @@ table {
   --secondary-color-light: #c5e99b;
   --secondary-color-dark: #429897;
   --text-color-primary: #ffffffde;
+  --field-bg: #2b2b2b;
   --primary-color-rgb: 84, 134, 135;
   --button-hover-bg: rgba(var(--primary-color-rgb), 0.15);
   --button-focus-outline: 2px solid var(--secondary-color-light);

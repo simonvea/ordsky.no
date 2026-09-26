@@ -6,7 +6,7 @@ export const Textarea = styled.textarea`
   border: 2px solid var(--primary-color-light);
   border-radius: 4px;
   padding: 7px;
-  background-color: #2b2b2b;
+  background-color: var(--field-bg);
   color: var(--text-color-primary);
 
   &::placeholder {
