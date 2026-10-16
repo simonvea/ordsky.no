@@ -5,9 +5,11 @@ import React, {
   startTransition,
 } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
+import styled from "styled-components";
 import { Cloud, WordCount } from "../../common/core/cloud.types";
 import {
   ApiError,
+  clearCloud,
   getSession,
   getWordsAndCreateCloud,
   saveCloudAndWordCount,
@@ -22,6 +24,18 @@ import { useCallToAction } from "../../common/hooks/useCallToAction";
 import { SubmittedWords } from "./components/SubmittedWords";
 import { BackButton } from "../../common/atoms/BackButton";
 import { Title } from "../../common/atoms/Title";
+import { Button } from "../../common/atoms/Button";
+import { InfoText } from "../../common/atoms/InfoText";
+
+const ReopenSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 32rem;
+  margin: 1.5rem auto 0;
+  padding: 0 1rem;
+  text-align: center;
+`;
 
 type CollectState = {
   loading: boolean;
@@ -186,6 +200,39 @@ export function CollectPage(): React.ReactElement {
     }
   };
 
+  const handleReopen = async (): Promise<void> => {
+    if (!id) return;
+
+    setState((prev) => ({
+      ...prev,
+      loading: true,
+      loadingMessage: "Åpner innsamlingen igjen...",
+    }));
+
+    try {
+      const session = await clearCloud(id);
+
+      // The response omits cloud and wordCount, so spreading it alone would keep the old ones.
+      setState((prev) => ({
+        ...prev,
+        ...session,
+        cloud: undefined,
+        wordCount: undefined,
+        loading: false,
+        loadingMessage: "",
+      }));
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        loading: false,
+        loadingMessage: "",
+        errorMessage:
+          "Noe gikk galt i forsøket på å åpne innsamlingen igjen: " +
+          (error as ApiError).response.statusText,
+      }));
+    }
+  };
+
   const handleQuit = (): void | Promise<void> => navigate("/felles");
 
   if (errorMessage) {
@@ -247,6 +294,23 @@ export function CollectPage(): React.ReactElement {
             shouldDisplayCallToAction={isAdmin && shouldDisplayCallToAction}
             shareable={true}
           />
+          {isAdmin && (
+            <ReopenSection>
+              <Button
+                type="button"
+                $variant="tonal"
+                onClick={handleReopen}
+                aria-describedby="reopen-explanation"
+              >
+                Samle inn flere ord
+              </Button>
+              <InfoText id="reopen-explanation">
+                Ordskyen slettes, men alle {numberOfEntries} innsendte svar
+                beholdes. Du lager en ny ordsky når du har samlet inn flere
+                ord.
+              </InfoText>
+            </ReopenSection>
+          )}
         </>
       )}
       <BackButton />
