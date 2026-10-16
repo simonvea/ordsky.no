@@ -42,12 +42,13 @@ const respond = (status: number, body?: unknown): Response =>
 
 const originalFetch = globalThis.fetch;
 
-const stubFetch = (): jest.Mock<Promise<Response>, [string, RequestInit?]> => {
+const stubFetch = (
+  onDelete: () => Promise<Response> = async () =>
+    respond(200, sessionWithoutCloud)
+): jest.Mock<Promise<Response>, [string, RequestInit?]> => {
   const fetch = jest.fn<Promise<Response>, [string, RequestInit?]>(
     async (_url, init) =>
-      init?.method === 'DELETE'
-        ? respond(200, sessionWithoutCloud)
-        : respond(200, sessionWithCloud)
+      init?.method === 'DELETE' ? onDelete() : respond(200, sessionWithCloud)
   );
   globalThis.fetch = fetch as unknown as typeof globalThis.fetch;
   return fetch;
@@ -116,6 +117,26 @@ describe('CollectPage', () => {
       expect(fetch).toHaveBeenCalledWith('/api/felles/abcde/cloud', {
         method: 'DELETE',
       });
+    });
+
+    it('when the admin clicks collect more words and the network fails, then an error is shown instead of a stuck spinner', async () => {
+      // Arrange
+      stubFetch(() => Promise.reject(new TypeError('Failed to fetch')));
+      renderPage('/felles/innsamling/abcde?admin=true');
+      const button = await screen.findByRole('button', {
+        name: 'Samle inn flere ord',
+      });
+
+      // Act
+      fireEvent.click(button);
+
+      // Assert
+      expect(
+        await screen.findByText(/Noe gikk galt i forsøket på å åpne innsamlingen igjen/)
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText('Åpner innsamlingen igjen...')
+      ).not.toBeInTheDocument();
     });
   });
 });

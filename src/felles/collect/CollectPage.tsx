@@ -33,7 +33,6 @@ const ReopenSection = styled.section`
   align-items: center;
   max-width: 32rem;
   margin: 1.5rem auto 0;
-  padding: 0 1rem;
   text-align: center;
 `;
 
@@ -228,7 +227,9 @@ export function CollectPage(): React.ReactElement {
         loadingMessage: "",
         errorMessage:
           "Noe gikk galt i forsøket på å åpne innsamlingen igjen: " +
-          (error as ApiError).response.statusText,
+          (error instanceof ApiError
+            ? error.response.statusText
+            : (error as Error).message),
       }));
     }
   };
