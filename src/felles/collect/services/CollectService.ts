@@ -2,6 +2,7 @@ import { Cloud, WordCount } from "../../../common/core/cloud.types";
 import { countWordsFromWords } from "../../../common/core/countWords";
 import { createCloud } from "../../../common/core/createCloud";
 import { wordCountToCloudInput } from "../../../common/core/wordCountToCloudInput";
+import { collectBaseUrl as baseUrl } from "./collectBaseUrl";
 
 export type SessionState = {
   id: string;
@@ -12,8 +13,6 @@ export type SessionState = {
   createdAt: string;
   updatedAt: string;
 };
-
-const baseUrl = import.meta.env.VITE_COLLECT_BASE_URL;
 
 export class ApiError extends Error {
   constructor(
@@ -91,6 +90,16 @@ export const saveCloudAndWordCount = async (
   }
 
   return respose.json();
+};
+
+export const clearCloud = async (id: string): Promise<SessionState> => {
+  const response = await fetch(`${baseUrl}/${id}/cloud`, { method: "DELETE" });
+
+  if (!response.ok) {
+    throw new ApiError("Error clearing cloud", response);
+  }
+
+  return response.json();
 };
 
 export const createCloudFromWords = async (
