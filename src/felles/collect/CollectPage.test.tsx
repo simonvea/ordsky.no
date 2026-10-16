@@ -36,7 +36,8 @@ const respond = (status: number, body?: unknown): Response =>
   ({
     ok: status >= 200 && status < 300,
     status,
-    statusText: String(status),
+    // HTTP/2, which production uses, has no reason phrase
+    statusText: '',
     json: async () => body,
   }) as Response;
 
@@ -82,7 +83,7 @@ describe('CollectPage', () => {
         name: 'Samle inn flere ord',
       });
       expect(button).toHaveAccessibleDescription(
-        'Ordskyen slettes, men alle 3 innsendte svar beholdes. Du lager en ny ordsky når du har samlet inn flere ord.'
+        'Ordskyen slettes, men alle innsendte svar beholdes (3 så langt). Du lager en ny ordsky når du har samlet inn flere ord.'
       );
     });
 
@@ -117,6 +118,25 @@ describe('CollectPage', () => {
       expect(fetch).toHaveBeenCalledWith('/api/felles/abcde/cloud', {
         method: 'DELETE',
       });
+    });
+
+    it('when the admin clicks collect more words and the server fails, then the error shows the status code', async () => {
+      // Arrange
+      stubFetch(async () => respond(500));
+      renderPage('/felles/innsamling/abcde?admin=true');
+      const button = await screen.findByRole('button', {
+        name: 'Samle inn flere ord',
+      });
+
+      // Act
+      fireEvent.click(button);
+
+      // Assert
+      expect(
+        await screen.findByText(
+          'Noe gikk galt i forsøket på å åpne innsamlingen igjen: 500'
+        )
+      ).toBeInTheDocument();
     });
 
     it('when the admin clicks collect more words and the network fails, then an error is shown instead of a stuck spinner', async () => {

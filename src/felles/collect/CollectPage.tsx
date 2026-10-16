@@ -227,8 +227,9 @@ export function CollectPage(): React.ReactElement {
         loadingMessage: "",
         errorMessage:
           "Noe gikk galt i forsøket på å åpne innsamlingen igjen: " +
+          // statusText is empty over HTTP/2, so the status code carries the detail
           (error instanceof ApiError
-            ? error.response.statusText
+            ? `${error.response.status} ${error.response.statusText}`.trim()
             : (error as Error).message),
       }));
     }
@@ -306,9 +307,8 @@ export function CollectPage(): React.ReactElement {
                 Samle inn flere ord
               </Button>
               <InfoText id="reopen-explanation">
-                Ordskyen slettes, men alle {numberOfEntries} innsendte svar
-                beholdes. Du lager en ny ordsky når du har samlet inn flere
-                ord.
+                {`Ordskyen slettes, men alle innsendte svar beholdes (${numberOfEntries} så langt).`}{" "}
+                Du lager en ny ordsky når du har samlet inn flere ord.
               </InfoText>
             </ReopenSection>
           )}
