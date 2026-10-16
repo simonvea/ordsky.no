@@ -41,3 +41,4 @@ Two separate collaboration backends exist:
 
 - Run the backend locally with `npm run dev` in `../ordsky.no-api` before starting the frontend
 - `npm ci` requires `.npmrc` with `legacy-peer-deps=true` — several ESLint plugins have stale peer dep declarations for ESLint v10
+- Jest (ts-jest, CommonJS) cannot compile `import.meta`. Read `import.meta.env` in a tiny module of its own and `jest.mock` that module in tests (see `src/felles/collect/services/collectBaseUrl.ts`)
